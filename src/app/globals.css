@@ -33,7 +33,9 @@
   --font-body: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
 
-  --text-display-xl: clamp(2.75rem, 6vw, 5.5rem);
+  /* Floor is set by the longest hero line fitting a 350px column without
+     re-wrapping inside its clip mask, not by what looks big in isolation. */
+  --text-display-xl: clamp(2rem, 5.6vw, 5.5rem);
   --text-display-xl--line-height: 0.95;
   --text-display-xl--letter-spacing: -0.02em;
 

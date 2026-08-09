@@ -1,5 +1,8 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
+import { HeroHeadline } from "@/components/motion/HeroHeadline";
+import { Reveal } from "@/components/motion/Reveal";
+import { Marquee } from "@/components/motion/Marquee";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
 
@@ -17,25 +20,36 @@ export default function HomePage() {
         data-hero
         className="on-dark relative flex min-h-[92svh] items-end overflow-hidden bg-spruce"
       >
-        <Image
-          src={images.home.hero.url}
-          alt={images.home.hero.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <div data-hero-image className="absolute inset-0">
+          <Image
+            src={images.home.hero.url}
+            alt={images.home.hero.alt}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
 
         {/* Scrim. Heavier at the foot, where the headline sits. */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-spruce via-spruce/45 to-spruce/15"
+          className="absolute inset-0 bg-gradient-to-t from-spruce via-spruce/45 to-spruce/10"
+        />
+        {/* A second scrim under the header, so nav contrast never depends on
+            what the photograph happens to be doing at the top of the frame. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-spruce/75 to-transparent"
         />
 
         <div className="shell relative w-full pb-16 pt-32 lg:pb-24">
           <div className="grid gap-8 lg:grid-cols-12">
             {/* The ledger rail — mono metadata, the site's organising device. */}
-            <div className="flex gap-6 lg:col-span-2 lg:flex-col lg:gap-3">
+            <div
+              data-hero-trail
+              className="flex gap-6 lg:col-span-2 lg:flex-col lg:gap-3"
+            >
               <p className="eyebrow text-brass-bright">
                 Est. {siteConfig.establishedYear}
               </p>
@@ -45,22 +59,26 @@ export default function HomePage() {
             </div>
 
             <div className="lg:col-span-8 lg:col-start-3">
-              <h1 className="text-display-xl text-ledger">
-                Eight litters a year.
-                <br />
-                Every one of them
-                <br />
-                accounted for.
-              </h1>
+              <HeroHeadline
+                className="text-display-xl text-ledger"
+                lines={[
+                  "Eight litters a year.",
+                  "Every one of them",
+                  "accounted for.",
+                ]}
+              />
 
-              <p className="measure mt-7 text-body-l text-ledger/85">
+              <p data-hero-trail className="measure mt-7 text-body-l text-ledger/85">
                 A family kennel in the Vermont hills raising {siteConfig.breed}s
                 for shooting, for service work, and for families who want a dog
                 that settles. Both parents cleared on hips, elbows, eyes and a
                 full DNA panel, with every certificate published on this site.
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+              <div
+                data-hero-trail
+                className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4"
+              >
                 <ButtonLink href="/puppies" variant="onDark" size="lg">
                   See available puppies
                 </ButtonLink>
@@ -78,7 +96,7 @@ export default function HomePage() {
       </section>
 
       <section className="shell py-20 lg:py-28">
-        <div className="grid gap-10 lg:grid-cols-12">
+        <Reveal stagger className="grid gap-10 lg:grid-cols-12">
           <p className="eyebrow text-canvas-deep lg:col-span-2">The kennel</p>
           <div className="lg:col-span-8 lg:col-start-3">
             <p className="measure text-body-l text-spruce">
@@ -88,7 +106,11 @@ export default function HomePage() {
               that, walk away from them.
             </p>
           </div>
-        </div>
+        </Reveal>
+      </section>
+
+      <section className="on-dark bg-spruce" aria-label="Health clearances and registries">
+        <Marquee items={siteConfig.registries} />
       </section>
     </>
   );
