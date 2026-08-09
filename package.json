@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "placeholders": "node scripts/fetch-placeholders.mjs",
+    "shoot": "node scripts/shoot.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

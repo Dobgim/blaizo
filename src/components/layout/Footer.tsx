@@ -64,10 +64,6 @@ export function Footer() {
                 </a>
               </p>
             </address>
-
-            <p className="eyebrow mt-6 text-enamel">
-              {contact.lat.toFixed(1)}°N {Math.abs(contact.lng).toFixed(1)}°W
-            </p>
           </div>
 
           <div className="grid gap-10 sm:grid-cols-2 lg:col-span-8 lg:col-start-5 lg:grid-cols-4 lg:gap-8">

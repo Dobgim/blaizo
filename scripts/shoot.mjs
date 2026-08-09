@@ -10,7 +10,10 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 
-const BASE = process.env.SHOOT_BASE ?? "http://localhost:3000";
+// Port 3100 by default: 3000 is routinely taken by another project, and a
+// silent fallback means you photograph somebody else's site.
+// Run the dev server with `npx next dev -p 3100`.
+const BASE = process.env.SHOOT_BASE ?? "http://localhost:3100";
 const OUT = ".shots";
 
 const args = process.argv.slice(2);
@@ -49,18 +52,29 @@ for (const { w, h, label } of widths) {
     viewport: { width: w, height: h },
     deviceScaleFactor: 2,
   });
-  await page.goto(`${BASE}${route}`, { waitUntil: "networkidle" });
+  // "load", not "networkidle": a slow remote placeholder image should not
+  // hang the capture. Images are waited on explicitly below, with a cap.
+  await page.goto(`${BASE}${route}`, { waitUntil: "load", timeout: 60_000 });
   // Let fonts settle so type is never captured mid-swap, and let every
   // image decode — a hero caught before its photograph paints reads as a
   // black box and sends you chasing a bug that isn't there.
   await page.evaluate(() => document.fonts.ready);
-  await page.evaluate(() =>
-    Promise.all(
-      Array.from(document.images)
-        .filter((img) => !img.complete)
-        .map((img) => new Promise((r) => img.addEventListener("load", r, { once: true }))),
-    ),
-  );
+  await page.evaluate(() => {
+    const pending = Array.from(document.images).filter((img) => !img.complete);
+    const settled = Promise.all(
+      pending.map(
+        (img) =>
+          new Promise((r) => {
+            img.addEventListener("load", r, { once: true });
+            img.addEventListener("error", r, { once: true });
+          }),
+      ),
+    );
+    return Promise.race([
+      settled,
+      new Promise((r) => setTimeout(r, 25_000)),
+    ]);
+  });
   // The page-load timeline runs to ~1.5s. Clear it before capturing.
   await page.waitForTimeout(2200);
 

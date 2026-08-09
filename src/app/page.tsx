@@ -1,15 +1,21 @@
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
 import { HeroHeadline } from "@/components/motion/HeroHeadline";
-import { Reveal } from "@/components/motion/Reveal";
-import { Marquee } from "@/components/motion/Marquee";
+import { AvailablePuppies } from "@/components/home/AvailablePuppies";
+import { WhyThisKennel } from "@/components/home/WhyThisKennel";
+import { MeetTheParents } from "@/components/home/MeetTheParents";
+import { ProcessInBrief } from "@/components/home/ProcessInBrief";
+import { PlacementQuote } from "@/components/home/PlacementQuote";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
+import { placeholderDogs, placeholderPuppies } from "@/lib/placeholder-data";
 
 /**
- * Step 1 of the build: the hero exists so the layout shell, the header's
- * transparent-over-photograph state and the type scale can be judged against
- * real content. The remaining home page sections arrive in step 3.
+ * Step 3 builds the home page against hardcoded content. Step 5 swaps the
+ * two arrays below for Supabase queries; nothing else on the page changes.
+ *
+ * The closing CTA is the one in the footer. It is the same invitation on
+ * every page and repeating it here would be the site asking twice in a row.
  */
 export default function HomePage() {
   const { contact } = siteConfig;
@@ -22,8 +28,8 @@ export default function HomePage() {
       >
         <div data-hero-image className="absolute inset-0">
           <Image
-            src={images.home.hero.url}
-            alt={images.home.hero.alt}
+            src={images["home-hero"].src}
+            alt={images["home-hero"].alt}
             fill
             priority
             sizes="100vw"
@@ -61,14 +67,13 @@ export default function HomePage() {
             <div className="lg:col-span-8 lg:col-start-3">
               <HeroHeadline
                 className="text-display-xl text-ledger"
-                lines={[
-                  "Eight litters a year.",
-                  "Every one of them",
-                  "accounted for.",
-                ]}
+                lines={[...siteConfig.heroHeadline]}
               />
 
-              <p data-hero-trail className="measure mt-7 text-body-l text-ledger/85">
+              <p
+                data-hero-trail
+                className="measure mt-7 text-body-l text-ledger/85"
+              >
                 A family kennel in the Vermont hills raising {siteConfig.breed}s
                 for shooting, for service work, and for families who want a dog
                 that settles. Both parents cleared on hips, elbows, eyes and a
@@ -95,23 +100,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="shell py-20 lg:py-28">
-        <Reveal stagger className="grid gap-10 lg:grid-cols-12">
-          <p className="eyebrow text-canvas-deep lg:col-span-2">The kennel</p>
-          <div className="lg:col-span-8 lg:col-start-3">
-            <p className="measure text-body-l text-spruce">
-              We keep six dogs. You can meet all of them, and you will meet the
-              mother of your puppy before you take it home — in the house she
-              lives in, not in a car park. If a breeder will not let you do
-              that, walk away from them.
-            </p>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="on-dark bg-spruce" aria-label="Health clearances and registries">
-        <Marquee items={siteConfig.registries} />
-      </section>
+      <AvailablePuppies puppies={placeholderPuppies} />
+      <WhyThisKennel />
+      <MeetTheParents dogs={placeholderDogs} />
+      <ProcessInBrief />
+      <PlacementQuote testimonial={null} />
     </>
   );
 }

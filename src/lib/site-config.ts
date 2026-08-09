@@ -19,6 +19,20 @@ export const siteConfig = {
   breedKey: "labrador" as "labrador" | "golden",
 
   tagline: "Eight litters a year. Every one of them accounted for.",
+
+  /**
+   * The hero headline, as three masked lines.
+   *
+   * PLACEHOLDER — "eight litters a year" is a factual claim about the
+   * business and the client has to confirm or change the number before this
+   * goes live. Kept here rather than in the page so there is exactly one
+   * place to correct it.
+   */
+  heroHeadline: [
+    "Eight litters a year.",
+    "Every one of them",
+    "accounted for.",
+  ],
   description:
     "A family kennel raising health-tested Labrador Retrievers for families and hunters. Hips, elbows, eyes and a full DNA panel on both parents, with the certificates published.",
 
