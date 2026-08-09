@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design tokens — Ridgeline Retrievers
+   Every colour, size and duration used in the build is declared here.
+   No arbitrary hex values in JSX.
+   ========================================================================== */
+
+@theme {
+  /* --- Palette -----------------------------------------------------------
+     Taken off the kennel's own materials: a grey-green enamel feed bowl,
+     a canvas coat, the brass tag on a working collar, ruled stud-book paper,
+     spruce shadow at the treeline.
+     ---------------------------------------------------------------------- */
+  --color-spruce: #1e2a23; /* ink, dark bands, primary button fill */
+  --color-spruce-soft: #2b3931; /* raised surface inside a dark band */
+  --color-spruce-line: #3b4a41; /* hairline on dark */
+  --color-ledger: #dfe0d8; /* page ground — grey-green paper, not cream */
+  --color-ledger-deep: #d2d4c9; /* alternating light band */
+  --color-ledger-bright: #ecede6; /* card face, form fields */
+  --color-enamel: #afb8b0; /* rules, card edges, disabled */
+  --color-canvas: #6e6448; /* muted text, image mattes */
+  --color-canvas-deep: #524b36; /* muted text that needs 7:1 */
+  --color-brass: #a9843f; /* tags, seals, focus ring, hover */
+  --color-brass-bright: #c9a25a; /* brass on a dark ground */
+  --color-foxred: #7a3b24; /* the one hot accent — seals, links */
+
+  /* --- Type --------------------------------------------------------------
+     Three faces, three jobs. Display is used large and rarely; body is
+     meant to disappear; mono carries every piece of record data.
+     ---------------------------------------------------------------------- */
+  --font-display: var(--font-young-serif), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --text-display-xl: clamp(2.75rem, 6vw, 5.5rem);
+  --text-display-xl--line-height: 0.95;
+  --text-display-xl--letter-spacing: -0.02em;
+
+  --text-display-l: clamp(2.25rem, 4vw, 3.75rem);
+  --text-display-l--line-height: 1;
+  --text-display-l--letter-spacing: -0.015em;
+
+  --text-h2: clamp(1.75rem, 2.6vw, 2.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.01em;
+
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.25;
+
+  --text-body-l: 1.1875rem;
+  --text-body-l--line-height: 1.6;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.5;
+
+  --text-data: 0.875rem;
+  --text-data--line-height: 1.7;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.14em;
+
+  /* --- Structure ---------------------------------------------------------- */
+  --spacing-rail: 11rem; /* width of the ledger metadata column */
+  --spacing-gutter: 1.5rem;
+  --spacing-shell: 90rem; /* outer page max-width */
+
+  --radius-card: 2px; /* the site is square. 2px is the ceiling. */
+
+  /* --- Motion -------------------------------------------------------------
+     Durations live here so the reduced-motion override has one place to
+     reach for. GSAP reads these via getComputedStyle where it needs to.
+     ---------------------------------------------------------------------- */
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --duration-header: 300ms;
+  --duration-card: 400ms;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html {
+    /* Lenis drives scrolling; native smooth-scroll would fight it. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ledger);
+    color: var(--color-spruce);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Record data is always tabular so pedigree rows align down the column. */
+  .font-mono,
+  code,
+  kbd,
+  samp {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* One visible focus treatment, everywhere, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  /* On the dark bands the brass ring loses contrast — brighten it. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-brass-bright);
+  }
+
+  ::selection {
+    background-color: var(--color-brass);
+    color: var(--color-ledger-bright);
+  }
+
+  /* Skip link — visible the moment it takes focus. */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    background-color: var(--color-spruce);
+    color: var(--color-ledger);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    text-transform: uppercase;
+    transition: top var(--duration-header) var(--ease-out-quart);
+  }
+  .skip-link:focus-visible {
+    top: 1rem;
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/* The page shell. Asymmetric by default: more room on the left so the
+   ledger rail can sit outside the content field. */
+@utility shell {
+  width: 100%;
+  max-width: var(--spacing-shell);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 4rem;
+  }
+}
+
+/* Mono metadata label. Used for eyebrows, litter IDs, dates, the rail. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Reading measure for long-form copy. The health-testing page depends on it. */
+@utility measure {
+  max-width: 68ch;
+}
+
+/* Hairline rule. The site's only divider. */
+@utility hairline {
+  border-top: 1px solid var(--color-enamel);
+}
+@utility hairline-dark {
+  border-top: 1px solid var(--color-spruce-line);
+}
+
+/* ==========================================================================
+   Reduced motion
+   Kills every transform-based animation and transition. Opacity survives so
+   fades still read as intentional rather than as a broken page.
+   GSAP registers a matching matchMedia guard in the motion provider.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: opacity, color, background-color, border-color,
+      outline-color !important;
+    transition-duration: 150ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Anything mid-transform is snapped back to its resting state. */
+  [data-motion],
+  [data-reveal],
+  [data-parallax] {
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
