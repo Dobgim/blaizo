@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, buttonClasses } from "@/components/ui/Button";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { footerNav } from "@/lib/nav";
 import { siteConfig } from "@/lib/site-config";
+import { generalEnquiryMessage } from "@/lib/whatsapp";
 
 const { contact } = siteConfig;
 
@@ -18,9 +20,11 @@ export function Footer() {
               Applications take about fifteen minutes, and we read every one.
             </h2>
             <p className="measure mt-5 text-body text-canvas-deep">
-              There is no charge to apply. If we think another breeder is a
-              better fit for what you are after, we will tell you that and give
-              you two names.
+              Nothing is paid on this website. You answer the questions, the
+              form hands your answers to us on WhatsApp, and we carry on the
+              conversation from there. If we think another breeder is a better
+              fit for what you are after, we will tell you that and give you two
+              names.
             </p>
           </div>
 
@@ -28,6 +32,12 @@ export function Footer() {
             <ButtonLink href="/apply" size="lg">
               Start an application
             </ButtonLink>
+            <WhatsAppLink
+              message={generalEnquiryMessage()}
+              className={buttonClasses("outline", "lg")}
+            >
+              Message us on WhatsApp
+            </WhatsAppLink>
             <a
               href={contact.phoneHref}
               className="eyebrow text-canvas-deep transition-colors duration-300 hover:text-foxred"
@@ -62,6 +72,12 @@ export function Footer() {
                 >
                   {contact.email}
                 </a>
+                <WhatsAppLink
+                  message={generalEnquiryMessage()}
+                  className="inline-flex items-center gap-2 text-small text-spruce underline decoration-brass decoration-1 underline-offset-4 transition-colors duration-300 hover:text-foxred"
+                >
+                  {contact.whatsappDisplay} on WhatsApp
+                </WhatsAppLink>
               </p>
             </address>
           </div>

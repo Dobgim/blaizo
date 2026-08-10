@@ -44,6 +44,19 @@ export const siteConfig = {
     phone: "(802) 555-0142",
     phoneHref: "tel:+18025550142",
     email: "hello@ridgelineretrievers.com",
+
+    /**
+     * WhatsApp is where every enquiry lands. No payment is taken on this
+     * site — the application form hands off to a WhatsApp conversation with
+     * the answers already written out.
+     *
+     * PLACEHOLDER — must be the kennel's real WhatsApp Business number, in
+     * full international format, digits only, no plus sign and no spaces.
+     * wa.me rejects anything else.
+     */
+    whatsappNumber: "18025550142",
+    /** How the same number is shown to a reader. */
+    whatsappDisplay: "+1 (802) 555-0142",
     /** PLACEHOLDER — client to confirm town before launch. */
     addressLine: "1408 Ridge Road",
     locality: "PLACEHOLDER TOWN",

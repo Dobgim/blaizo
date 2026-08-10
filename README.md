@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ridgeline Retrievers
 
-## Getting Started
+Marketing and lead-generation site for a family kennel. It sells nothing. Its
+job is to make an anxious visitor trust the breeder enough to send an
+application.
 
-First, run the development server:
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js 15, App Router, React 19, TypeScript strict |
+| Styling | Tailwind CSS v4 — all tokens in `src/app/globals.css` |
+| Motion | GSAP 3 + ScrollTrigger, Lenis |
+| Data | Supabase (Postgres, Storage, Auth) |
+| Forms | react-hook-form + zod |
+| Email | Resend |
+| Enquiries | WhatsApp hand-off (see below) |
+| Deploy | Vercel |
+
+## No payment is taken on this site
+
+There is no Stripe, no checkout, and no deposit collected in the browser. When
+a visitor wants a puppy, the site opens WhatsApp with the whole enquiry already
+written — puppy, litter, sire, dam, and every answer from the application form
+— so they send it in one tap and the breeder receives something actionable.
+
+Everything for that lives in two places:
+
+- `src/lib/whatsapp.ts` — builds the `wa.me` links and formats the messages
+- `src/components/ui/WhatsAppLink.tsx` — the anchor, with the brand mark
+
+Applications are still written to the `applications` table so the owner has an
+inbox in `/admin`; the WhatsApp message is the notification, not the record.
+The table has no `deposit_status` or `stripe_session_id` column.
+
+**Before launch:** `siteConfig.contact.whatsappNumber` must be the kennel's real
+WhatsApp Business number in full international format — digits only, no `+`,
+no spaces. `wa.me` silently fails on anything else.
+
+## Client-supplied values
+
+Everything the client still owes is in `src/lib/site-config.ts`, marked
+`PLACEHOLDER`. Nothing on the site asserts a fact that has not been supplied:
+
+- Phone, WhatsApp number, address and town
+- Year established
+- `stats` — the home page count-up band does not render at all while any figure
+  is `null`, so no invented statistics can ship
+
+Photography slots are listed in [IMAGES.md](IMAGES.md) so the client knows what
+to shoot. Placeholders are Unsplash source URLs.
+
+## Design system
+
+Do not introduce arbitrary hex values or font sizes in JSX. Everything is a
+token in `globals.css`:
+
+- **Palette** — spruce, ledger, enamel, canvas, brass, fox red
+- **Type** — Young Serif (display), Instrument Sans (body), IBM Plex Mono
+  (pedigree data, IDs, dates, eyebrows)
+- **Signature element** — the kennel record card
+  (`src/components/records/RecordCard.tsx`). It is the one place the site
+  spends boldness. Everything around it stays quiet: no shadows, no radius
+  above 2px, one accent per section.
+
+All motion is wrapped in a `prefers-reduced-motion` guard, and nothing is
+hidden by default — reveal styles are applied by JS, so the page is fully
+readable if scripts fail.
+
+## Running it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Script | |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint |
+| `npm run placeholders` | Refresh local placeholder imagery |
+| `npm run shoot` | Playwright screenshots used for design critique |

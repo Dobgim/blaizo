@@ -27,6 +27,15 @@ const sizes: Record<Size, string> = {
   lg: "h-14 px-8 text-body",
 };
 
+/** Exported so non-Link anchors (the WhatsApp hand-off) can match exactly. */
+export function buttonClasses(
+  variant: Variant = "solid",
+  size: Size = "md",
+  className?: string,
+) {
+  return classes(variant, size, className);
+}
+
 function classes(variant: Variant, size: Size, className?: string) {
   return [
     base,
