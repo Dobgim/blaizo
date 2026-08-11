@@ -136,9 +136,9 @@ export const images = {
   ),
   "default-contact": slot(
     "default-contact",
-    "photo-1425082661705-1834bfd09dca",
+    "photo-1470240731273-7821a6eeb6bd",
     1600,
-    "The gravel drive and gate at the entrance to the kennel.",
+    "The hill meadow at dusk on the approach to the farm, with the treeline behind it.",
   ),
   "default-og": slot(
     "default-og",

@@ -11,7 +11,45 @@
  */
 
 import { images } from "@/lib/images";
-import type { Dog, Puppy } from "@/lib/types";
+import type { Dog, Litter, Puppy } from "@/lib/types";
+
+export const placeholderLitters: Litter[] = [
+  {
+    id: "litter-h-2026",
+    code: "H-2026",
+    sireName: "Birch",
+    damName: "Hazel",
+    expectedOn: null,
+    bornOn: "2026-06-14",
+    readyOn: "2026-08-09",
+    status: "weaning",
+    notes:
+      "Seven puppies, all yellow. Whelped in the sitting room over a Sunday night.",
+  },
+  {
+    id: "litter-t-2026",
+    code: "T-2026",
+    sireName: "Birch",
+    damName: "Tessa",
+    expectedOn: null,
+    bornOn: "2026-06-28",
+    readyOn: "2026-08-23",
+    status: "weaning",
+    notes: "Five puppies, three black and two yellow.",
+  },
+  {
+    id: "litter-h-2027",
+    code: "H-2027",
+    sireName: "Birch",
+    damName: "Hazel",
+    expectedOn: "2027-04-10",
+    bornOn: null,
+    readyOn: null,
+    status: "planned",
+    notes:
+      "Planned for spring, pending Hazel's next clear eye examination. The waiting list opens once the pairing is confirmed, and we will not confirm it before she is cleared.",
+  },
+];
 
 export const placeholderDogs: Dog[] = [
   {

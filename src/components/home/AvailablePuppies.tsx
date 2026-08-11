@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { RecordCard } from "@/components/records/RecordCard";
+import { PuppyCard } from "@/components/records/PuppyCard";
 import { Reveal } from "@/components/motion/Reveal";
-import { formatDate } from "@/lib/format";
 import type { Puppy } from "@/lib/types";
 
 /**
@@ -50,22 +49,7 @@ export function AvailablePuppies({ puppies }: { puppies: Puppy[] }) {
           >
             {puppies.map((puppy) => (
               <div key={puppy.id} className="w-[78vw] max-w-[320px] shrink-0 sm:w-[300px]">
-                <RecordCard
-                  href={`/puppies/${puppy.slug}`}
-                  name={puppy.name}
-                  tag={puppy.litterId}
-                  meta={`${puppy.sex === "dog" ? "Male" : "Female"} · ${puppy.colour}`}
-                  image={puppy.heroImage}
-                  imageAlt={puppy.heroAlt}
-                  status={puppy.status}
-                  rows={[
-                    { label: "Collar", value: puppy.collarColour },
-                    { label: "Sire", value: puppy.sireName },
-                    { label: "Dam", value: puppy.damName },
-                    { label: "Born", value: formatDate(puppy.bornOn) },
-                    { label: "Ready", value: formatDate(puppy.readyOn) },
-                  ]}
-                />
+                <PuppyCard puppy={puppy} />
               </div>
             ))}
           </Reveal>

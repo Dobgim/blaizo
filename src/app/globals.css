@@ -200,6 +200,67 @@
   max-width: 68ch;
 }
 
+/* Long-form copy. Used on the process pages, the guarantee and journal posts,
+   where the reading is the point and the markup is plain prose. */
+@utility longform {
+  max-width: 68ch;
+
+  & > * + * {
+    margin-block-start: 1.25em;
+  }
+
+  & h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    margin-block-start: 2.25em;
+  }
+
+  & h3 {
+    font-family: var(--font-body);
+    font-size: var(--text-h3);
+    font-weight: 600;
+    line-height: var(--text-h3--line-height);
+    margin-block-start: 2em;
+  }
+
+  & a {
+    color: var(--color-foxred);
+    text-decoration: underline;
+    text-decoration-color: var(--color-brass);
+    text-underline-offset: 4px;
+  }
+
+  & strong {
+    font-weight: 600;
+  }
+
+  & ul,
+  & ol {
+    padding-inline-start: 1.35em;
+  }
+  & ul {
+    list-style: disc;
+  }
+  & ol {
+    list-style: decimal;
+  }
+  & li + li {
+    margin-block-start: 0.6em;
+  }
+  & li::marker {
+    color: var(--color-brass);
+  }
+
+  /* A pulled-aside note. Brass rule on the leading edge, never a tinted box. */
+  & blockquote {
+    border-inline-start: 2px solid var(--color-brass);
+    padding-inline-start: 1.25rem;
+    font-size: var(--text-body-l);
+    line-height: var(--text-body-l--line-height);
+  }
+}
+
 /* Hairline rule. The site's only divider. */
 @utility hairline {
   border-top: 1px solid var(--color-enamel);

@@ -1,0 +1,64 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { ButtonLink, buttonClasses } from "@/components/ui/Button";
+import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
+import { siteConfig } from "@/lib/site-config";
+import { generalEnquiryMessage } from "@/lib/whatsapp";
+
+const { contact } = siteConfig;
+
+/**
+ * The closing invitation above the footer directory.
+ *
+ * Hidden on the pages that *are* the invitation. Offering "Start an
+ * application" to somebody already filling in the application is the site
+ * asking twice, and on /apply the button would link to the page you are
+ * standing on.
+ */
+const SUPPRESS_ON = ["/apply", "/contact"];
+
+export function ClosingInvitation() {
+  const pathname = usePathname();
+  if (SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return null;
+  }
+
+  return (
+    <div className="shell border-b border-enamel py-14 lg:py-20">
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-7 lg:col-start-1">
+          <p className="eyebrow text-canvas-deep">Next step</p>
+          <h2 className="mt-5 text-h2 text-spruce">
+            Applications take about fifteen minutes, and we read every one.
+          </h2>
+          <p className="measure mt-5 text-body text-canvas-deep">
+            Nothing is paid on this website. You answer the questions, the form
+            hands your answers to us on WhatsApp, and we carry on the
+            conversation from there. If we think another breeder is a better fit
+            for what you are after, we will tell you that and give you two
+            names.
+          </p>
+        </div>
+
+        <div className="flex flex-col items-start gap-4 lg:col-span-4 lg:col-start-9 lg:items-end lg:justify-end">
+          <ButtonLink href="/apply" size="lg">
+            Start an application
+          </ButtonLink>
+          <WhatsAppLink
+            message={generalEnquiryMessage()}
+            className={buttonClasses("outline", "lg")}
+          >
+            Message us on WhatsApp
+          </WhatsAppLink>
+          <a
+            href={contact.phoneHref}
+            className="eyebrow text-canvas-deep transition-colors duration-300 hover:text-foxred"
+          >
+            or call {contact.phone}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}

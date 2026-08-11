@@ -9,7 +9,7 @@ import type {
   PuppyRow,
   TestimonialRow,
 } from "@/lib/supabase/database.types";
-import type { Clearance, Dog, Puppy, Testimonial } from "@/lib/types";
+import type { Clearance, Dog, Litter, Puppy, Testimonial } from "@/lib/types";
 
 /**
  * The read layer.
@@ -179,6 +179,56 @@ export async function getPuppySlugs(): Promise<string[]> {
     return [];
   }
   return data.map((r) => r.slug);
+}
+
+// --- Litters ------------------------------------------------------------------
+
+type LitterWithParents = LitterRow & {
+  sire: Pick<DogRow, "name" | "call_name"> | null;
+  dam: Pick<DogRow, "name" | "call_name"> | null;
+};
+
+function toLitter(row: LitterWithParents): Litter {
+  return {
+    id: row.id,
+    code: row.code,
+    sireName: dogLabel(row.sire),
+    damName: dogLabel(row.dam),
+    expectedOn: row.expected_on,
+    bornOn: row.born_on,
+    readyOn: row.ready_on,
+    status: row.status,
+    notes: row.notes,
+  };
+}
+
+export async function getLitters(
+  status?: Litter["status"] | Litter["status"][],
+): Promise<Litter[]> {
+  const supabase = await createClient();
+  if (!supabase) return [];
+
+  let query = supabase
+    .from("litters")
+    .select(
+      `*,
+       sire:dogs!litters_sire_id_fkey (name, call_name),
+       dam:dogs!litters_dam_id_fkey (name, call_name)`,
+    )
+    .order("expected_on", { ascending: true, nullsFirst: false });
+
+  if (status) {
+    query = Array.isArray(status)
+      ? query.in("status", status)
+      : query.eq("status", status);
+  }
+
+  const { data, error } = await query;
+  if (error) {
+    warn("getLitters", error);
+    return [];
+  }
+  return (data as unknown as LitterWithParents[]).map(toLitter);
 }
 
 // --- Dogs --------------------------------------------------------------------

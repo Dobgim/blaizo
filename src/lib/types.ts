@@ -57,6 +57,19 @@ export type Puppy = {
   readyOn: string | null;
 };
 
+export type Litter = {
+  id: string;
+  /** "H-2026" — the code shown in the mono rows and on the brass tag. */
+  code: string;
+  sireName: string;
+  damName: string;
+  expectedOn: string | null;
+  bornOn: string | null;
+  readyOn: string | null;
+  status: LitterStatus;
+  notes: string;
+};
+
 export type Testimonial = {
   id: string;
   authorName: string;
