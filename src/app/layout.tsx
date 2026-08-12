@@ -1,11 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import { fontVariables } from "@/lib/fonts";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
+/**
+ * Root layout — document shell only.
+ *
+ * The marketing chrome (header, footer, smooth scroll) lives in the (site)
+ * group, because the admin panel must not inherit any of it: a nav that
+ * invites the owner to "Apply for a puppy" while they are editing a litter
+ * would be absurd, and Lenis fighting a long admin form is worse.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -35,15 +40,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={fontVariables}>
-      <body>
-        <a href="#main" className="skip-link">
-          Skip to content
-        </a>
-        <SmoothScroll />
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

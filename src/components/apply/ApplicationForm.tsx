@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/Button";
 import { BooleanField, Field } from "@/components/apply/Field";
-import { submitApplication } from "@/app/apply/actions";
+import { submitApplication } from "@/lib/actions/application";
 import {
   applicationSchema,
   STEP_FIELDS,
