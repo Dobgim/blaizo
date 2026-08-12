@@ -2,6 +2,10 @@
 
 import { createClient } from "@/lib/supabase/server";
 import {
+  sendApplicantConfirmation,
+  sendOwnerNotification,
+} from "@/lib/email";
+import {
   applicationSchema,
   type ApplicationValues,
 } from "@/lib/schemas/application";
@@ -20,10 +24,21 @@ export async function submitApplication(
   const parsed = applicationSchema.safeParse(values);
   if (!parsed.success) return { ok: false };
 
-  const supabase = await createClient();
-  if (!supabase) return { ok: false };
-
   const v = parsed.data;
+
+  /* Email goes out regardless of whether the database is reachable — the
+     owner's copy of an application matters more than our record of it, and
+     these two failure modes are unrelated. Neither blocks the hand-off. */
+  const emails = Promise.allSettled([
+    sendOwnerNotification(v),
+    sendApplicantConfirmation(v),
+  ]);
+
+  const supabase = await createClient();
+  if (!supabase) {
+    await emails;
+    return { ok: false };
+  }
 
   const { data, error } = await supabase
     .from("applications")
@@ -46,6 +61,8 @@ export async function submitApplication(
     })
     .select("id")
     .single();
+
+  await emails;
 
   if (error) {
     console.error(`[apply] could not record application: ${error.message}`);

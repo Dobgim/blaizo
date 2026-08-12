@@ -6,8 +6,10 @@ import { WhyThisKennel } from "@/components/home/WhyThisKennel";
 import { MeetTheParents } from "@/components/home/MeetTheParents";
 import { ProcessInBrief } from "@/components/home/ProcessInBrief";
 import { PlacementQuote } from "@/components/home/PlacementQuote";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
+import { localBusinessSchema } from "@/lib/schema";
 import { placeholderDogs, placeholderPuppies } from "@/lib/placeholder-data";
 
 /**
@@ -22,6 +24,8 @@ export default function HomePage() {
 
   return (
     <>
+      <JsonLd data={localBusinessSchema()} />
+
       <section
         data-hero
         className="on-dark relative flex min-h-[92svh] items-end overflow-hidden bg-spruce"

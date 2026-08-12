@@ -6,6 +6,8 @@ import { PuppyCard } from "@/components/records/PuppyCard";
 import { DataRows } from "@/components/records/DataRows";
 import { ClearanceTable } from "@/components/records/ClearanceTable";
 import { Reveal } from "@/components/motion/Reveal";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbSchema, dogSchema } from "@/lib/schema";
 import { allPuppies, dogBySlug } from "@/lib/content-source";
 import { getDogSlugs } from "@/lib/queries";
 import { ageInYears, formatDate } from "@/lib/format";
@@ -50,6 +52,14 @@ export default async function DogPage({ params }: Params) {
 
   return (
     <article>
+      <JsonLd data={dogSchema(dog)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Our dogs", path: "/dogs" },
+          { name: call, path: `/dogs/${dog.slug}` },
+        ])}
+      />
+
       <div className="shell pb-16 pt-32 lg:pt-44">
         <nav aria-label="Breadcrumb" className="mb-8">
           <Link
