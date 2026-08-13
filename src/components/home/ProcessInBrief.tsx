@@ -27,7 +27,7 @@ export function ProcessInBrief() {
               href={step.href}
               className="group grid gap-3 py-8 transition-colors duration-300 lg:grid-cols-12 lg:gap-8 lg:py-10"
             >
-              <span className="eyebrow text-brass lg:col-span-2">{step.n}</span>
+              <span className="eyebrow text-brass-text lg:col-span-2">{step.n}</span>
               <h3 className="font-display text-h3 text-spruce transition-colors duration-300 group-hover:text-foxred lg:col-span-3">
                 {step.title}
               </h3>

@@ -21,7 +21,7 @@ export function AvailablePuppies({ puppies }: { puppies: Puppy[] }) {
       <div className="grid gap-8 lg:grid-cols-12">
         <div className="flex items-baseline gap-5 lg:col-span-2 lg:flex-col lg:items-start lg:gap-2">
           <p className="eyebrow text-canvas-deep">Available</p>
-          <p className="font-mono text-[2.5rem] leading-none text-foxred">
+          <p className="font-mono text-numeral text-foxred">
             {String(availableCount).padStart(2, "0")}
           </p>
         </div>

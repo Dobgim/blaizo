@@ -14,7 +14,7 @@ export default function NotFound() {
     <section className="shell flex min-h-[70vh] items-center py-32">
       <div className="grid w-full gap-10 lg:grid-cols-12 lg:gap-8">
         <div className="flex items-baseline gap-5 lg:col-span-2 lg:flex-col lg:items-start lg:gap-2">
-          <p className="font-mono text-[2.5rem] leading-none text-foxred">404</p>
+          <p className="font-mono text-numeral text-foxred">404</p>
           <p className="eyebrow text-canvas-deep">No record</p>
         </div>
 

@@ -231,7 +231,7 @@ export function Header() {
               <li key={item.href} className="hairline-dark py-5 first:border-t-0 first:pt-0">
                 <Link
                   href={item.href}
-                  className="font-display text-[1.75rem] leading-none text-ledger transition-colors duration-200 hover:text-brass-bright"
+                  className="font-display text-wordmark leading-none text-ledger transition-colors duration-200 hover:text-brass-bright"
                 >
                   {item.label}
                 </Link>

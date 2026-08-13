@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { PuppyCard } from "@/components/records/PuppyCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Reveal } from "@/components/motion/Reveal";
-import { LitterFilterLinks } from "@/components/puppies/LitterFilterLinks";
 import { puppiesByStatus } from "@/lib/content-source";
 
 export const metadata: Metadata = {
@@ -29,22 +28,24 @@ export default async function PuppiesPage() {
 
       <section className="shell pb-24 lg:pb-32">
         {puppies.length > 0 ? (
-          <>
-            <LitterFilterLinks puppies={puppies} />
-            <Reveal
-              stagger
-              className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            >
-              {puppies.map((puppy, i) => (
-                <PuppyCard
-                  key={puppy.id}
-                  puppy={puppy}
-                  sizes={GRID_SIZES}
-                  priority={i < 4}
-                />
-              ))}
-            </Reveal>
-          </>
+          /* No litter summary strip above this grid. It said which litters
+             were represented and how many of each — which is exactly what the
+             brass tag on every card already says. The record card is where
+             this design spends itself; repeating it in plain text alongside
+             was the page not trusting its own signature element. */
+          <Reveal
+            stagger
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
+            {puppies.map((puppy, i) => (
+              <PuppyCard
+                key={puppy.id}
+                puppy={puppy}
+                sizes={GRID_SIZES}
+                priority={i < 4}
+              />
+            ))}
+          </Reveal>
         ) : (
           <EmptyState
             title="No puppies available right now"

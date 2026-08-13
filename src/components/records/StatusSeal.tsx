@@ -6,8 +6,10 @@ const seal: Record<PuppyStatus, { label: string; className: string }> = {
     className: "border-foxred text-foxred",
   },
   reserved: {
+    /* brass-text, not brass: the seal is a word before it is an ornament,
+       and #a9843f cannot carry 12px type at 4.5:1 on any of our grounds. */
     label: "Reserved",
-    className: "border-brass text-brass",
+    className: "border-brass-text text-brass-text",
   },
   placed: {
     label: "Placed",

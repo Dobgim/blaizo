@@ -229,7 +229,7 @@ export default async function HealthTestingPage() {
       <header className="shell pb-14 pt-32 lg:pb-20 lg:pt-44">
         <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
           <div className="flex items-baseline gap-5 lg:col-span-2 lg:flex-col lg:items-start lg:gap-2">
-            <p className="font-mono text-[2.5rem] leading-none text-foxred">02</p>
+            <p className="font-mono text-numeral text-foxred">02</p>
             <p className="eyebrow text-canvas-deep">Step 02 of 05</p>
           </div>
 
@@ -259,7 +259,7 @@ export default async function HealthTestingPage() {
                 not a sequence, so numbering them would be decoration — the
                 rail label is the only true thing to say. */}
             <div className="lg:col-span-2">
-              <p className="eyebrow text-brass">{test.rail}</p>
+              <p className="eyebrow text-brass-text">{test.rail}</p>
             </div>
 
             <Reveal className="lg:col-span-8 lg:col-start-3">
@@ -285,7 +285,7 @@ export default async function HealthTestingPage() {
       >
         <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-2">
-            <p className="eyebrow text-brass">If a dog fails</p>
+            <p className="eyebrow text-brass-text">If a dog fails</p>
           </div>
           <div className="longform text-body text-spruce lg:col-span-8 lg:col-start-3">
             <h2 id="fails-heading" className="text-h2">

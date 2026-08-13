@@ -30,7 +30,7 @@ export function PageHeader({
       <div className="grid gap-6 lg:grid-cols-12 lg:gap-8">
         <div className="flex items-baseline gap-5 lg:col-span-2 lg:flex-col lg:items-start lg:gap-2">
           <p className="eyebrow text-canvas-deep">{eyebrow}</p>
-          {railNote && <p className="eyebrow text-brass">{railNote}</p>}
+          {railNote && <p className="eyebrow text-brass-text">{railNote}</p>}
         </div>
 
         <Reveal stagger className="lg:col-span-9 lg:col-start-3">

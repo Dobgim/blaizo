@@ -71,7 +71,7 @@ export default async function FaqsPage() {
                       {item.question}
                       <span
                         aria-hidden
-                        className="mt-1 shrink-0 font-mono text-data text-brass transition-transform duration-300 group-open:rotate-45"
+                        className="mt-1 shrink-0 font-mono text-data text-brass-text transition-transform duration-300 group-open:rotate-45"
                       >
                         +
                       </span>

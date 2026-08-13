@@ -106,7 +106,7 @@ export function RecordCard({
 
         <span
           aria-hidden
-          className="eyebrow shrink-0 bg-brass px-2.5 py-1 text-spruce transition-transform duration-[400ms] ease-out-quad group-hover:translate-x-2 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+          className="eyebrow shrink-0 bg-brass-tag px-2.5 py-1 text-spruce transition-transform duration-[400ms] ease-out-quad group-hover:translate-x-2 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
         >
           {tag}
         </span>
@@ -136,15 +136,18 @@ export function RecordCard({
           >
             <dt
               className={[
-                "font-mono text-[0.7rem] uppercase tracking-[0.12em]",
-                onDark ? "text-enamel/70" : "text-canvas",
+                "font-mono text-micro uppercase tracking-label",
+                /* Full enamel, not 70% — the dimmed version measured 3.75:1
+                   on spruce-soft. The label/value hierarchy is carried by
+                   case and colour, which is enough without fading it. */
+                onDark ? "text-enamel" : "text-canvas",
               ].join(" ")}
             >
               {row.label}
             </dt>
             <dd
               className={[
-                "font-mono text-[0.75rem] text-right",
+                "font-mono text-eyebrow tracking-normal text-right",
                 onDark ? "text-ledger" : "text-spruce",
               ].join(" ")}
             >

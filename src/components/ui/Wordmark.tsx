@@ -22,7 +22,7 @@ export function Wordmark({
       <span
         className={[
           "font-display tracking-tight transition-colors duration-300",
-          compact ? "text-[1.35rem]" : "text-[1.6rem]",
+          compact ? "text-wordmark-sm" : "text-wordmark",
           onDark
             ? "text-ledger group-hover:text-brass-bright"
             : "text-spruce group-hover:text-foxred",
@@ -30,11 +30,14 @@ export function Wordmark({
       >
         Ridgeline
       </span>
+      {/* The subline used to shrink to 9.6px, which no colour on this palette
+          could carry at 4.5:1. It holds at the micro token instead, and the
+          compact variant tightens tracking rather than dropping size. */}
       <span
         className={[
-          "eyebrow mt-1 transition-colors duration-300",
-          compact ? "text-[0.6rem]" : "text-[0.65rem]",
-          onDark ? "text-brass-bright/80" : "text-canvas",
+          "eyebrow mt-1 text-micro transition-colors duration-300",
+          compact ? "tracking-label" : "",
+          onDark ? "text-brass-bright" : "text-canvas",
         ].join(" ")}
       >
         Retrievers · Est. {siteConfig.establishedYear}

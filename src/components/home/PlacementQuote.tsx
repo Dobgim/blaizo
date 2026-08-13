@@ -48,7 +48,7 @@ export function PlacementQuote({
         <div className="flex flex-col justify-center lg:col-span-7 lg:col-start-6">
           {testimonial ? (
             <figure>
-              <blockquote className="font-display text-[clamp(1.5rem,2.4vw,2.125rem)] leading-[1.25] text-spruce">
+              <blockquote className="font-display text-quote text-spruce">
                 <p>{testimonial.quote}</p>
               </blockquote>
               <figcaption className="eyebrow mt-7 text-canvas-deep">
@@ -93,10 +93,10 @@ function PhotoSlot() {
 function CopySlot() {
   return (
     <div className="border-l-2 border-brass pl-6">
-      <p className="eyebrow text-brass">
+      <p className="eyebrow text-brass-text">
         {placeholderTestimonial.slotLabel} — awaiting copy
       </p>
-      <p className="mt-4 font-display text-[clamp(1.5rem,2.4vw,2.125rem)] leading-[1.25] text-canvas">
+      <p className="mt-4 font-display text-quote text-canvas">
         {placeholderTestimonial.guidance}
       </p>
       <p className="eyebrow mt-6 text-canvas-deep">

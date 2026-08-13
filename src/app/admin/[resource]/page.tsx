@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { PublishToggle } from "@/components/admin/PublishToggle";
 import { createClient } from "@/lib/supabase/server";
-import { findResource, resources } from "@/lib/admin/resources";
+import { findResource } from "@/lib/admin/resources";
 import { formatDate } from "@/lib/format";
 import type { Field } from "@/lib/admin/resources";
 
