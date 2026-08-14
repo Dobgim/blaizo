@@ -6,6 +6,14 @@ import { getPostBySlug, getPosts } from "@/lib/queries";
 import { formatDate } from "@/lib/format";
 import { siteConfig } from "@/lib/site-config";
 
+/* Re-read the database at most once a minute.
+
+   Admin edits already call revalidatePath, so those appear instantly. This
+   covers changes made outside the app — a row deleted in the Supabase SQL
+   editor, say — which otherwise leave a prerendered page serving content that
+   no longer exists. */
+export const revalidate = 60;
+
 type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {

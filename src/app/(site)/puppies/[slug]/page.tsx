@@ -13,6 +13,14 @@ import { getPuppySlugs } from "@/lib/queries";
 import { formatDate, formatPrice } from "@/lib/format";
 import { puppyEnquiryMessage } from "@/lib/whatsapp";
 
+/* Re-read the database at most once a minute.
+
+   Admin edits already call revalidatePath, so those appear instantly. This
+   covers changes made outside the app — a row deleted in the Supabase SQL
+   editor, say — which otherwise leave a prerendered page serving content that
+   no longer exists. */
+export const revalidate = 60;
+
 type Params = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {

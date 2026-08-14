@@ -5,6 +5,14 @@ import { Reveal } from "@/components/motion/Reveal";
 import { getTestimonials } from "@/lib/queries";
 import { placeholderTestimonial } from "@/lib/placeholder-data";
 
+/* Re-read the database at most once a minute.
+
+   Admin edits already call revalidatePath, so those appear instantly. This
+   covers changes made outside the app — a row deleted in the Supabase SQL
+   editor, say — which otherwise leave a prerendered page serving content that
+   no longer exists. */
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Placements",
   description:

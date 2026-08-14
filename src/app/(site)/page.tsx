@@ -12,17 +12,40 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
 import { localBusinessSchema } from "@/lib/schema";
-import { placeholderDogs, placeholderPuppies } from "@/lib/placeholder-data";
+import { allDogs, puppiesByStatus } from "@/lib/content-source";
+
+/* Re-read the database at most once a minute.
+
+   Admin edits already call revalidatePath, so those appear instantly. This
+   covers changes made outside the app — a row deleted in the Supabase SQL
+   editor, say — which otherwise leave a prerendered page serving content that
+   no longer exists. */
+export const revalidate = 60;
 
 /**
- * Step 3 builds the home page against hardcoded content. Step 5 swaps the
- * two arrays below for Supabase queries; nothing else on the page changes.
+ * The home page, reading the same source as every other page.
+ *
+ * It was still importing the hardcoded arrays from step 3 — the swap to
+ * Supabase happened on /puppies and /dogs but never here, so the home page
+ * showed the demonstration dogs whatever the database contained, and no amount
+ * of deleting rows would shift them.
  *
  * The closing CTA is the one in the footer. It is the same invitation on
  * every page and repeating it here would be the site asking twice in a row.
  */
-export default function HomePage() {
+export default async function HomePage() {
   const { contact } = siteConfig;
+
+  const [puppies, parents] = await Promise.all([
+    puppiesByStatus(["available", "reserved"]),
+    allDogs(),
+  ]);
+
+  /* Only the dogs actually being bred from belong in "Meet the parents";
+     retired and companion dogs live on /dogs. */
+  const breedingDogs = parents.filter(
+    (dog) => dog.role === "sire" || dog.role === "dam",
+  );
 
   return (
     <>
@@ -106,9 +129,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <AvailablePuppies puppies={placeholderPuppies} />
+      <AvailablePuppies puppies={puppies} />
       <WhyThisKennel />
-      <MeetTheParents dogs={placeholderDogs} />
+      {breedingDogs.length > 0 && <MeetTheParents dogs={breedingDogs} />}
       <ProcessInBrief />
       <PlacementQuote testimonial={null} />
       <ReviewsWall />
