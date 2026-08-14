@@ -1,13 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
-import { KennelMark } from "@/components/ui/KennelMark";
 import { siteConfig } from "@/lib/site-config";
 
 /**
- * The kennel mark and name.
+ * The kennel logo and name.
  *
- * Brass tag, then the name in the display face with a mono strapline under it
- * carrying the founding year — the same register as the record cards, so the
- * masthead and the artifacts on the page read as one system.
+ * The mark is the client's own artwork (public/brand/logo.png) — a golden
+ * retriever's head in a gold-edged black tile. It already carries its own
+ * background, so it is not tinted and does not change between the light header
+ * and the transparent one over the hero; only the type beside it does.
+ *
+ * `priority` because it sits in the masthead and would otherwise be the one
+ * lazy image above the fold on every page.
  */
 export function Wordmark({
   onDark = false,
@@ -19,18 +23,19 @@ export function Wordmark({
   return (
     <Link
       href="/"
-      className="group inline-flex items-center gap-2.5 leading-none"
+      className="group inline-flex items-center gap-3 leading-none"
       aria-label={`${siteConfig.name} — home`}
     >
-      {/* Full brass, not brass-text. The mark is decorative and aria-hidden,
-          with the kennel's name set beside it — it carries no information of
-          its own, so it is not held to text contrast, and the darker tint
-          just made it read as a smudge at this size. */}
-      <KennelMark
+      <Image
+        src="/brand/logo.png"
+        alt=""
+        width={162}
+        height={162}
+        priority
+        sizes="48px"
         className={[
-          "shrink-0 transition-colors duration-300",
-          compact ? "size-8" : "size-10",
-          onDark ? "text-brass-bright" : "text-brass",
+          "shrink-0 rounded-[6px]",
+          compact ? "size-9" : "size-11",
         ].join(" ")}
       />
 
@@ -46,9 +51,6 @@ export function Wordmark({
         >
           Golden Pup
         </span>
-        {/* The subline used to shrink to 9.6px, which no colour on this palette
-            could carry at 4.5:1. It holds at the micro token instead, and the
-            compact variant tightens tracking rather than dropping size. */}
         <span
           className={[
             "eyebrow mt-1 text-micro transition-colors duration-300",
