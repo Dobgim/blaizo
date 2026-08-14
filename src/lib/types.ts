@@ -59,7 +59,7 @@ export type Puppy = {
 
 export type Litter = {
   id: string;
-  /** "H-2026" — the code shown in the mono rows and on the brass tag. */
+  /** "A-2025" — the code shown in the mono rows and on the brass tag. */
   code: string;
   sireName: string;
   damName: string;

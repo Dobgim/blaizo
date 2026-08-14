@@ -48,17 +48,17 @@ from dogs d
 join (values
   ('birch', 'Hips',   'OFA Excellent', date '2023-04-11', 1),
   ('birch', 'Elbows', 'OFA Normal',    date '2023-04-11', 2),
-  ('birch', 'Eyes',   'CAER Clear',    date '2026-01-20', 3),
+  ('birch', 'Eyes',   'CAER Clear',    date '2025-01-20', 3),
   ('birch', 'DNA',    '5-panel clear', date '2021-08-02', 4),
 
   ('hazel', 'Hips',   'OFA Good',      date '2023-06-08', 1),
   ('hazel', 'Elbows', 'OFA Normal',    date '2023-06-08', 2),
-  ('hazel', 'Eyes',   'CAER Clear',    date '2026-01-20', 3),
+  ('hazel', 'Eyes',   'CAER Clear',    date '2025-01-20', 3),
   ('hazel', 'DNA',    '5-panel clear', date '2021-09-15', 4),
 
   ('tessa', 'Hips',   'OFA Good',      date '2024-09-30', 1),
   ('tessa', 'Elbows', 'OFA Normal',    date '2024-09-30', 2),
-  ('tessa', 'Eyes',   'CAER Clear',    date '2026-01-20', 3),
+  ('tessa', 'Eyes',   'CAER Clear',    date '2025-01-20', 3),
   ('tessa', 'DNA',    '5-panel clear', date '2022-12-04', 4)
 ) as c (slug, type, result, tested_on, sort_order)
   on c.slug = d.slug;
@@ -67,28 +67,28 @@ join (values
 
 insert into litters (code, sire_id, dam_id, born_on, ready_on, status, notes, is_published)
 values
-  ('H-2026',
+  ('A-2025',
    (select id from dogs where slug = 'birch'),
    (select id from dogs where slug = 'hazel'),
-   '2026-06-14', '2026-08-09', 'weaning',
+   '2025-04-12', '2025-06-07', 'weaning',
    'Seven puppies, all yellow. Whelped in the sitting room over a Sunday night.',
    true),
 
-  ('T-2026',
+  ('B-2025',
    (select id from dogs where slug = 'birch'),
    (select id from dogs where slug = 'tessa'),
-   '2026-06-28', '2026-08-23', 'weaning',
+   '2025-04-26', '2025-06-21', 'weaning',
    'Five puppies, three black and two yellow.',
    true),
 
-  ('H-2027',
+  ('C-2025',
    (select id from dogs where slug = 'birch'),
    (select id from dogs where slug = 'hazel'),
    null, null, 'planned',
-   'Planned for spring. Waiting list opens once the pairing is confirmed.',
+   'Planned for December. Waiting list opens once the pairing is confirmed.',
    true);
 
-update litters set expected_on = '2027-04-10' where code = 'H-2027';
+update litters set expected_on = '2025-12-10' where code = 'C-2025';
 
 -- --- puppies ------------------------------------------------------------------
 
@@ -98,16 +98,16 @@ select l.id, p.slug, p.name, p.sex::dog_sex, p.colour, p.collar_colour,
        p.price_cents, p.status::puppy_status, p.hero_image, p.hero_alt, true, p.sort_order
 from litters l
 join (values
-  ('H-2026', 'juniper', 'Juniper', 'bitch', 'Yellow', 'Green',  320000, 'available',
+  ('A-2025', 'juniper', 'Juniper', 'bitch', 'Yellow', 'Green',  320000, 'available',
    '/placeholders/default-puppy.jpg',
    'A yellow Labrador puppy in a green collar sitting on cut grass.', 1),
-  ('H-2026', 'ash', 'Ash', 'dog', 'Yellow', 'Blue', 320000, 'available',
+  ('A-2025', 'ash', 'Ash', 'dog', 'Yellow', 'Blue', 320000, 'available',
    '/placeholders/dog-sire.jpg',
    'A yellow Labrador puppy in a blue collar standing on cut grass.', 2),
-  ('H-2026', 'wren', 'Wren', 'bitch', 'Yellow', 'Red', 320000, 'reserved',
+  ('A-2025', 'wren', 'Wren', 'bitch', 'Yellow', 'Red', 320000, 'reserved',
    '/placeholders/default-dog.jpg',
    'A yellow Labrador puppy in a red collar lying in cut grass.', 3),
-  ('T-2026', 'sorrel', 'Sorrel', 'dog', 'Black', 'Orange', 320000, 'available',
+  ('B-2025', 'sorrel', 'Sorrel', 'dog', 'Black', 'Orange', 320000, 'available',
    '/placeholders/dog-dam-two.jpg',
    'A black Labrador puppy in an orange collar sitting on cut grass.', 4)
 ) as p (code, slug, name, sex, colour, collar_colour, price_cents, status,

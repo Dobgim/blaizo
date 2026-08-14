@@ -18,7 +18,7 @@ export const siteConfig = {
    */
   breedKey: "labrador" as "labrador" | "golden",
 
-  tagline: "Eight litters a year. Every one of them accounted for.",
+  tagline: "Three litters a year. Every one of them accounted for.",
 
   /**
    * The hero headline, as three masked lines.
@@ -29,20 +29,18 @@ export const siteConfig = {
    * place to correct it.
    */
   heroHeadline: [
-    "Eight litters a year.",
+    "Three litters a year.",
     "Every one of them",
     "accounted for.",
   ],
   description:
     "A family kennel raising health-tested Labrador Retrievers for families and hunters. Hips, elbows, eyes and a full DNA panel on both parents, with the certificates published.",
 
-  /** PLACEHOLDER — client to confirm. */
-  establishedYear: 1998,
+  establishedYear: 2024,
 
   contact: {
-    /** PLACEHOLDER — client to confirm. */
-    phone: "(802) 555-0142",
-    phoneHref: "tel:+18025550142",
+    phone: "(202) 643-8872",
+    phoneHref: "tel:+12026438872",
     email: "hello@ridgelineretrievers.com",
 
     /**
@@ -50,13 +48,12 @@ export const siteConfig = {
      * site — the application form hands off to a WhatsApp conversation with
      * the answers already written out.
      *
-     * PLACEHOLDER — must be the kennel's real WhatsApp Business number, in
-     * full international format, digits only, no plus sign and no spaces.
-     * wa.me rejects anything else.
+     * Digits only, full international format, no plus sign and no spaces —
+     * wa.me rejects anything else. Same line as the phone number above.
      */
-    whatsappNumber: "18025550142",
+    whatsappNumber: "12026438872",
     /** How the same number is shown to a reader. */
-    whatsappDisplay: "+1 (802) 555-0142",
+    whatsappDisplay: "+1 (202) 643-8872",
     /** PLACEHOLDER — client to confirm town before launch. */
     addressLine: "1408 Ridge Road",
     locality: "PLACEHOLDER TOWN",

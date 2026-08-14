@@ -6,7 +6,7 @@ const MONTHS = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
-/** "2026-06-14" → "14 Jun 2026". Mono rows, so no comma. */
+/** "2025-04-12" → "12 Apr 2025". Mono rows, so no comma. */
 export function formatDate(iso: string | null): string {
   if (!iso) return "—";
   const [y, m, d] = iso.split("-").map(Number);
@@ -14,7 +14,7 @@ export function formatDate(iso: string | null): string {
   return `${String(d).padStart(2, "0")} ${MONTHS[m - 1]} ${y}`;
 }
 
-/** "2026-06-14" → "Jun 2026". Used where the day is noise. */
+/** "2025-04-12" → "Apr 2025". Used where the day is noise. */
 export function formatMonth(iso: string | null): string {
   if (!iso) return "—";
   const [y, m] = iso.split("-").map(Number);

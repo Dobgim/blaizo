@@ -179,7 +179,7 @@ export const resources: Resource[] = [
         type: "text",
         required: true,
         inList: true,
-        help: "Short, like H-2026. It appears on the brass tag of every puppy card.",
+        help: "Short, like A-2025. It appears on the brass tag of every puppy card.",
       },
       { name: "sire_id", label: "Sire", type: "reference", refTable: "dogs", inList: true },
       { name: "dam_id", label: "Dam", type: "reference", refTable: "dogs", inList: true },

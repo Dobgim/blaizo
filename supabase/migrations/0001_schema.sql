@@ -85,7 +85,7 @@ create index clearances_dog_idx on clearances (dog_id, sort_order);
 
 create table litters (
   id           uuid primary key default gen_random_uuid(),
-  code         text not null unique,           -- 'H-2026', shown in the mono rows
+  code         text not null unique,           -- 'A-2025', shown in the mono rows
   sire_id      uuid references dogs (id) on delete set null,
   dam_id       uuid references dogs (id) on delete set null,
   expected_on  date,

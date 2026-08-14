@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { WaitingListPopup } from "@/components/marketing/WaitingListPopup";
 
 /** The public site: marketing chrome and smooth scroll. */
 export default function SiteLayout({
@@ -15,6 +16,7 @@ export default function SiteLayout({
       <Header />
       <main id="main">{children}</main>
       <Footer />
+      <WaitingListPopup />
     </>
   );
 }

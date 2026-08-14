@@ -71,8 +71,11 @@ export function Footer() {
 
       {/* ---------- Legal ---------- */}
       <div className="shell hairline flex flex-col gap-4 py-7 md:flex-row md:items-center md:justify-between">
+        {/* Pinned to the founding year rather than new Date(). A copyright
+            line is the one place on a page that silently rewrites itself, and
+            the client asked for a fixed year they control. */}
         <p className="eyebrow text-canvas-deep">
-          © {new Date().getFullYear()} {siteConfig.name}
+          © {siteConfig.establishedYear} {siteConfig.name}
         </p>
         <ul className="flex flex-wrap gap-x-7 gap-y-2">
           <li>
