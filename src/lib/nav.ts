@@ -79,7 +79,8 @@ export const footerNav: { heading: string; links: { label: string; href: string 
       { label: "The family", href: "/about" },
       { label: "The facility", href: "/about/facility" },
       { label: "Placements", href: "/about/reviews" },
-      { label: "Journal", href: "/journal" },
+      /* Journal is out of the footer too now. The route still resolves, so
+         anything already linked or indexed keeps working. */
       { label: "FAQs", href: "/faqs" },
       { label: "Contact", href: "/contact" },
     ],

@@ -1,4 +1,4 @@
-# Ridgeline Retrievers
+# Golden Pup Kennel
 
 Marketing and lead-generation site for a family kennel. It sells nothing. Its
 job is to make an anxious visitor trust the breeder enough to send an
@@ -66,6 +66,29 @@ token in `globals.css`:
 All motion is wrapped in a `prefers-reduced-motion` guard, and nothing is
 hidden by default — reveal styles are applied by JS, so the page is fully
 readable if scripts fail.
+
+## Deploying to Vercel
+
+Import the repo, keep every framework default, and set the environment
+variables below. `next build` is the build command and there is no custom
+output directory.
+
+| Variable | Needed for | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Production only | `https://goldenpupkennel.com`. Sets canonicals, Open Graph, the sitemap and JSON-LD. **Leave it unset on Preview** — previews then use their own deployment URL instead of claiming to be production. |
+| `NEXT_PUBLIC_SUPABASE_URL` | Admin, live data | Without it the site serves the demonstration records and `/admin` shows a "not configured" screen. |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Admin, live data | Safe to expose; RLS is what protects the data. |
+| `RESEND_API_KEY` | Application emails | Optional. Missing means the WhatsApp hand-off still works, no email is sent. |
+| `RESEND_FROM` | Application emails | Must be a verified sender domain in Resend. |
+| `OWNER_NOTIFICATION_EMAIL` | Application emails | Where the owner's copy goes. |
+
+The origin resolves in this order: `NEXT_PUBLIC_SITE_URL`, then
+`VERCEL_PROJECT_PRODUCTION_URL`, then `VERCEL_URL`, then localhost — so
+canonicals stay correct on previews without any extra configuration.
+
+After the first deploy: point the domain at the project, add the deployed
+origin to Supabase's allowed redirect URLs, and create the owner's account in
+Supabase Auth (there is no public sign-up).
 
 ## Running it
 

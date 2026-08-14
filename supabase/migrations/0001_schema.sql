@@ -1,5 +1,5 @@
 -- =============================================================================
--- Ridgeline Retrievers — schema
+-- Golden Pup Kennel — schema
 --
 -- Notes on shape:
 --   * Slugs are unique and are the public URL key; ids stay internal.

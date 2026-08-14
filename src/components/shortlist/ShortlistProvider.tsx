@@ -48,7 +48,7 @@ type ShortlistContext = {
   ready: boolean;
 };
 
-const STORAGE_KEY = "ridgeline:shortlist";
+const STORAGE_KEY = "goldenpup:shortlist";
 
 const Context = createContext<ShortlistContext | null>(null);
 

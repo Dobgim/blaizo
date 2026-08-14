@@ -374,7 +374,7 @@ export function findResource(key: string) {
   return resources.find((r) => r.key === key) ?? null;
 }
 
-/** "Ridgeline's Second Wind" → "ridgelines-second-wind" */
+/** "Golden Pup's Second Wind" → "golden-pups-second-wind" */
 export function slugify(input: string) {
   return input
     .toLowerCase()

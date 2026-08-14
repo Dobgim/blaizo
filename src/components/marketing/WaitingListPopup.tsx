@@ -31,7 +31,7 @@ import { whatsappUrl } from "@/lib/whatsapp";
  * to WhatsApp, exactly like every other conversion path on this site.
  */
 
-const STORAGE_KEY = "ridgeline:waiting-list-seen";
+const STORAGE_KEY = "goldenpup:waiting-list-seen";
 const DELAY_MS = 6000;
 
 export function WaitingListPopup() {

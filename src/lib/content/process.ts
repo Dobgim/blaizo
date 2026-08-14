@@ -35,7 +35,7 @@ export const processPages: ProcessPage[] = [
     slug: "training",
     title: "Early training",
     summary:
-      "What a Ridgeline puppy already knows before it ever sees your house.",
+      "What a Golden Pup puppy already knows before it ever sees your house.",
   },
   {
     n: "04",

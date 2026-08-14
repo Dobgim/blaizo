@@ -4,7 +4,7 @@ import { ProcessLayout } from "@/components/process/ProcessLayout";
 export const metadata: Metadata = {
   title: "Early training",
   description:
-    "What a Ridgeline puppy already knows at eight weeks: crate, car, stairs, noise, handling, and the beginnings of house training.",
+    "What a Golden Pup puppy already knows at eight weeks: crate, car, stairs, noise, handling, and the beginnings of house training.",
 };
 
 export default function TrainingPage() {

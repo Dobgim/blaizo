@@ -9,7 +9,7 @@ import { formatMonth } from "@/lib/format";
 export const metadata: Metadata = {
   title: "Upcoming litters",
   description:
-    "Planned and expected Labrador litters at Ridgeline Retrievers, with the pairing, the timing and what is still to be confirmed.",
+    "Planned and expected Labrador litters at Golden Pup Kennel, with the pairing, the timing and what is still to be confirmed.",
 };
 
 export default async function UpcomingLittersPage() {

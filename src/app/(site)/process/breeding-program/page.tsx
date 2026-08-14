@@ -4,7 +4,7 @@ import { ProcessLayout } from "@/components/process/ProcessLayout";
 export const metadata: Metadata = {
   title: "The breeding program",
   description:
-    "How we choose a pairing, why we skip seasons, and how many litters a dam has in her life at Ridgeline Retrievers.",
+    "How we choose a pairing, why we skip seasons, and how many litters a dam has in her life at Golden Pup Kennel.",
 };
 
 export default function BreedingProgramPage() {

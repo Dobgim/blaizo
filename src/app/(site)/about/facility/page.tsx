@@ -7,7 +7,7 @@ import { images } from "@/lib/images";
 export const metadata: Metadata = {
   title: "Where the dogs live",
   description:
-    "The whelping room, the boot room and the field. Photographs of where Ridgeline dogs actually spend their day, not a staged set.",
+    "The whelping room, the boot room and the field. Photographs of where Golden Pup dogs actually spend their day, not a staged set.",
 };
 
 /**

@@ -4,7 +4,7 @@ import { ProcessLayout } from "@/components/process/ProcessLayout";
 export const metadata: Metadata = {
   title: "Going home",
   description:
-    "Collection, delivery within four hours, or a flight nanny in the cabin — plus everything in the folder that travels with every Ridgeline puppy.",
+    "Collection, delivery within four hours, or a flight nanny in the cabin — plus everything in the folder that travels with every Golden Pup puppy.",
 };
 
 export default function GoingHomePage() {
@@ -34,7 +34,7 @@ export default function GoingHomePage() {
       <p>
         Further afield, we book a courier who carries the puppy in the cabin as
         their own carry-on and hands it to you at the airport. It costs more
-        than the alternatives and it is worth every dollar. Ridgeline puppies do
+        than the alternatives and it is worth every dollar. Golden Pup puppies do
         not travel as cargo, in any weather, for any price.
       </p>
 

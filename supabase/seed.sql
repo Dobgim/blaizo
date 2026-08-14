@@ -19,21 +19,21 @@
 insert into dogs (slug, name, call_name, sex, colour, dob, role, weight_lbs,
                   registry_number, bio, hero_image, hero_alt, is_published, sort_order)
 values
-  ('birch', 'Ridgeline''s Second Wind', 'Birch', 'dog', 'Yellow', '2021-03-14',
+  ('birch', 'Golden Pup''s Second Wind', 'Birch', 'dog', 'Yellow', '2021-03-14',
    'sire', 74, 'SR000000/01',
    'Birch works. He has spent five seasons in the grouse woods and still asks for one more field at the end of the day, then falls asleep under the kitchen table for eleven hours.',
    '/placeholders/dog-sire.jpg',
    'A yellow Labrador standing alert in long field grass, head turned toward the treeline.',
    true, 1),
 
-  ('hazel', 'Ridgeline''s Hazel Run', 'Hazel', 'bitch', 'Yellow', '2021-04-02',
+  ('hazel', 'Golden Pup''s Hazel Run', 'Hazel', 'bitch', 'Yellow', '2021-04-02',
    'dam', 62, 'SR000000/02',
    'Hazel is the one who decides where everybody sleeps. Steady with children to the point of being boring about it, which is exactly what we breed her for.',
    '/placeholders/dog-dam-one.jpg',
    'A yellow Labrador lying on a porch board floor with her chin on her paws.',
    true, 2),
 
-  ('tessa', 'Ridgeline''s Tessa Grade', 'Tessa', 'bitch', 'Black', '2022-08-19',
+  ('tessa', 'Golden Pup''s Tessa Grade', 'Tessa', 'bitch', 'Black', '2022-08-19',
    'dam', 58, 'SR000000/03',
    'Tessa came back to us from a service programme that had more dogs than placements. She is the softest mouth on the property and the fastest learner we have owned.',
    '/placeholders/dog-dam-two.jpg',
@@ -160,7 +160,7 @@ insert into faqs (category, question, answer, sort_order) values
 
   ('After they are home',
    'What if my circumstances change?',
-   'We take the dog back. At eight weeks or at eight years, for any reason, with no questions and no fee. It is written into the contract. No Ridgeline dog ends up in a shelter while we are alive to prevent it.',
+   'We take the dog back. At eight weeks or at eight years, for any reason, with no questions and no fee. It is written into the contract. No Golden Pup dog ends up in a shelter while we are alive to prevent it.',
    1),
   ('After they are home',
    'What does the health guarantee actually cover?',

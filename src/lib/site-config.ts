@@ -7,10 +7,32 @@
  * updates everywhere.
  */
 
+/**
+ * The canonical origin, resolved for wherever this build is running.
+ *
+ * Order matters. NEXT_PUBLIC_SITE_URL wins so the production domain can be set
+ * explicitly; VERCEL_PROJECT_PRODUCTION_URL keeps canonicals correct on Vercel
+ * before a custom domain is attached; VERCEL_URL covers preview deployments,
+ * where a hardcoded production URL would make every preview's metadata,
+ * sitemap and JSON-LD point at the wrong host. Localhost is the last resort.
+ */
+function siteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const production = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (production) return `https://${production}`;
+
+  const preview = process.env.VERCEL_URL;
+  if (preview) return `https://${preview}`;
+
+  return "http://localhost:3000";
+}
+
 export const siteConfig = {
-  name: "Ridgeline Retrievers",
+  name: "Golden Pup Kennel",
   /** Used in <title> templates and the footer mark. */
-  shortName: "Ridgeline",
+  shortName: "Golden Pup",
   breed: "Labrador Retriever",
   /**
    * Drives the DNA panel copy on /process/health-testing. Switching this to
@@ -41,7 +63,7 @@ export const siteConfig = {
   contact: {
     phone: "(202) 643-8872",
     phoneHref: "tel:+12026438872",
-    email: "hello@ridgelineretrievers.com",
+    email: "hello@goldenpupkennel.com",
 
     /**
      * WhatsApp is where every enquiry lands. No payment is taken on this
@@ -96,7 +118,7 @@ export const siteConfig = {
     "Embark Tested",
   ],
 
-  url: "https://ridgelineretrievers.com",
+  url: siteUrl(),
 } as const;
 
 export type SiteConfig = typeof siteConfig;

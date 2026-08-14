@@ -1,4 +1,4 @@
-# Photography brief — Ridgeline Retrievers
+# Photography brief — Golden Pup Kennel
 
 The site is photo-led. Layout is built around large, well-cropped images; weak
 photography will undo the rest of the build. Every slot the site renders is

@@ -55,7 +55,7 @@ export const placeholderDogs: Dog[] = [
   {
     id: "dog-birch",
     slug: "birch",
-    name: "Ridgeline's Second Wind",
+    name: "Golden Pup's Second Wind",
     callName: "Birch",
     sex: "dog",
     colour: "Yellow",
@@ -77,7 +77,7 @@ export const placeholderDogs: Dog[] = [
   {
     id: "dog-hazel",
     slug: "hazel",
-    name: "Ridgeline's Hazel Run",
+    name: "Golden Pup's Hazel Run",
     callName: "Hazel",
     sex: "bitch",
     colour: "Yellow",
@@ -99,7 +99,7 @@ export const placeholderDogs: Dog[] = [
   {
     id: "dog-tessa",
     slug: "tessa",
-    name: "Ridgeline's Tessa Grade",
+    name: "Golden Pup's Tessa Grade",
     callName: "Tessa",
     sex: "bitch",
     colour: "Black",
@@ -231,7 +231,7 @@ export const processSteps = [
   {
     n: "03",
     title: "Weeks three to eight",
-    body: "Crates, car rides, stairs, gunfire at a distance, a vacuum cleaner, children, and a floor that moves. By eight weeks a Ridgeline puppy has met the things that frighten dogs.",
+    body: "Crates, car rides, stairs, gunfire at a distance, a vacuum cleaner, children, and a floor that moves. By eight weeks a Golden Pup puppy has met the things that frighten dogs.",
     href: "/process/training",
   },
   {

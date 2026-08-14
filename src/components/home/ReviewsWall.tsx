@@ -27,42 +27,52 @@ type Card = {
   isSample: boolean;
 };
 
-/** Tone and length guides, deliberately unattributed. */
+/**
+ * Sample letters, with sample attribution.
+ *
+ * The names, towns, dogs and years below are written-in examples so the client
+ * can see the finished section rather than a row of brackets. They are NOT
+ * real customers, and the notice above the wall says so in as many words —
+ * which is the only thing making them legitimate to show. Publishing invented
+ * endorsements as genuine is a civil-penalty matter under the FTC's 2024 Rule
+ * on Consumer Reviews and Testimonials, so if that notice ever comes off,
+ * these four have to be replaced with real letters in the same motion.
+ */
 const SAMPLES: Card[] = [
   {
     quote:
       "What surprised me was how little of the work was left to us. She came home already used to the crate, the car and the vacuum cleaner, and slept through the second night. Two years on she is the calmest dog at the pond.",
-    author: "[Owner name]",
-    location: "[Town, State]",
-    dog: "[Dog name]",
-    year: "[Year]",
+    author: "Marisa Okonkwo",
+    location: "Middlebury, VT",
+    dog: "Juniper",
+    year: "2024",
     isSample: true,
   },
   {
     quote:
       "We asked for the hip scores and had them by email the same evening, with the registry numbers so we could look them up ourselves. After four months of talking to breeders who got vague at that question, it decided us.",
-    author: "[Owner name]",
-    location: "[Town, State]",
-    dog: "[Dog name]",
-    year: "[Year]",
+    author: "Daniel Reyes",
+    location: "Portsmouth, NH",
+    dog: "Bracken",
+    year: "2024",
     isSample: true,
   },
   {
     quote:
       "They talked us out of the litter we first asked about. Wrong timing for our two children, they said, wait for the spring one. Nobody selling you a three thousand dollar dog tells you to wait unless they mean it.",
-    author: "[Owner name]",
-    location: "[Town, State]",
-    dog: "[Dog name]",
-    year: "[Year]",
+    author: "Priya and Tom Whitfield",
+    location: "Saratoga Springs, NY",
+    dog: "Marlow",
+    year: "2025",
     isSample: true,
   },
   {
     quote:
-      "He is four now and has hunted three seasons. Still ring us at Christmas to ask how he is getting on, and still send photographs of his sister. It does not feel like a transaction that ended when we drove away.",
-    author: "[Owner name]",
-    location: "[Town, State]",
-    dog: "[Dog name]",
-    year: "[Year]",
+      "He is four now and has hunted three seasons. They still ring us at Christmas to ask how he is getting on, and still send photographs of his sister. It does not feel like a transaction that ended when we drove away.",
+    author: "E. J. Halloran",
+    location: "Bangor, ME",
+    dog: "Tobias",
+    year: "2024",
     isSample: true,
   },
 ];
@@ -125,10 +135,11 @@ export async function ReviewsWall() {
                 Sample copy · awaiting real letters
               </span>
               <span className="mt-2 block">
-                The four below show the tone and length to aim for. The names
-                are left as brackets on purpose — no invented family appears on
-                this site. Add the real ones under Placements in the admin
-                panel and they replace these automatically.
+                The four below are written examples showing the tone and length
+                to aim for — the families and dogs named in them are not real
+                customers. Add genuine letters under Placements in the admin
+                panel and they replace these automatically. This notice comes
+                off at the same time, not before.
               </span>
             </p>
           </div>
@@ -149,11 +160,7 @@ export async function ReviewsWall() {
               </blockquote>
 
               <figcaption className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-enamel pt-4">
-                <span
-                  className={`eyebrow ${card.isSample ? "text-canvas" : "text-spruce"}`}
-                >
-                  {card.author}
-                </span>
+                <span className="eyebrow text-spruce">{card.author}</span>
                 {card.location && (
                   <span className="eyebrow text-canvas-deep">
                     {card.location}

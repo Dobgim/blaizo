@@ -4,7 +4,7 @@ import { ProcessLayout } from "@/components/process/ProcessLayout";
 export const metadata: Metadata = {
   title: "The health guarantee",
   description:
-    "The Ridgeline Retrievers health warranty in full — what is covered, for how long, what we pay, and the return-to-breeder clause that has no time limit.",
+    "The Golden Pup Kennel health warranty in full — what is covered, for how long, what we pay, and the return-to-breeder clause that has no time limit.",
 };
 
 /**
@@ -83,7 +83,7 @@ export default function GuaranteePage() {
       </blockquote>
       <p>
         There is no time limit on that, it is not conditional on anything, and
-        it is written into the contract you sign. It exists because no Ridgeline
+        it is written into the contract you sign. It exists because no Golden Pup
         dog should ever end up in a shelter, and because circumstances change in
         ways nobody plans for. If you cannot keep the dog, call us before you do
         anything else.

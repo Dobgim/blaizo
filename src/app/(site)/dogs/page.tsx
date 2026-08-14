@@ -10,7 +10,7 @@ import type { Dog } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Our dogs",
   description:
-    "Every dog at Ridgeline Retrievers — sires, dams and the retired ones who still live here. Clearances, registry numbers and certificates on each.",
+    "Every dog at Golden Pup Kennel — sires, dams and the retired ones who still live here. Clearances, registry numbers and certificates on each.",
 };
 
 type Filter = "all" | Dog["role"];

@@ -79,7 +79,7 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "What if my circumstances change?",
         answer:
-          "We take the dog back. At eight weeks or at eight years, for any reason, with no questions and no fee. It is written into the contract. No Ridgeline dog ends up in a shelter while we are alive to prevent it.",
+          "We take the dog back. At eight weeks or at eight years, for any reason, with no questions and no fee. It is written into the contract. No Golden Pup dog ends up in a shelter while we are alive to prevent it.",
       },
       {
         question: "What does the health guarantee actually cover?",

@@ -15,7 +15,7 @@ export function ProcessInBrief() {
         </p>
         <div className="lg:col-span-7 lg:col-start-3">
           <h2 id="process-heading" className="text-h2 text-spruce">
-            How a Ridgeline puppy gets to you
+            How a Golden Pup puppy gets to you
           </h2>
         </div>
       </div>

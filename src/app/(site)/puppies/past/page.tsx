@@ -8,7 +8,7 @@ import { puppiesByStatus } from "@/lib/content-source";
 export const metadata: Metadata = {
   title: "Past litters",
   description:
-    "Every Ridgeline puppy we have placed, kept on the record. The archive is the proof — these are the dogs, and these are the families that have them.",
+    "Every Golden Pup puppy we have placed, kept on the record. The archive is the proof — these are the dogs, and these are the families that have them.",
 };
 
 /**
