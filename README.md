@@ -102,5 +102,14 @@ npm run dev
 | `npm run dev` | Dev server |
 | `npm run build` | Production build |
 | `npm run lint` | ESLint |
-| `npm run placeholders` | Refresh local placeholder imagery |
+| `npm run placeholders` | Fetch and downscale local placeholder imagery |
+| `npm run optimise:images` | Re-compress `public/placeholders` in place |
+| `npm run a11y` | axe-core over every route at 390px and 1440px |
+| `npm run responsive` | Horizontal overflow and tap-target check, 320px→1024px |
 | `npm run shoot` | Playwright screenshots used for design critique |
+
+`a11y` and `responsive` both need the site running (`npm run build && npm start`)
+and both exit non-zero on failure, so they can gate a deploy. The bars they
+enforce are zero axe violations, zero horizontal overflow, and WCAG 2.2
+Target Size (Minimum) at 24×24 CSS px — primary controls are built to 44px by
+hand because it is better on a phone.

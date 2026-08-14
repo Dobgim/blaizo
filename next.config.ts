@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
     // is the client's own Supabase Storage.
     remotePatterns: supabaseImageHost(),
     formats: ["image/avif", "image/webp"],
+    /* The photography barely changes and every optimised variant is expensive
+       to produce on a cold deployment. A month of cache means a visitor pays
+       that cost once, not once per deploy window. */
+    minimumCacheTTL: 60 * 60 * 24 * 31,
+    /* Trimmed from the defaults to what the layouts actually request. Each
+       extra width is another variant to generate and store on first hit. */
+    deviceSizes: [390, 640, 828, 1080, 1200, 1920],
+    imageSizes: [64, 128, 256, 384],
   },
   experimental: {
     optimizePackageImports: ["gsap"],

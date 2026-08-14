@@ -28,7 +28,7 @@ export function ShortlistButton({ onDark = false }: { onDark?: boolean }) {
       type="button"
       onClick={open}
       className={[
-        "inline-flex items-center gap-2 rounded-[2px] px-2.5 py-2 transition-colors duration-300",
+        "inline-flex min-h-11 items-center gap-2 rounded-[2px] px-2.5 py-2 transition-colors duration-300",
         onDark
           ? "text-ledger hover:text-brass-bright"
           : "text-spruce hover:text-foxred",

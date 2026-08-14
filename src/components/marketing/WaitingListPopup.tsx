@@ -146,43 +146,59 @@ export function WaitingListPopup() {
     "mt-2 w-full rounded-[2px] border border-enamel bg-ledger-bright px-4 py-3 text-body text-spruce transition-colors duration-200 hover:border-canvas";
 
   return (
+    /* Scrolling lives on the outer block element, and the flex centring on an
+       inner wrapper with min-h-full. Centring a taller-than-viewport child
+       directly on a scroll container clips its top edge and makes it
+       unreachable — on a phone that meant the close button sat above the
+       viewport with no way to scroll up to it. */
     <div
-      className="fixed inset-0 z-[60] flex items-end justify-center overflow-y-auto bg-spruce/70 p-4 sm:items-center"
+      className="fixed inset-0 z-[60] overflow-y-auto overscroll-contain bg-spruce/70"
       onClick={(e) => {
         if (e.target === e.currentTarget) dismiss();
       }}
     >
       <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="waiting-list-heading"
-        aria-describedby="waiting-list-body"
-        className="relative my-8 w-full max-w-[26rem] border border-enamel bg-ledger"
+        className="flex min-h-full items-end justify-center p-4 sm:items-center"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) dismiss();
+        }}
       >
-        <button
-          ref={closeRef}
-          type="button"
-          onClick={dismiss}
-          className="absolute right-3 top-3 z-10 flex size-9 items-center justify-center rounded-[2px] bg-ledger text-spruce transition-colors duration-200 hover:bg-spruce hover:text-ledger"
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="waiting-list-heading"
+          aria-describedby="waiting-list-body"
+          className="relative w-full max-w-[26rem] border border-enamel bg-ledger"
         >
-          <span aria-hidden className="text-[1.25rem] leading-none">
-            ×
-          </span>
-          <span className="sr-only">Close</span>
-        </button>
+          {/* 44px hit area — the iOS minimum — and it stays inside the panel
+              rather than floating over the image edge, so it cannot end up
+              under a browser chrome overlay. */}
+          <button
+            ref={closeRef}
+            type="button"
+            onClick={dismiss}
+            className="absolute right-2.5 top-2.5 z-10 flex size-11 items-center justify-center rounded-[2px] bg-ledger/95 text-spruce transition-colors duration-200 hover:bg-spruce hover:text-ledger"
+          >
+            <span aria-hidden className="text-[1.35rem] leading-none">
+              ×
+            </span>
+            <span className="sr-only">Close</span>
+          </button>
 
-        <div className="relative aspect-[16/10] overflow-hidden bg-canvas">
-          <Image
-            src={images["default-puppy"].src}
-            alt=""
-            fill
-            sizes="26rem"
-            className="object-cover"
-          />
-        </div>
+          {/* Shorter crop on a phone: the image is the first thing to give up
+              height when the panel has to fit a short viewport. */}
+          <div className="relative aspect-[16/7] overflow-hidden bg-canvas sm:aspect-[16/10]">
+            <Image
+              src={images["default-puppy"].src}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 100vw, 26rem"
+              className="object-cover"
+            />
+          </div>
 
-        <div className="p-7">
+          <div className="p-5 sm:p-7">
           <p className="eyebrow text-foxred">Waiting list</p>
           <h2
             id="waiting-list-heading"
@@ -253,6 +269,7 @@ export function WaitingListPopup() {
               No thanks, I am just looking
             </button>
           </form>
+          </div>
         </div>
       </div>
     </div>

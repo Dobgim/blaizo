@@ -93,7 +93,7 @@ export function ProcessFoot({ slug }: { slug: string }) {
             {previous && (
               <Link
                 href={`/process/${previous.slug}`}
-                className="eyebrow text-enamel transition-colors duration-300 hover:text-brass-bright"
+                className="eyebrow inline-flex min-h-11 items-center text-enamel transition-colors duration-300 hover:text-brass-bright"
               >
                 ← {previous.n} {previous.title}
               </Link>
@@ -101,7 +101,7 @@ export function ProcessFoot({ slug }: { slug: string }) {
             {next && (
               <Link
                 href={`/process/${next.slug}`}
-                className="eyebrow text-brass-bright transition-colors duration-300 hover:text-ledger"
+                className="eyebrow inline-flex min-h-11 items-center text-brass-bright transition-colors duration-300 hover:text-ledger"
               >
                 {next.n} {next.title} →
               </Link>

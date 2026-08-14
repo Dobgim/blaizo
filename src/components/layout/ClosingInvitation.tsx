@@ -56,7 +56,7 @@ export function ClosingInvitation() {
           </WhatsAppLink>
           <a
             href={contact.phoneHref}
-            className="eyebrow text-canvas-deep transition-colors duration-300 hover:text-foxred"
+            className="eyebrow inline-flex min-h-11 items-center text-canvas-deep transition-colors duration-300 hover:text-foxred"
           >
             or call {contact.phone}
           </a>

@@ -29,7 +29,7 @@ export function SaveButton({
       onClick={() => toggle(item)}
       aria-pressed={saved}
       className={[
-        "absolute right-3 top-11 z-20 flex size-9 items-center justify-center rounded-full",
+        "absolute right-2.5 top-10 z-20 flex size-11 items-center justify-center rounded-full",
         "transition-colors duration-[400ms] ease-out-quad",
         saved
           ? "bg-foxred text-ledger"

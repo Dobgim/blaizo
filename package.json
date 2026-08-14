@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "placeholders": "node scripts/fetch-placeholders.mjs",
-    "shoot": "node scripts/shoot.mjs"
+    "placeholders": "node scripts/fetch-placeholders.mjs && node scripts/optimise-placeholders.mjs",
+    "shoot": "node scripts/shoot.mjs",
+    "optimise:images": "node scripts/optimise-placeholders.mjs",
+    "a11y": "node scripts/a11y.mjs",
+    "responsive": "node scripts/responsive.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

@@ -57,7 +57,7 @@ export default async function JournalPostPage({ params }: Params) {
         <nav aria-label="Breadcrumb" className="mb-8">
           <Link
             href="/journal"
-            className="eyebrow text-canvas-deep transition-colors duration-300 hover:text-foxred"
+            className="eyebrow inline-flex min-h-11 items-center text-canvas-deep transition-colors duration-300 hover:text-foxred"
           >
             ← Journal
           </Link>
