@@ -1,7 +1,8 @@
 -- =============================================================================
 -- Patch 02 — chocolate Labradors, and $750
 --
--- Run this once, in the SQL editor, after patch-01.
+-- Run this once, in the SQL editor, after patch-01. Do NOT run setup.sql again:
+-- the tables and seed rows already exist, so it stops on the first duplicate.
 --
 -- setup.sql seeded the database before the kennel confirmed it breeds
 -- chocolate Labradors at $750. Editing the seed file does not help: it only
@@ -51,14 +52,20 @@ update litters
 set notes = 'Five puppies, all chocolate, two of them very dark.'
 where code = 'B-2025';
 
--- --- make sure the owner is an administrator ------------------------------------------
--- Repeated from patch-01 in case that insert found no matching account at the
--- time. Harmless if it already ran.
+-- --- make the owner an administrator ---------------------------------------------------
+--
+-- Every account in auth.users is granted admin. That is safe *here* and only
+-- here: this project has a single user, the owner's own. It avoids guessing at
+-- an address — the earlier attempt looked for dobgimajoshua52@gmail.com and
+-- found nothing, because the account actually in use is a different one.
+--
+-- Before launch, turn public sign-up off under Authentication → Sign In /
+-- Providers. After that, new accounts can only be created from the dashboard,
+-- and admin rights only by inserting a row here on purpose.
 
 insert into admins (user_id, email, note)
 select id, email, 'Kennel owner'
 from auth.users
-where email in ('dobgimajoshua52@gmail.com', 'goldenpupkennel12@gmail.com')
 on conflict (user_id) do nothing;
 
 -- --- confirm -----------------------------------------------------------------------
