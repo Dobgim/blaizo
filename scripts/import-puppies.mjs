@@ -38,10 +38,17 @@ const PUPPY_NAMES = [
 /** Collar colours, cycled. This is how a family tells them apart. */
 const COLLARS = ["Red", "Blue", "Green", "Orange", "Purple", "Yellow", "Pink", "Grey"];
 
-/** Prices in cents, cycled — $700 to $850. */
-const PRICES = [70000, 72500, 75000, 77500, 80000, 82500, 85000];
+/** Prices in cents, cycled — $750 to $800, so they vary without looking random. */
+const PRICES = [75000, 76500, 77500, 78500, 79500, 80000];
 
-/** One description each, so no two cards read identically. */
+/**
+ * One description each, so no two cards read identically.
+ *
+ * These are written as a breeder describes a puppy they have watched for six
+ * weeks: a specific habit, not an adjective. Replace them with what is
+ * actually true of each puppy — "loves cuddles" is what every listing says and
+ * tells a buyer nothing.
+ */
 const NOTES = [
   "The first to come and say hello, and the last to settle at night. Confident with strangers from the start.",
   "Quiet, watchful, and already the steadiest of the litter around the vacuum cleaner.",
