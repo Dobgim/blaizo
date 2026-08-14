@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { ButtonLink } from "@/components/ui/Button";
+import { ShortlistButton } from "@/components/shortlist/ShortlistButton";
 import { primaryNav } from "@/lib/nav";
 import { siteConfig } from "@/lib/site-config";
 
@@ -172,6 +173,9 @@ export function Header() {
           >
             {siteConfig.contact.phone}
           </a>
+
+          {/* Appears only once something is saved. */}
+          <ShortlistButton onDark={transparent} />
 
           <ButtonLink
             href="/apply"

@@ -30,6 +30,14 @@ export function PuppyCard({
       onDark={onDark}
       sizes={sizes}
       priority={priority}
+      saveItem={{
+        id: puppy.id,
+        slug: puppy.slug,
+        name: puppy.name,
+        kind: "puppy",
+        tag: `Litter ${puppy.litterId}`,
+        image: puppy.heroImage,
+      }}
       rows={[
         { label: "Collar", value: puppy.collarColour },
         { label: "Sire", value: puppy.sireName },
@@ -74,6 +82,14 @@ export function DogCard({
       imageAlt={dog.heroAlt}
       onDark={onDark}
       sizes={sizes}
+      saveItem={{
+        id: dog.id,
+        slug: dog.slug,
+        name: dog.callName ?? dog.name,
+        kind: "dog",
+        tag: ROLE_LABEL[dog.role],
+        image: dog.heroImage,
+      }}
       rows={
         rows.length > 0
           ? rows

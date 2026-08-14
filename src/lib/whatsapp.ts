@@ -60,6 +60,30 @@ export function generalEnquiryMessage(): string {
   );
 }
 
+/**
+ * The shortlist, as an opening message.
+ *
+ * Written as an enquiry about several dogs rather than an order. Nothing is
+ * bought here; the list is what the visitor wants to talk about.
+ */
+export function shortlistMessage(
+  items: { name: string; tag: string; slug: string; kind: "puppy" | "dog" }[],
+): string {
+  const lines = items.map(
+    (item, i) =>
+      `${i + 1}. ${item.name} (${item.tag}) — ${siteConfig.url}/${
+        item.kind === "puppy" ? "puppies" : "dogs"
+      }/${item.slug}`,
+  );
+
+  return compose(
+    items.length === 1
+      ? `Hello — I'd like to ask about one of your dogs.`
+      : `Hello — I'd like to ask about ${items.length} of your dogs.`,
+    [...lines, "", "Could you tell me which of these are still available?"],
+  );
+}
+
 /** Everything the application form collected, as one readable message. */
 export type ApplicationMessageInput = {
   name: string;

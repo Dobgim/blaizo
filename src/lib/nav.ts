@@ -36,7 +36,10 @@ export const primaryNav: NavLink[] = [
       { label: "Placements", href: "/about/reviews" },
     ],
   },
-  { label: "Journal", href: "/journal" },
+  /* Journal is deliberately not in the primary nav. The route still exists and
+     the footer links it, but a small kennel posting occasionally should not
+     spend a top-level slot on it — a stale journal in the masthead costs more
+     trust than it earns. */
   { label: "FAQs", href: "/faqs" },
   { label: "Contact", href: "/contact" },
 ];

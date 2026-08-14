@@ -29,14 +29,18 @@ export default function AboutPage() {
       />
 
       {/* --- The land. Full-bleed photograph, parallax. --- */}
-      <section className="relative h-[55vh] min-h-[380px] overflow-hidden bg-canvas lg:h-[70vh]">
+      {/* Shorter than a hero, and the crop is anchored above centre: the band
+          is wide, the subject sits in the upper half of the frame, and the
+          parallax drifts the image up as you scroll. Left at object-center the
+          puppy's head leaves the frame entirely. */}
+      <section className="relative h-[42vh] min-h-[300px] overflow-hidden bg-canvas lg:h-[56vh]">
         <Parallax className="absolute inset-0 -bottom-16">
           <Image
             src={images["about-land"].src}
             alt={images["about-land"].alt}
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-[center_32%]"
           />
         </Parallax>
       </section>

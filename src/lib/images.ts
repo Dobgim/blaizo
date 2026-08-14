@@ -36,9 +36,9 @@ function slot(key: string, id: string, w: number, alt: string): ImageSlot {
 export const images = {
   "home-hero": slot(
     "home-hero",
-    "photo-1500382017468-9049fed747ef",
+    "photo-1607695238438-c87cbaff4d42",
     2000,
-    "A yellow Labrador dam standing chest-deep in field grass, late afternoon light behind her.",
+    "A black Labrador walking in profile through cut grass at the water's edge, collar and tag catching the light.",
   ),
   "home-whelping": slot(
     "home-whelping",
@@ -74,9 +74,9 @@ export const images = {
 
   "about-land": slot(
     "about-land",
-    "photo-1470071459604-3b5ec3a7fe05",
+    "photo-1576201836106-db1758fd1c97",
     2000,
-    "The ridge the kennel is named for, seen across pasture in low cloud.",
+    "A yellow Labrador puppy running towards the camera across cut grass in low evening sun.",
   ),
   "about-family": slot(
     "about-family",
@@ -130,9 +130,9 @@ export const images = {
   ),
   "default-journal": slot(
     "default-journal",
-    "photo-1516339901601-2e1b62dc0c45",
+    "photo-1727534240947-db4a9b78f4ce",
     1600,
-    "A Labrador resting in long grass.",
+    "A black Labrador running through a meadow of long grass and wildflowers.",
   ),
   "default-contact": slot(
     "default-contact",

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { StatusSeal } from "@/components/records/StatusSeal";
+import { SaveButton } from "@/components/shortlist/SaveButton";
+import type { ShortlistItem } from "@/components/shortlist/ShortlistProvider";
 import type { PuppyStatus } from "@/lib/types";
 
 export type RecordRow = { label: string; value: string };
@@ -21,6 +23,8 @@ type Props = {
   onDark?: boolean;
   sizes?: string;
   priority?: boolean;
+  /** Enables the shortlist heart. Omit on cards that are not saveable. */
+  saveItem?: ShortlistItem;
 };
 
 /**
@@ -46,6 +50,7 @@ export function RecordCard({
   onDark = false,
   sizes = "(max-width: 640px) 78vw, (max-width: 1024px) 40vw, 22vw",
   priority = false,
+  saveItem,
 }: Props) {
   return (
     <article
@@ -69,6 +74,10 @@ export function RecordCard({
           onDark ? "bg-spruce ring-spruce-line" : "bg-ledger ring-enamel",
         ].join(" ")}
       />
+
+      {/* Outside the stretched link and above it, so the heart is its own
+          target rather than a button nested in an anchor. */}
+      {saveItem && <SaveButton item={saveItem} onDark={onDark} />}
 
       <div
         className={[
