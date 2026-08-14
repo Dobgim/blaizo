@@ -10,25 +10,24 @@ import {
   placeholderLitters,
   placeholderPuppies,
 } from "@/lib/placeholder-data";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import type { Dog, Litter, Puppy } from "@/lib/types";
 
 /**
  * One seam between the pages and the database.
  *
- * Until the client's Supabase project exists the site runs on the labelled
- * demonstration records in `placeholder-data.ts`. The moment the environment
- * variables are set and a row is published, the real data takes over and
- * nothing in any page component changes.
+ * With no Supabase project configured the site runs on the labelled
+ * demonstration records in `placeholder-data.ts`, so it can be developed and
+ * reviewed before a database exists.
  *
- * The fallback is only used when the database returns *nothing*. A configured
- * project with zero published puppies is a real answer, and the page shows its
- * empty state rather than quietly resurrecting demo dogs.
+ * Once a project IS configured, the database is the only source of truth —
+ * including when it is empty. An empty database is a real answer, and the
+ * pages have designed empty states for it ("No puppies available right now —
+ * join the waiting list"). Falling back to demo dogs there would mean an owner
+ * who deleted everything watched Birch, Hazel and Tessa reappear, with no way
+ * to remove them and no idea where they were coming from.
  */
-
-export const usingPlaceholderData = async () => {
-  const [dogs, puppies] = await Promise.all([getDogs(), getPuppies()]);
-  return dogs.length === 0 && puppies.length === 0;
-};
+export const usingPlaceholderData = async () => !isSupabaseConfigured;
 
 export async function allPuppies(): Promise<Puppy[]> {
   const rows = await getPuppies();
