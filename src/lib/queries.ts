@@ -1,5 +1,5 @@
 import { images } from "@/lib/images";
-import { createClient } from "@/lib/supabase/server";
+import { createStaticClient } from "@/lib/supabase/static";
 import type {
   ClearanceRow,
   DogRow,
@@ -127,7 +127,7 @@ const DOG_SELECT = `*, clearances (*)`;
 export async function getPuppies(
   status?: Puppy["status"] | Puppy["status"][],
 ): Promise<Puppy[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   let query = supabase
@@ -154,7 +154,7 @@ export async function getAvailablePuppies(): Promise<Puppy[]> {
 }
 
 export async function getPuppyBySlug(slug: string): Promise<Puppy | null> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return null;
 
   const { data, error } = await supabase
@@ -171,7 +171,7 @@ export async function getPuppyBySlug(slug: string): Promise<Puppy | null> {
 }
 
 export async function getPuppySlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
   const { data, error } = await supabase.from("puppies").select("slug");
   if (error) {
@@ -205,7 +205,7 @@ function toLitter(row: LitterWithParents): Litter {
 export async function getLitters(
   status?: Litter["status"] | Litter["status"][],
 ): Promise<Litter[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   let query = supabase
@@ -234,7 +234,7 @@ export async function getLitters(
 // --- Dogs --------------------------------------------------------------------
 
 export async function getDogs(role?: Dog["role"]): Promise<Dog[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   let query = supabase
@@ -255,7 +255,7 @@ export async function getDogs(role?: Dog["role"]): Promise<Dog[]> {
 }
 
 export async function getDogBySlug(slug: string): Promise<Dog | null> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return null;
 
   const { data, error } = await supabase
@@ -274,7 +274,7 @@ export async function getDogBySlug(slug: string): Promise<Dog | null> {
 }
 
 export async function getDogSlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
   const { data, error } = await supabase.from("dogs").select("slug");
   if (error) {
@@ -286,7 +286,7 @@ export async function getDogSlugs(): Promise<string[]> {
 
 /** Puppies this dog has produced. Used on the dog detail page. */
 export async function getOffspring(dogId: string): Promise<Puppy[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
@@ -318,7 +318,7 @@ export async function getOffspring(dogId: string): Promise<Puppy[]> {
 // --- Testimonials, posts, FAQs ------------------------------------------------
 
 export async function getTestimonials(featuredOnly = false) {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   let query = supabase
@@ -341,7 +341,7 @@ export async function getFeaturedTestimonial(): Promise<Testimonial | null> {
 }
 
 export async function getPosts(limit?: number): Promise<PostRow[]> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   let query = supabase
@@ -359,7 +359,7 @@ export async function getPosts(limit?: number): Promise<PostRow[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<PostRow | null> {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return null;
   const { data, error } = await supabase
     .from("posts")
@@ -377,7 +377,7 @@ export async function getPostBySlug(slug: string): Promise<PostRow | null> {
 export async function getFaqsByCategory(): Promise<
   { category: string; items: FaqRow[] }[]
 > {
-  const supabase = await createClient();
+  const supabase = createStaticClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
