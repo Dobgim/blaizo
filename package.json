@@ -12,7 +12,8 @@
     "optimise:images": "node scripts/optimise-placeholders.mjs",
     "a11y": "node scripts/a11y.mjs",
     "responsive": "node scripts/responsive.mjs",
-    "photos": "node scripts/install-puppy-photos.mjs"
+    "photos": "node scripts/install-puppy-photos.mjs",
+    "import:puppies": "node scripts/import-puppies.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",
