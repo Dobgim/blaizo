@@ -19,25 +19,25 @@
 insert into dogs (slug, name, call_name, sex, colour, dob, role, weight_lbs,
                   registry_number, bio, hero_image, hero_alt, is_published, sort_order)
 values
-  ('birch', 'Golden Pup''s Second Wind', 'Birch', 'dog', 'Yellow', '2021-03-14',
+  ('birch', 'Golden Pup''s Second Wind', 'Birch', 'dog', 'Chocolate', '2021-03-14',
    'sire', 74, 'SR000000/01',
    'Birch works. He has spent five seasons in the grouse woods and still asks for one more field at the end of the day, then falls asleep under the kitchen table for eleven hours.',
    '/placeholders/dog-sire.jpg',
-   'A yellow Labrador standing alert in long field grass, head turned toward the treeline.',
+   'A chocolate Labrador standing alert in long field grass, head turned toward the treeline.',
    true, 1),
 
-  ('hazel', 'Golden Pup''s Hazel Run', 'Hazel', 'bitch', 'Yellow', '2021-04-02',
+  ('hazel', 'Golden Pup''s Hazel Run', 'Hazel', 'bitch', 'Chocolate', '2021-04-02',
    'dam', 62, 'SR000000/02',
    'Hazel is the one who decides where everybody sleeps. Steady with children to the point of being boring about it, which is exactly what we breed her for.',
    '/placeholders/dog-dam-one.jpg',
-   'A yellow Labrador lying on a porch board floor with her chin on her paws.',
+   'A chocolate Labrador lying on a porch board floor with her chin on her paws.',
    true, 2),
 
-  ('tessa', 'Golden Pup''s Tessa Grade', 'Tessa', 'bitch', 'Black', '2022-08-19',
+  ('tessa', 'Golden Pup''s Tessa Grade', 'Tessa', 'bitch', 'Chocolate', '2022-08-19',
    'dam', 58, 'SR000000/03',
    'Tessa came back to us from a service programme that had more dogs than placements. She is the softest mouth on the property and the fastest learner we have owned.',
    '/placeholders/dog-dam-two.jpg',
-   'A black Labrador sitting in cut grass, looking directly at the camera.',
+   'A chocolate Labrador sitting in cut grass, looking directly at the camera.',
    true, 3);
 
 -- --- clearances ---------------------------------------------------------------
@@ -71,14 +71,14 @@ values
    (select id from dogs where slug = 'birch'),
    (select id from dogs where slug = 'hazel'),
    '2025-04-12', '2025-06-07', 'weaning',
-   'Seven puppies, all yellow. Whelped in the sitting room over a Sunday night.',
+   'Seven puppies, all chocolate. Whelped in the sitting room over a Sunday night.',
    true),
 
   ('B-2025',
    (select id from dogs where slug = 'birch'),
    (select id from dogs where slug = 'tessa'),
    '2025-04-26', '2025-06-21', 'weaning',
-   'Five puppies, three black and two yellow.',
+   'Five puppies, all chocolate, two of them very dark.',
    true),
 
   ('C-2025',
@@ -98,18 +98,18 @@ select l.id, p.slug, p.name, p.sex::dog_sex, p.colour, p.collar_colour,
        p.price_cents, p.status::puppy_status, p.hero_image, p.hero_alt, true, p.sort_order
 from litters l
 join (values
-  ('A-2025', 'juniper', 'Juniper', 'bitch', 'Yellow', 'Green',  320000, 'available',
+  ('A-2025', 'juniper', 'Juniper', 'bitch', 'Chocolate', 'Green',  75000, 'available',
    '/placeholders/default-puppy.jpg',
-   'A yellow Labrador puppy in a green collar sitting on cut grass.', 1),
-  ('A-2025', 'ash', 'Ash', 'dog', 'Yellow', 'Blue', 320000, 'available',
+   'A chocolate Labrador puppy in a green collar sitting on cut grass.', 1),
+  ('A-2025', 'ash', 'Ash', 'dog', 'Chocolate', 'Blue', 75000, 'available',
    '/placeholders/dog-sire.jpg',
-   'A yellow Labrador puppy in a blue collar standing on cut grass.', 2),
-  ('A-2025', 'wren', 'Wren', 'bitch', 'Yellow', 'Red', 320000, 'reserved',
+   'A chocolate Labrador puppy in a blue collar standing on cut grass.', 2),
+  ('A-2025', 'wren', 'Wren', 'bitch', 'Chocolate', 'Red', 75000, 'reserved',
    '/placeholders/default-dog.jpg',
-   'A yellow Labrador puppy in a red collar lying in cut grass.', 3),
-  ('B-2025', 'sorrel', 'Sorrel', 'dog', 'Black', 'Orange', 320000, 'available',
+   'A chocolate Labrador puppy in a red collar lying in cut grass.', 3),
+  ('B-2025', 'sorrel', 'Sorrel', 'dog', 'Chocolate', 'Orange', 75000, 'available',
    '/placeholders/dog-dam-two.jpg',
-   'A black Labrador puppy in an orange collar sitting on cut grass.', 4)
+   'A chocolate Labrador puppy in an orange collar sitting on cut grass.', 4)
 ) as p (code, slug, name, sex, colour, collar_colour, price_cents, status,
         hero_image, hero_alt, sort_order)
   on p.code = l.code;

@@ -38,7 +38,7 @@ export const images = {
     "home-hero",
     "photo-1607695238438-c87cbaff4d42",
     2000,
-    "A black Labrador walking in profile through cut grass at the water's edge, collar and tag catching the light.",
+    "A chocolate Labrador walking in profile through cut grass at the water's edge, collar and tag catching the light.",
   ),
   "home-whelping": slot(
     "home-whelping",
@@ -57,26 +57,26 @@ export const images = {
     "dog-sire",
     "photo-1552053831-71594a27632d",
     1100,
-    "A yellow Labrador sire photographed head-and-chest against open ground.",
+    "A chocolate Labrador sire photographed head-and-chest against open ground.",
   ),
   "dog-dam-one": slot(
     "dog-dam-one",
     "photo-1518717758536-85ae29035b6d",
     1100,
-    "A yellow Labrador dam photographed head-and-chest against open ground.",
+    "A chocolate Labrador dam photographed head-and-chest against open ground.",
   ),
   "dog-dam-two": slot(
     "dog-dam-two",
     "photo-1543466835-00a7907e9de1",
     1100,
-    "A black Labrador dam photographed head-and-chest against open ground.",
+    "A chocolate Labrador dam photographed head-and-chest against open ground.",
   ),
 
   "about-land": slot(
     "about-land",
     "photo-1576201836106-db1758fd1c97",
     2000,
-    "A yellow Labrador puppy running towards the camera across cut grass in low evening sun.",
+    "A chocolate Labrador puppy running towards the camera across cut grass in low evening sun.",
   ),
   "about-family": slot(
     "about-family",
@@ -132,7 +132,7 @@ export const images = {
     "default-journal",
     "photo-1727534240947-db4a9b78f4ce",
     1600,
-    "A black Labrador running through a meadow of long grass and wildflowers.",
+    "A chocolate Labrador running through a meadow of long grass and wildflowers.",
   ),
   "default-contact": slot(
     "default-contact",

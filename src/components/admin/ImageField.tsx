@@ -40,6 +40,9 @@ export function ImageField({
 }) {
   const [value, setValue] = useState(defaultValue);
   const [busy, setBusy] = useState(false);
+  /* Selecting a dozen photos from a phone over mobile data takes a while.
+     Without a count the owner cannot tell a slow upload from a stuck one. */
+  const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -52,6 +55,7 @@ export function ImageField({
   async function upload(files: FileList) {
     setBusy(true);
     setError(null);
+    setProgress({ done: 0, total: files.length });
 
     try {
       const supabase = createClient();
@@ -77,6 +81,7 @@ export function ImageField({
 
         const { data } = supabase.storage.from("photos").getPublicUrl(path);
         uploaded.push(data.publicUrl);
+        setProgress((prev) => ({ ...prev, done: prev.done + 1 }));
       }
 
       setValue((current) => {
@@ -92,6 +97,7 @@ export function ImageField({
       );
     } finally {
       setBusy(false);
+      setProgress({ done: 0, total: 0 });
       if (inputRef.current) inputRef.current.value = "";
     }
   }
@@ -157,7 +163,9 @@ export function ImageField({
           className="sr-only"
         />
         {busy
-          ? "Uploading…"
+          ? progress.total > 1
+            ? `Uploading ${progress.done + 1} of ${progress.total}…`
+            : "Uploading…"
           : urls.length > 0
             ? multiple
               ? "Add more photographs"
@@ -168,7 +176,9 @@ export function ImageField({
       </label>
 
       <p className="mt-2 text-small text-canvas-deep">
-        Take a photo or choose one from your phone. JPEG or PNG, up to 10MB.
+        Take a photo or choose from your phone.
+        {multiple ? " Select as many as you like at once — tap each one." : ""}{" "}
+        JPEG or PNG, up to 10MB each.
       </p>
 
       {error && (

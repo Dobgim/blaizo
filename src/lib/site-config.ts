@@ -33,7 +33,7 @@ export const siteConfig = {
   name: "Golden Pup Kennel",
   /** Used in <title> templates and the footer mark. */
   shortName: "Golden Pup",
-  breed: "Labrador Retriever",
+  breed: "Chocolate Labrador Retriever",
   /**
    * Drives the DNA panel copy on /process/health-testing. Switching this to
    * "Golden Retriever" changes the panel to PRA1 / PRA2 / ICT / DM.
@@ -45,10 +45,9 @@ export const siteConfig = {
   /**
    * The hero headline, as three masked lines.
    *
-   * PLACEHOLDER — "eight litters a year" is a factual claim about the
-   * business and the client has to confirm or change the number before this
-   * goes live. Kept here rather than in the page so there is exactly one
-   * place to correct it.
+   * "Three litters a year" is a factual claim about the business — confirm
+   * the number before launch. Kept here rather than in the page so there is
+   * exactly one place to correct it.
    */
   heroHeadline: [
     "Three litters a year.",
@@ -56,7 +55,7 @@ export const siteConfig = {
     "accounted for.",
   ],
   description:
-    "A family kennel raising health-tested Labrador Retrievers for families and hunters. Hips, elbows, eyes and a full DNA panel on both parents, with the certificates published.",
+    "A family kennel raising health-tested chocolate Labrador Retrievers for families and hunters. Hips, elbows, eyes and a full DNA panel on both parents, with the certificates published.",
 
   establishedYear: 2024,
 
