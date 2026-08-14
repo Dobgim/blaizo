@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { ImageField } from "@/components/admin/ImageField";
+import { MoneyField } from "@/components/admin/MoneyField";
 import { deleteRow, saveRow } from "@/app/admin/actions";
 import type { Field, Resource } from "@/lib/admin/resources";
 
@@ -58,17 +60,16 @@ function Control({
         />
       );
 
+    case "image":
+      return <ImageField name={field.name} defaultValue={defaultValue} />;
+
     case "gallery":
       return (
-        <textarea
-          id={id}
-          name={field.name}
-          rows={4}
-          defaultValue={defaultValue}
-          placeholder="One image URL per line"
-          className={`${inputClasses} font-mono text-data`}
-        />
+        <ImageField name={field.name} defaultValue={defaultValue} multiple />
       );
+
+    case "money":
+      return <MoneyField name={field.name} defaultCents={defaultValue} />;
 
     case "select":
       return (

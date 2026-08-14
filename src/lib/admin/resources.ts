@@ -17,6 +17,7 @@ export type FieldType =
   | "select"
   | "image"
   | "gallery"
+  | "money"
   | "reference";
 
 export type Field = {
@@ -149,14 +150,24 @@ export const resources: Resource[] = [
         type: "textarea",
         help: "Two or three sentences. What they are like to live with beats a list of titles.",
       },
-      { name: "hero_image", label: "Main photograph", type: "image" },
+      {
+        name: "hero_image",
+        label: "Main photograph",
+        type: "image",
+        help: "Take one on your phone or pick from your camera roll. Portrait crops best.",
+      },
       {
         name: "hero_alt",
         label: "Photograph description",
         type: "text",
         help: "For people using a screen reader. Describe what is in the picture, plainly.",
       },
-      { name: "gallery", label: "More photographs", type: "gallery" },
+      {
+        name: "gallery",
+        label: "More photographs",
+        type: "gallery",
+        help: "Add as many as you like. They upload as you choose them.",
+      },
       SORT_ORDER,
       PUBLISHED,
     ],
@@ -257,13 +268,23 @@ export const resources: Resource[] = [
       },
       {
         name: "price_cents",
-        label: "Price (in cents)",
-        type: "number",
-        help: "3200 dollars is 320000. Leave blank to show “Ask us” instead of a number.",
+        label: "Price",
+        type: "money",
+        help: "Enter it in dollars. It is stored in cents so it can never drift by a rounding error.",
       },
-      { name: "hero_image", label: "Main photograph", type: "image" },
+      {
+        name: "hero_image",
+        label: "Main photograph",
+        type: "image",
+        help: "Take one on your phone or pick from your camera roll. Portrait crops best.",
+      },
       { name: "hero_alt", label: "Photograph description", type: "text" },
-      { name: "gallery", label: "More photographs", type: "gallery" },
+      {
+        name: "gallery",
+        label: "More photographs",
+        type: "gallery",
+        help: "Add as many as you like. They upload as you choose them.",
+      },
       { name: "notes", label: "Notes", type: "textarea" },
       SORT_ORDER,
       PUBLISHED,
@@ -302,7 +323,11 @@ export const resources: Resource[] = [
         type: "textarea",
         help: "Plain text. Leave a blank line between paragraphs.",
       },
-      { name: "cover_image", label: "Cover photograph", type: "image" },
+      {
+        name: "cover_image",
+        label: "Cover photograph",
+        type: "image",
+      },
       { name: "cover_alt", label: "Photograph description", type: "text" },
       { name: "author", label: "Written by", type: "text", inList: true },
     ],
@@ -330,7 +355,11 @@ export const resources: Resource[] = [
       },
       { name: "dog_name", label: "Their dog", type: "text", inList: true },
       { name: "placed_year", label: "Year placed", type: "number" },
-      { name: "photo", label: "Their photograph", type: "image" },
+      {
+        name: "photo",
+        label: "Their photograph",
+        type: "image",
+      },
       { name: "photo_alt", label: "Photograph description", type: "text" },
       {
         name: "is_featured",

@@ -5,12 +5,18 @@
 --   SQL Editor → New query → paste → Run
 --
 -- It creates every table, every Row Level Security policy, the two storage
--- buckets, and the demonstration content so the site has something to show
--- before you have entered your own dogs.
+-- buckets, the demonstration content, and grants the owner's account admin
+-- rights.
 --
--- Re-running it will fail on "already exists", which is deliberate — it tells
--- you the setup already ran rather than silently doing half the work. To start
--- over on a project with nothing worth keeping, uncomment these two lines:
+-- Note on access: writing requires a row in `admins`, not merely a signed-in
+-- account. Supabase allows public sign-up by default, so policies granted to
+-- `authenticated` alone would let anyone register and then edit everything
+-- here. Adding an administrator is a deliberate act performed in this editor.
+--
+-- Re-running this file will fail on "already exists", which is deliberate — it
+-- tells you the setup already ran rather than silently doing half the work. To
+-- start over on a project with nothing worth keeping, run these two lines
+-- first:
 --
 --   drop schema public cascade;
 --   create schema public;
@@ -55,6 +61,36 @@ begin
   new.updated_at = now();
   return new;
 end;
+$$;
+
+-- --- admins ---------------------------------------------------------------------
+-- Who is allowed to write. Membership of this table, not merely holding an
+-- account, is what grants access.
+--
+-- This exists because Supabase projects allow public sign-up by default. With
+-- write policies granted to `authenticated`, anybody could create an account
+-- and edit every dog, litter and application in the database. Adding a row
+-- here is a deliberate act performed in the dashboard.
+
+create table admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  email      text,
+  note       text,
+  created_at timestamptz not null default now()
+);
+
+/* SECURITY DEFINER so the check can read `admins` while the caller is being
+   evaluated against policies that depend on this very function — without it
+   the policy would recurse. search_path is pinned, which is required for any
+   definer function. */
+create or replace function is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from admins a where a.user_id = auth.uid());
 $$;
 
 -- --- dogs ---------------------------------------------------------------------
@@ -257,14 +293,19 @@ create trigger faqs_updated_at before update on faqs
 -- Row Level Security
 --
 -- The rule everywhere: the public (anon) role reads published rows and nothing
--- else. Authenticated users — which means the kennel owner, signed in at
--- /admin — read and write everything.
+-- else. Writing requires a row in `admins` — not merely a signed-in account.
+--
+-- That distinction is the whole point. Supabase projects allow public sign-up
+-- by default, so policies written as `to authenticated using (true)` would let
+-- anyone create an account and then edit every dog, litter and application in
+-- the database. Every write below goes through is_admin() instead.
 --
 -- The single exception is `applications`: anyone may INSERT one, nobody
 -- anonymous may ever read one back. A visitor's home address, their children's
 -- ages and their phone number are in that table.
 -- =============================================================================
 
+alter table admins       enable row level security;
 alter table dogs         enable row level security;
 alter table clearances   enable row level security;
 alter table litters      enable row level security;
@@ -274,6 +315,16 @@ alter table posts        enable row level security;
 alter table testimonials enable row level security;
 alter table faqs         enable row level security;
 
+-- --- admins -------------------------------------------------------------------
+-- Readable only by admins, and writable by nobody through the API. Granting
+-- access is a deliberate act in the Supabase dashboard: if the app itself
+-- could add rows here, compromising one admin account would let an attacker
+-- mint further admins.
+
+create policy "admins can see the admin list"
+  on admins for select to authenticated
+  using (is_admin());
+
 -- --- dogs ---------------------------------------------------------------------
 
 create policy "dogs are publicly readable when published"
@@ -282,7 +333,7 @@ create policy "dogs are publicly readable when published"
 
 create policy "signed-in users manage dogs"
   on dogs for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- clearances ---------------------------------------------------------------
 -- Visible exactly when the dog they belong to is visible.
@@ -295,7 +346,7 @@ create policy "clearances follow their dog"
 
 create policy "signed-in users manage clearances"
   on clearances for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- litters ------------------------------------------------------------------
 
@@ -305,7 +356,7 @@ create policy "litters are publicly readable when published"
 
 create policy "signed-in users manage litters"
   on litters for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- puppies ------------------------------------------------------------------
 -- A puppy needs its own publish flag AND a published litter. Unpublishing a
@@ -319,7 +370,7 @@ create policy "puppies are publicly readable when published"
 
 create policy "signed-in users manage puppies"
   on puppies for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- applications -------------------------------------------------------------
 
@@ -330,15 +381,15 @@ create policy "anyone may submit an application"
 -- Deliberately no SELECT policy for anon. Without one, RLS denies by default.
 create policy "signed-in users read applications"
   on applications for select to authenticated
-  using (true);
+  using (is_admin());
 
 create policy "signed-in users update applications"
   on applications for update to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 create policy "signed-in users delete applications"
   on applications for delete to authenticated
-  using (true);
+  using (is_admin());
 
 -- --- posts --------------------------------------------------------------------
 -- Published means the date has actually arrived, so scheduling works.
@@ -349,7 +400,7 @@ create policy "posts are publicly readable once published"
 
 create policy "signed-in users manage posts"
   on posts for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- testimonials -------------------------------------------------------------
 
@@ -359,7 +410,7 @@ create policy "testimonials are publicly readable when published"
 
 create policy "signed-in users manage testimonials"
   on testimonials for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- --- faqs ---------------------------------------------------------------------
 
@@ -369,7 +420,7 @@ create policy "faqs are publicly readable when published"
 
 create policy "signed-in users manage faqs"
   on faqs for all to authenticated
-  using (true) with check (true);
+  using (is_admin()) with check (is_admin());
 
 -- =============================================================================
 -- Storage
@@ -390,15 +441,15 @@ create policy "public may read kennel media"
 
 create policy "signed-in users write kennel media"
   on storage.objects for insert to authenticated
-  with check (bucket_id in ('photos', 'certificates'));
+  with check (is_admin() and bucket_id in ('photos', 'certificates'));
 
 create policy "signed-in users replace kennel media"
   on storage.objects for update to authenticated
-  using (bucket_id in ('photos', 'certificates'));
+  using (is_admin() and bucket_id in ('photos', 'certificates'));
 
 create policy "signed-in users delete kennel media"
   on storage.objects for delete to authenticated
-  using (bucket_id in ('photos', 'certificates'));
+  using (is_admin() and bucket_id in ('photos', 'certificates'));
 
 
 -- =============================================================================
@@ -569,3 +620,20 @@ insert into faqs (category, question, answer, sort_order) values
    'What does the health guarantee actually cover?',
    'The full text is on the guarantee page rather than summarised here, because a warranty you have only read a summary of is not much use. Read it before you apply, and ask us about anything in it you do not like.',
    2);
+
+-- --- admins -------------------------------------------------------------------
+-- The kennel owner's account, created through the sign-up API. Without a row
+-- here the account can sign in but cannot write anything, which is the point:
+-- holding an account is not the same as being an administrator.
+--
+-- To add another administrator later, create the user under Authentication →
+-- Users, then insert their id here. Do it deliberately; there is no way to do
+-- it from inside the application.
+
+insert into admins (user_id, email, note)
+values (
+  '8b4394b7-6ca5-4550-af6b-f2cc52e9b5fa',
+  'dobgimajoshua52@gmail.com',
+  'Kennel owner'
+)
+on conflict (user_id) do nothing;

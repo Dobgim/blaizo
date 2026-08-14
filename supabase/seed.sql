@@ -166,3 +166,20 @@ insert into faqs (category, question, answer, sort_order) values
    'What does the health guarantee actually cover?',
    'The full text is on the guarantee page rather than summarised here, because a warranty you have only read a summary of is not much use. Read it before you apply, and ask us about anything in it you do not like.',
    2);
+
+-- --- admins -------------------------------------------------------------------
+-- The kennel owner's account, created through the sign-up API. Without a row
+-- here the account can sign in but cannot write anything, which is the point:
+-- holding an account is not the same as being an administrator.
+--
+-- To add another administrator later, create the user under Authentication →
+-- Users, then insert their id here. Do it deliberately; there is no way to do
+-- it from inside the application.
+
+insert into admins (user_id, email, note)
+values (
+  '8b4394b7-6ca5-4550-af6b-f2cc52e9b5fa',
+  'dobgimajoshua52@gmail.com',
+  'Kennel owner'
+)
+on conflict (user_id) do nothing;

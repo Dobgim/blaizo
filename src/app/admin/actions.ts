@@ -63,11 +63,15 @@ function coerce(field: Field, form: FormData): unknown {
       // An unchecked checkbox sends nothing at all.
       return raw === "on" || raw === "true";
 
-    case "number": {
+    /* `money` arrives already converted to whole cents by MoneyField, so it is
+       an integer column value like any other number — the dollars the owner
+       typed never reach the server. */
+    case "number":
+    case "money": {
       const s = typeof raw === "string" ? raw.trim() : "";
       if (s === "") return null;
       const n = Number(s);
-      return Number.isFinite(n) ? n : null;
+      return Number.isFinite(n) ? Math.round(n) : null;
     }
 
     case "date": {

@@ -35,6 +35,36 @@ begin
 end;
 $$;
 
+-- --- admins ---------------------------------------------------------------------
+-- Who is allowed to write. Membership of this table, not merely holding an
+-- account, is what grants access.
+--
+-- This exists because Supabase projects allow public sign-up by default. With
+-- write policies granted to `authenticated`, anybody could create an account
+-- and edit every dog, litter and application in the database. Adding a row
+-- here is a deliberate act performed in the dashboard.
+
+create table admins (
+  user_id    uuid primary key references auth.users (id) on delete cascade,
+  email      text,
+  note       text,
+  created_at timestamptz not null default now()
+);
+
+/* SECURITY DEFINER so the check can read `admins` while the caller is being
+   evaluated against policies that depend on this very function — without it
+   the policy would recurse. search_path is pinned, which is required for any
+   definer function. */
+create or replace function is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from admins a where a.user_id = auth.uid());
+$$;
+
 -- --- dogs ---------------------------------------------------------------------
 
 create table dogs (
