@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
+import { images } from "@/lib/images";
 import { placeholderTestimonial } from "@/lib/placeholder-data";
 import type { Testimonial } from "@/lib/types";
 
@@ -77,16 +78,35 @@ export function PlacementQuote({
 
 /* ---------- Labelled placeholders ---------------------------------------- */
 
+/**
+ * The photograph slot, showing the stand-in rather than an empty box.
+ *
+ * An empty dashed rectangle told the client nothing about how the section
+ * reads once a picture is in it — the whole point of a photo-led layout is
+ * the weight of the image against the quote. The label stays on top so
+ * nobody mistakes the stand-in for a real owner's dog.
+ */
 function PhotoSlot() {
   return (
-    <div className="flex aspect-[4/5] flex-col justify-between border border-dashed border-canvas/50 bg-ledger-deep p-5">
-      <span className="eyebrow text-canvas">Photo slot</span>
-      <span className="font-mono text-data text-canvas-deep">
+    <figure>
+      <div className="relative aspect-[4/5] overflow-hidden bg-canvas">
+        <Image
+          src={images["home-testimonial"].src}
+          alt={images["home-testimonial"].alt}
+          fill
+          sizes="(max-width: 1024px) 90vw, 30vw"
+          className="object-cover"
+        />
+        <span className="eyebrow absolute left-4 top-4 bg-ledger-bright px-2.5 py-1 text-foxred">
+          Photo slot
+        </span>
+      </div>
+      <figcaption className="mt-3 font-mono text-data text-canvas-deep">
         Owner&rsquo;s own photograph of the grown dog at home. 4:5. A phone
         picture is fine here and often reads as more honest than anything we
         would shoot.
-      </span>
-    </div>
+      </figcaption>
+    </figure>
   );
 }
 

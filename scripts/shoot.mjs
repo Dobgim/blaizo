@@ -28,9 +28,13 @@ const flagValueIndexes = new Set(
 );
 // Git Bash rewrites a bare "/" argument into a Windows path, so routes may
 // be passed without the leading slash: `node scripts/shoot.mjs puppies`.
+// Git Bash rewrites a leading "/" into the MSYS install path, so a bare "/"
+// arrives as "C:/Program Files/Git". Undo that before anything else, or you
+// photograph a 404 and name the file after your Git installation.
 const rawRoute =
   args.find((a, i) => !a.startsWith("--") && !flagValueIndexes.has(i)) ?? "/";
-const route = rawRoute.startsWith("/") ? rawRoute : `/${rawRoute}`;
+const unmangled = rawRoute.replace(/^[A-Za-z]:[\\/].*?[\\/]Git[\\/]?/, "/");
+const route = unmangled.startsWith("/") ? unmangled : `/${unmangled}`;
 
 const only = flag("at");
 const scrollTo = flag("scroll") ? Number(flag("scroll")) : null;

@@ -38,6 +38,7 @@ export const primaryNav: NavLink[] = [
   },
   { label: "Journal", href: "/journal" },
   { label: "FAQs", href: "/faqs" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const footerNav: { heading: string; links: { label: string; href: string }[] }[] = [

@@ -6,6 +6,7 @@ import { WhyThisKennel } from "@/components/home/WhyThisKennel";
 import { MeetTheParents } from "@/components/home/MeetTheParents";
 import { ProcessInBrief } from "@/components/home/ProcessInBrief";
 import { PlacementQuote } from "@/components/home/PlacementQuote";
+import { ContactSection } from "@/components/home/ContactSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
@@ -109,6 +110,7 @@ export default function HomePage() {
       <MeetTheParents dogs={placeholderDogs} />
       <ProcessInBrief />
       <PlacementQuote testimonial={null} />
+      <ContactSection />
     </>
   );
 }

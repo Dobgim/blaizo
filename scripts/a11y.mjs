@@ -13,8 +13,19 @@ import AxeBuilder from "@axe-core/playwright";
 
 const BASE = process.env.A11Y_BASE ?? "http://localhost:3000";
 
+/**
+ * Git Bash rewrites a leading "/" argument into the MSYS install path, so
+ * `node scripts/a11y.mjs /puppies` arrives as "C:/Program Files/Git/puppies".
+ * Undo that, and accept routes with no leading slash too.
+ */
+function normalizeRoute(arg) {
+  const stripped = arg.replace(/^[A-Za-z]:[\\/].*?[\\/]Git[\\/]?/, "/");
+  const withSlash = stripped.startsWith("/") ? stripped : `/${stripped}`;
+  return withSlash === "" ? "/" : withSlash;
+}
+
 const ROUTES = process.argv.slice(2).length
-  ? process.argv.slice(2)
+  ? process.argv.slice(2).map(normalizeRoute)
   : [
       "/",
       "/puppies",

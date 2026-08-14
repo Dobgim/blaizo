@@ -16,7 +16,10 @@ const { contact } = siteConfig;
  * asking twice, and on /apply the button would link to the page you are
  * standing on.
  */
-const SUPPRESS_ON = ["/apply", "/contact"];
+/* "/" is here because the home page closes with its own contact band, which
+   carries the same two actions plus the phone number and hours. Repeating the
+   invitation 200px below it is the site asking twice. */
+const SUPPRESS_ON = ["/", "/apply", "/contact"];
 
 export function ClosingInvitation() {
   const pathname = usePathname();
