@@ -3,7 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { getPuppyBySlug } from "@/lib/queries";
 import { orderSchema, orderReference, type OrderValues } from "@/lib/schemas/order";
-import { sendViaWeb3Forms } from "@/lib/web3forms";
+import type { Web3FormsMessage } from "@/lib/web3forms";
 import { paymentMethods, siteConfig } from "@/lib/site-config";
 import { formatPrice } from "@/lib/format";
 
@@ -24,7 +24,7 @@ import { formatPrice } from "@/lib/format";
  */
 
 export type OrderResult =
-  | { ok: true; reference: string; emailed: boolean }
+  | { ok: true; reference: string; message: Web3FormsMessage }
   | { ok: false; error: string };
 
 export async function placeOrder(values: OrderValues): Promise<OrderResult> {
@@ -81,9 +81,11 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
     }
   }
 
-  // --- tell the kennel --------------------------------------------------------
-
-  const sent = await sendViaWeb3Forms({
+  /* --- the notification -------------------------------------------------------
+     Built here, where the puppy and the price are known, but SENT by the
+     browser. Web3Forms is behind Cloudflare, which challenges server-to-server
+     POSTs and returns an HTML page instead of sending anything. */
+  const message: Web3FormsMessage = {
     subject: `New order ${reference} — ${puppy.name}`,
     fromName: `${siteConfig.shortName} website`,
     /* Reply in the inbox reaches the buyer, which is how the kennel sends the
@@ -101,16 +103,9 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
       Notes: v.notes || "—",
       "Puppy page": `${siteConfig.url}/puppies/${puppy.slug}`,
       "Next step":
-        "Call them, then send the payment details yourself. Never email the details unprompted, and never change them by message.",
+        "Call them, then give the payment details yourself. Never email the details unprompted, and never change them by message.",
     },
-  });
+  };
 
-  if (!sent.ok) {
-    /* The order is safely recorded, so the buyer is not sent away — but the
-       kennel would not know about it, so say so rather than showing a clean
-       confirmation over a silent failure. */
-    console.error(`[order] ${reference} recorded but not emailed.`);
-  }
-
-  return { ok: true, reference, emailed: sent.ok };
+  return { ok: true, reference, message };
 }

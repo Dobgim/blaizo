@@ -96,7 +96,7 @@ output directory.
 | `NEXT_PUBLIC_SITE_URL` | Production only | Your custom domain, once you have one. Sets canonicals, Open Graph, the sitemap and JSON-LD. **Leave it unset on Preview** — previews then use their own deployment URL instead of claiming to be production. |
 | `NEXT_PUBLIC_SUPABASE_URL` | Admin, live data | Without it the site serves the demonstration records and `/admin` shows a "not configured" screen. |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Admin, live data | Safe to expose; RLS is what protects the data. |
-| `WEB3FORMS_ACCESS_KEY` | Order and application emails | From web3forms.com, tied to the address that should receive them. Without it orders are still saved but nobody is told — the buyer sees a notice asking them to phone. Verify with `npm run test:email`. |
+| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Order and application emails | From web3forms.com, tied to the address that should receive them. Without it orders are still saved but nobody is told — the buyer sees a notice asking them to phone. Verify with `npm run test:email`. |
 
 The origin resolves in this order: `NEXT_PUBLIC_SITE_URL`, then
 `VERCEL_PROJECT_PRODUCTION_URL`, then `VERCEL_URL`, then localhost — so

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { sendViaWeb3Forms } from "@/lib/web3forms";
+import type { Web3FormsMessage } from "@/lib/web3forms";
 import { siteConfig } from "@/lib/site-config";
 import {
   applicationSchema,
@@ -18,7 +18,7 @@ import {
  */
 export async function submitApplication(
   values: ApplicationValues,
-): Promise<{ ok: boolean; id?: string }> {
+): Promise<{ ok: boolean; id?: string; message?: Web3FormsMessage }> {
   const parsed = applicationSchema.safeParse(values);
   if (!parsed.success) return { ok: false };
 
@@ -27,7 +27,9 @@ export async function submitApplication(
   /* The email goes out regardless of whether the database is reachable — the
      owner seeing the application matters more than our record of it, and the
      two failure modes are unrelated. Neither blocks the WhatsApp hand-off. */
-  const emails = sendViaWeb3Forms({
+  /* Built here, sent by the browser — Cloudflare challenges server-to-server
+     POSTs to Web3Forms, so a send from Node never arrives. */
+  const message: Web3FormsMessage = {
     subject: `Application — ${v.name}`,
     fromName: `${siteConfig.shortName} website`,
     replyTo: v.email,
@@ -49,13 +51,10 @@ export async function submitApplication(
       "Experience with the breed": v.experience,
       "Anything else": v.message || "—",
     },
-  });
+  };
 
   const supabase = await createClient();
-  if (!supabase) {
-    await emails;
-    return { ok: false };
-  }
+  if (!supabase) return { ok: false, message };
 
   const { data, error } = await supabase
     .from("applications")
@@ -79,12 +78,10 @@ export async function submitApplication(
     .select("id")
     .single();
 
-  await emails;
-
   if (error) {
     console.error(`[apply] could not record application: ${error.message}`);
-    return { ok: false };
+    return { ok: false, message };
   }
 
-  return { ok: true, id: data.id };
+  return { ok: true, id: data.id, message };
 }

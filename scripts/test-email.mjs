@@ -22,9 +22,9 @@ const env = Object.fromEntries(
     }),
 );
 
-const key = env.WEB3FORMS_ACCESS_KEY;
+const key = env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
 if (!key) {
-  console.error("No WEB3FORMS_ACCESS_KEY in .env.local.");
+  console.error("No NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY in .env.local.");
   process.exit(1);
 }
 

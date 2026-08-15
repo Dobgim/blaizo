@@ -14,6 +14,7 @@ import {
   type ApplicationValues,
 } from "@/lib/schemas/application";
 import { applicationMessage, whatsappUrl } from "@/lib/whatsapp";
+import { postToWeb3Forms } from "@/lib/web3forms";
 
 /**
  * The application, in three steps.
@@ -81,8 +82,11 @@ export function ApplicationForm({ puppyName }: { puppyName?: string }) {
       message: values.message,
     });
 
-    // Best effort. The hand-off happens either way.
-    await submitApplication(values).catch(() => ({ ok: false }));
+    /* Best effort, and the WhatsApp hand-off happens either way. The email is
+       posted from here rather than the server because Web3Forms is behind
+       Cloudflare, which challenges server-to-server requests. */
+    const recorded = await submitApplication(values).catch(() => null);
+    if (recorded?.message) postToWeb3Forms(recorded.message);
 
     const url = whatsappUrl(message);
     setHandoff(url);

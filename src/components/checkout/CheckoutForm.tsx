@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/apply/Field";
 import { placeOrder } from "@/lib/actions/order";
+import { postToWeb3Forms } from "@/lib/web3forms";
 import { orderSchema, type OrderValues } from "@/lib/schemas/order";
 import { formatPrice } from "@/lib/format";
-import { paymentMethods, siteConfig } from "@/lib/site-config";
+import { paymentMethods } from "@/lib/site-config";
 import type { PaymentMethodId } from "@/lib/supabase/database.types";
 
 /**
@@ -31,6 +32,7 @@ export function CheckoutForm({
   puppyName: string;
   amountCents: number;
 }) {
+  const router = useRouter();
   const [values, setValues] = useState<OrderValues>({
     buyerName: "",
     buyerEmail: "",
@@ -42,12 +44,6 @@ export function CheckoutForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [failed, setFailed] = useState<string | null>(null);
-  const [done, setDone] = useState<{
-    reference: string;
-    emailed: boolean;
-  } | null>(null);
-
-  const chosen = paymentMethods.find((m) => m.id === values.paymentMethod);
 
   function set<K extends keyof OrderValues>(key: K, value: OrderValues[K]) {
     setValues((v) => ({ ...v, [key]: value }));
@@ -70,79 +66,27 @@ export function CheckoutForm({
 
     setErrors({});
     setSubmitting(true);
+
     const result = await placeOrder(parsed.data);
-    setSubmitting(false);
+    if (!result.ok) {
+      setSubmitting(false);
+      setFailed(result.error);
+      return;
+    }
 
-    if (result.ok) setDone({ reference: result.reference, emailed: result.emailed });
-    else setFailed(result.error);
-  }
+    /* The order is recorded by this point. The notification now leaves as a
+       real form navigation rather than a fetch: fetch cannot get through — the
+       endpoint sits behind Cloudflare, which answers without CORS headers, so
+       the browser discards the response and no mail is sent. A form post has
+       no CORS to fail and lets the browser clear the challenge on the way.
+       Web3Forms redirects to the thank-you page afterwards. */
+    postToWeb3Forms(result.message);
 
-  // --- Placed ---------------------------------------------------------------
-
-  if (done) {
-    return (
-      <div className="border border-enamel bg-ledger-bright p-7">
-        <p className="eyebrow text-foxred">Order {done.reference}</p>
-        <h2 className="mt-3 text-h2 text-spruce">
-          Thank you. We will get back to you with the payment details.
-        </h2>
-
-        <p className="measure mt-4 text-body text-canvas-deep">
-          Your order for {puppyName} is with us. We will call you on the number
-          you gave, usually the same day, to talk it through and send you the{" "}
-          {chosen?.label} details for the {formatPrice(amountCents)}.
-        </p>
-
-        <p className="measure mt-4 text-body text-canvas-deep">
-          Nothing has been charged and there is nothing to pay yet. Please do
-          not send money until you have spoken to us.
-        </p>
-
-        <dl className="hairline mt-7">
-          {[
-            ["Order number", done.reference],
-            ["Puppy", puppyName],
-            ["Total, paid in full", formatPrice(amountCents)],
-            ["Paying by", chosen?.label ?? ""],
-          ].map(([label, value]) => (
-            <div
-              key={label}
-              className="flex items-baseline justify-between gap-4 border-b border-enamel py-2.5"
-            >
-              <dt className="eyebrow text-canvas">{label}</dt>
-              <dd className="font-mono text-data text-spruce">{value}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <p className="measure mt-6 border-l-2 border-brass pl-4 text-small text-canvas-deep">
-          We will only ever give you payment details by phone, or in a message
-          you receive after we have spoken. If anything claiming to be us emails
-          you payment details out of the blue, it is not us — call{" "}
-          {siteConfig.contact.phone}.
-        </p>
-
-        {!done.emailed && (
-          <p
-            role="alert"
-            className="measure mt-5 border-l-2 border-foxred pl-4 text-small text-foxred"
-          >
-            One thing: we could not send ourselves the notification for this
-            order. It is saved, but please call or text{" "}
-            {siteConfig.contact.phone} and quote {done.reference} so we are
-            certain to see it.
-          </p>
-        )}
-
-        <p className="mt-7">
-          <Link
-            href="/puppies"
-            className="border-b border-brass pb-1 text-body text-spruce transition-colors duration-300 hover:border-foxred hover:text-foxred"
-          >
-            Back to the puppies
-          </Link>
-        </p>
-      </div>
+    /* Our own confirmation, not one served by a third party. The buyer's
+       reference must survive Web3Forms being slow, blocked or down. */
+    router.push(
+      `/checkout/thank-you?ref=${encodeURIComponent(result.reference)}` +
+        `&puppy=${encodeURIComponent(puppyName)}`,
     );
   }
 
