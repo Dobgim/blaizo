@@ -1,11 +1,10 @@
 /**
  * Email delivery through Web3Forms.
  *
- * Sent FROM THE BROWSER, deliberately. Web3Forms sits behind Cloudflare, which
- * challenges server-to-server POSTs — from a Node process the reply is an HTML
- * "Just a moment…" page rather than JSON, and no mail is ever sent. Their whole
- * product is designed around a form in a page posting directly, and that is the
- * path that reliably gets through.
+ * Sent FROM THE BROWSER, deliberately, which is the only path Web3Forms
+ * documents. A POST from a Node process is challenged before it arrives and
+ * comes back as an HTML page rather than JSON, so no mail is ever sent. Their
+ * product is built around a page posting directly, and that is what we do.
  *
  * The access key is therefore public, which is how Web3Forms intends it: their
  * documentation puts it in plain HTML. It authorises delivery to one fixed
@@ -30,32 +29,85 @@ export type Web3FormsMessage = {
   fields: Record<string, string>;
 };
 
+export type SendOutcome =
+  | { sent: true }
+  /** The request left, but we could not read the answer. Unknown, not failed. */
+  | { sent: "unconfirmed"; reason: string }
+  | { sent: false; reason: string };
+
 /**
- * Send by submitting a real form into a hidden iframe.
+ * Send the notification, preferring the path that can tell us whether it worked.
  *
- * Three constraints forced this shape, in order:
+ * Web3Forms' documented browser call is a plain `fetch` with a JSON body, and
+ * the endpoint sends CORS headers so the reply can be read. That is what we try
+ * first, because it returns `{ success: true }` — a real answer we can log and
+ * act on.
  *
- *   1. A cross-origin fetch cannot work. The endpoint sits behind Cloudflare,
- *      which answers without `Access-Control-Allow-Origin` whenever it
- *      intervenes; the browser then discards the response and no mail is sent.
- *      A form post is not subject to CORS at all.
- *   2. Submitting the form as a top-level navigation does work, but stakes the
- *      buyer's confirmation on a third party being reachable — if it is not,
- *      they land on a browser error page having just placed an order, with no
- *      reference number and no idea whether it went through.
- *   3. So the form targets a hidden iframe. The post leaves the browser
- *      exactly as before, the page never moves, and the caller navigates to
- *      its own confirmation immediately afterwards.
+ * If that throws, the request never got out: an extension, an ad blocker, a
+ * captive network. A form post is then worth trying, because it is not subject
+ * to CORS and is not cancelled by the same filters. It targets a hidden iframe
+ * so the page never moves, at the cost of the answer being unreadable — hence
+ * "unconfirmed" rather than "sent".
  *
- * The trade-off is that the result cannot be read: the iframe is cross-origin.
- * That is acceptable here — the order is already recorded server-side before
- * this is called, so the email is a notification, not the record.
+ * Either way the order is already recorded server-side before this runs, so
+ * this email is a notification, not the record.
  */
-export function postToWeb3Forms(message: Web3FormsMessage): void {
+export async function postToWeb3Forms(
+  message: Web3FormsMessage,
+): Promise<SendOutcome> {
   if (!ACCESS_KEY) {
     console.warn("[web3forms] no access key set; nothing sent.");
-    return;
+    return { sent: false, reason: "No access key configured." };
   }
+
+  const payload: Record<string, string> = {
+    access_key: ACCESS_KEY,
+    subject: message.subject,
+    from_name: message.fromName,
+    ...(message.replyTo ? { replyto: message.replyTo } : {}),
+    ...message.fields,
+  };
+
+  try {
+    const response = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = (await response.json()) as {
+      success?: boolean;
+      message?: string;
+    };
+
+    if (result.success) return { sent: true };
+
+    /* A read answer that says no is final — retrying by form post would only
+       resend something Web3Forms has already refused. */
+    const reason = result.message ?? `Web3Forms refused it (${response.status}).`;
+    console.error(`[web3forms] ${reason}`);
+    return { sent: false, reason };
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    console.warn(`[web3forms] fetch failed (${reason}); trying a form post.`);
+    return postByHiddenForm(payload)
+      ? { sent: "unconfirmed", reason }
+      : { sent: false, reason };
+  }
+}
+
+/**
+ * Fallback: submit a real form into a hidden iframe.
+ *
+ * Not subject to CORS, and survives filters that cancel background fetches.
+ * The iframe is cross-origin, so the result cannot be read — the caller treats
+ * this as "we tried", never as "it arrived".
+ */
+function postByHiddenForm(payload: Record<string, string>): boolean {
+  if (typeof document === "undefined") return false;
 
   const frameName = `w3f-${Date.now()}`;
   const frame = document.createElement("iframe");
@@ -77,18 +129,15 @@ export function postToWeb3Forms(message: Web3FormsMessage): void {
     form.appendChild(input);
   };
 
-  add("access_key", ACCESS_KEY);
-  add("subject", message.subject);
-  add("from_name", message.fromName);
-  if (message.replyTo) add("replyto", message.replyTo);
   /* Web3Forms' own honeypot. A bot filling every field trips it; a person
      never sees it. */
   add("botcheck", "");
 
-  for (const [label, value] of Object.entries(message.fields)) {
-    add(label, value);
+  for (const [name, value] of Object.entries(payload)) {
+    add(name, value);
   }
 
   document.body.appendChild(form);
   form.submit();
+  return true;
 }

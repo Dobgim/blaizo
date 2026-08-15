@@ -9,17 +9,14 @@ export const metadata: Metadata = {
 };
 
 /**
- * Where Web3Forms sends the buyer back to after the order notification.
+ * The buyer's confirmation, served by us.
  *
- * A separate page rather than a state inside the form, because the order is
- * submitted by a real form navigation: the browser leaves this site, posts to
- * Web3Forms, and is redirected here. That route is used precisely because it
- * involves no CORS and lets the browser clear a Cloudflare challenge on the
- * way through, which a fetch cannot do.
+ * A page of our own rather than one a third party redirects to, so the
+ * reference number survives Web3Forms being slow, blocked or down. The order
+ * is recorded server-side before the buyer ever arrives here.
  *
- * Everything shown here comes from the query string, so it is presentational
- * only — the order itself was already recorded server-side before the
- * redirect, and this page never writes anything.
+ * Everything shown comes from the query string: this page is presentational
+ * only and never writes anything.
  */
 export default async function ThankYouPage({
   searchParams,

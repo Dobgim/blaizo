@@ -74,13 +74,16 @@ export function CheckoutForm({
       return;
     }
 
-    /* The order is recorded by this point. The notification now leaves as a
-       real form navigation rather than a fetch: fetch cannot get through — the
-       endpoint sits behind Cloudflare, which answers without CORS headers, so
-       the browser discards the response and no mail is sent. A form post has
-       no CORS to fail and lets the browser clear the challenge on the way.
-       Web3Forms redirects to the thank-you page afterwards. */
-    postToWeb3Forms(result.message);
+    /* The order is recorded by this point, so this email is a notification
+       rather than the record. Awaited so the request finishes before we
+       navigate away, and so a failure is visible in the console instead of
+       disappearing silently. */
+    const delivery = await postToWeb3Forms(result.message);
+    if (delivery.sent !== true) {
+      console.error(
+        `[checkout] order ${result.reference} saved, but the email did not confirm: ${delivery.reason}`,
+      );
+    }
 
     /* Our own confirmation, not one served by a third party. The buyer's
        reference must survive Web3Forms being slow, blocked or down. */

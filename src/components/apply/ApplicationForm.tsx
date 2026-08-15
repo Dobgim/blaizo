@@ -83,10 +83,15 @@ export function ApplicationForm({ puppyName }: { puppyName?: string }) {
     });
 
     /* Best effort, and the WhatsApp hand-off happens either way. The email is
-       posted from here rather than the server because Web3Forms is behind
-       Cloudflare, which challenges server-to-server requests. */
+       posted from here rather than the server because a POST from Node is
+       challenged before it reaches Web3Forms and never sends anything. */
     const recorded = await submitApplication(values).catch(() => null);
-    if (recorded?.message) postToWeb3Forms(recorded.message);
+    if (recorded?.message) {
+      const delivery = await postToWeb3Forms(recorded.message);
+      if (delivery.sent !== true) {
+        console.error(`[apply] the email did not confirm: ${delivery.reason}`);
+      }
+    }
 
     const url = whatsappUrl(message);
     setHandoff(url);
