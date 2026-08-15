@@ -62,7 +62,7 @@ export const siteConfig = {
   contact: {
     phone: "(202) 643-8872",
     phoneHref: "tel:+12026438872",
-    email: "hello@goldenpupkennel.com",
+    email: "goldenpupkennel12@gmail.com",
 
     /**
      * WhatsApp is for questions, not for ordering. Orders go through

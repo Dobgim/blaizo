@@ -1,8 +1,8 @@
 # Golden Pup Kennel
 
 Marketing and lead-generation site for a family kennel. It sells nothing. Its
-job is to make an anxious visitor trust the breeder enough to send an
-application.
+job is to make an anxious visitor trust the breeder enough to order a puppy or
+pick up the phone.
 
 ## Stack
 
@@ -13,39 +13,57 @@ application.
 | Motion | GSAP 3 + ScrollTrigger, Lenis |
 | Data | Supabase (Postgres, Storage, Auth) |
 | Forms | react-hook-form + zod |
-| Email | Resend |
-| Enquiries | WhatsApp hand-off (see below) |
+| Email | Web3Forms |
+| Enquiries | WhatsApp, for questions |
 | Deploy | Vercel |
 
-## No payment is taken on this site
+## How money works, and why
 
-There is no Stripe, no checkout, and no deposit collected in the browser. When
-a visitor wants a puppy, the site opens WhatsApp with the whole enquiry already
-written — puppy, litter, sire, dam, and every answer from the application form
-— so they send it in one tap and the breeder receives something actionable.
+The site takes **orders**. It does not take **payments**, and it cannot: the
+four methods offered — Zelle, Cash App, Chime, Apple Pay — are all transfers
+the buyer makes from their own app. No card number, account number or token
+ever reaches this code.
 
-Everything for that lives in two places:
+The buyer orders, chooses a method, and sees *"thank you, we will get back to
+you with the payment details."* The kennel is emailed, calls them, sends video
+of that particular puppy, and gives the payment details on the call.
 
-- `src/lib/whatsapp.ts` — builds the `wa.me` links and formats the messages
-- `src/components/ui/WhatsAppLink.tsx` — the anchor, with the brand mark
+**No account handle appears anywhere in this repo, on the site, or in an
+automated email — deliberately.** Payment details published on a page or sent
+by an automated email are details an attacker can substitute, and that is
+precisely how transfer-based sales get intercepted. Details given by a person,
+on a call the buyer was told to expect, cannot be.
 
-Applications are still written to the `applications` table so the owner has an
-inbox in `/admin`; the WhatsApp message is the notification, not the record.
-The table has no `deposit_status` or `stripe_session_id` column.
+Two more properties worth preserving if you change this code:
 
-**Before launch:** `siteConfig.contact.whatsappNumber` must be the kennel's real
-WhatsApp Business number in full international format — digits only, no `+`,
-no spaces. `wa.me` silently fails on anything else.
+- **The price is read from the database, never the form.** A price posted by
+  the browser is a price the browser can change.
+- **`paid` is a claim, not a fact.** Nothing here can see money arrive, so the
+  status defaults to unpaid and only an admin can move it. The admin screen
+  says why.
+
+Payment is in full. There is no deposit or instalment option anywhere.
+
+- `src/lib/actions/order.ts` — validates, records, notifies
+- `src/lib/web3forms.ts` — email delivery
+- `supabase/patch-04-orders.sql` — the table and its RLS
+
+WhatsApp is for questions only (`src/lib/whatsapp.ts`). Before launch,
+`siteConfig.contact.whatsappNumber` must be the real number in full
+international format — digits only, no `+`, no spaces. `wa.me` fails silently
+on anything else.
 
 ## Client-supplied values
 
-Everything the client still owes is in `src/lib/site-config.ts`, marked
-`PLACEHOLDER`. Nothing on the site asserts a fact that has not been supplied:
+Everything the client still owes is in `src/lib/site-config.ts`. Nothing on the
+site asserts a fact that has not been supplied:
 
-- Phone, WhatsApp number, address and town
-- Year established
 - `stats` — the home page count-up band does not render at all while any figure
   is `null`, so no invented statistics can ship
+- The four sample placement letters on the home page carry a visible notice
+  saying the families named are not real customers. **That notice comes off
+  only when real letters replace them**, not before — fabricated testimonials
+  are a civil-penalty matter under the FTC's 2024 rule.
 
 Photography slots are listed in [IMAGES.md](IMAGES.md) so the client knows what
 to shoot. Placeholders are Unsplash source URLs.
@@ -75,12 +93,10 @@ output directory.
 
 | Variable | Needed for | Notes |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Production only | `https://goldenpupkennel.com`. Sets canonicals, Open Graph, the sitemap and JSON-LD. **Leave it unset on Preview** — previews then use their own deployment URL instead of claiming to be production. |
+| `NEXT_PUBLIC_SITE_URL` | Production only | Your custom domain, once you have one. Sets canonicals, Open Graph, the sitemap and JSON-LD. **Leave it unset on Preview** — previews then use their own deployment URL instead of claiming to be production. |
 | `NEXT_PUBLIC_SUPABASE_URL` | Admin, live data | Without it the site serves the demonstration records and `/admin` shows a "not configured" screen. |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Admin, live data | Safe to expose; RLS is what protects the data. |
-| `RESEND_API_KEY` | Application emails | Optional. Missing means the WhatsApp hand-off still works, no email is sent. |
-| `RESEND_FROM` | Application emails | Must be a verified sender domain in Resend. |
-| `OWNER_NOTIFICATION_EMAIL` | Application emails | Where the owner's copy goes. |
+| `WEB3FORMS_ACCESS_KEY` | Order and application emails | From web3forms.com, tied to the address that should receive them. Without it orders are still saved but nobody is told — the buyer sees a notice asking them to phone. Verify with `npm run test:email`. |
 
 The origin resolves in this order: `NEXT_PUBLIC_SITE_URL`, then
 `VERCEL_PROJECT_PRODUCTION_URL`, then `VERCEL_URL`, then localhost — so
@@ -107,6 +123,10 @@ npm run dev
 | `npm run a11y` | axe-core over every route at 390px and 1440px |
 | `npm run responsive` | Horizontal overflow and tap-target check, 320px→1024px |
 | `npm run shoot` | Playwright screenshots used for design critique |
+| `npm run test:email` | Sends one real test through Web3Forms and says whether it was delivered, blocked by Cloudflare, or rejected |
+| `npm run sync:faqs` | Pushes `src/lib/content/faqs.ts` to the database, which is what the site reads |
+| `npm run import:puppies` | Uploads `incoming-photos/` and creates dam, litter and puppies |
+| `npm run photos` | Replaces the site's own placeholder imagery from `incoming-photos/` |
 
 `a11y` and `responsive` both need the site running (`npm run build && npm start`)
 and both exit non-zero on failure, so they can gate a deploy. The bars they
