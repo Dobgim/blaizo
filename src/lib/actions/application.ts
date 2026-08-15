@@ -1,10 +1,8 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import {
-  sendApplicantConfirmation,
-  sendOwnerNotification,
-} from "@/lib/email";
+import { sendViaWeb3Forms } from "@/lib/web3forms";
+import { siteConfig } from "@/lib/site-config";
 import {
   applicationSchema,
   type ApplicationValues,
@@ -26,13 +24,32 @@ export async function submitApplication(
 
   const v = parsed.data;
 
-  /* Email goes out regardless of whether the database is reachable — the
-     owner's copy of an application matters more than our record of it, and
-     these two failure modes are unrelated. Neither blocks the hand-off. */
-  const emails = Promise.allSettled([
-    sendOwnerNotification(v),
-    sendApplicantConfirmation(v),
-  ]);
+  /* The email goes out regardless of whether the database is reachable — the
+     owner seeing the application matters more than our record of it, and the
+     two failure modes are unrelated. Neither blocks the WhatsApp hand-off. */
+  const emails = sendViaWeb3Forms({
+    subject: `Application — ${v.name}`,
+    fromName: `${siteConfig.shortName} website`,
+    replyTo: v.email,
+    fields: {
+      Name: v.name,
+      Email: v.email,
+      Phone: v.phone,
+      "Puppy of interest": v.puppyName || "No particular puppy yet",
+      Home: v.homeType,
+      Yard: v.hasYard
+        ? v.yardFenced
+          ? "Yes, fenced"
+          : "Yes, not fenced"
+        : "No yard",
+      "Other pets": v.otherPets || "None",
+      "Children at home": v.childrenAges || "None",
+      "Hours alone on a typical day": v.timeAlone,
+      Timing: v.preferredTiming,
+      "Experience with the breed": v.experience,
+      "Anything else": v.message || "—",
+    },
+  });
 
   const supabase = await createClient();
   if (!supabase) {

@@ -1,29 +1,30 @@
 "use server";
 
-import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { getPuppyBySlug } from "@/lib/queries";
 import { orderSchema, orderReference, type OrderValues } from "@/lib/schemas/order";
-import { buyerReceiptHtml, ownerOrderHtml } from "@/lib/email-receipt";
-import { siteConfig } from "@/lib/site-config";
+import { sendViaWeb3Forms } from "@/lib/web3forms";
+import { paymentMethods, siteConfig } from "@/lib/site-config";
+import { formatPrice } from "@/lib/format";
 
 /**
  * Place an order.
  *
- * No money moves here and none can: every method offered is a manual transfer
- * the buyer makes from their own app afterwards. This records what was ordered
- * and emails the receipt that tells them where to send it.
+ * Nothing is charged and no payment details are published. The buyer says what
+ * they want and how they would like to pay; the kennel is emailed; the kennel
+ * gets in touch with the details personally.
  *
- * The price comes from the database, never from the form. A price posted by
- * the browser is a price the browser can change.
+ * That last part is a deliberate safety property, not an inconvenience.
+ * Payment details printed on a page or sent by an automated email are details
+ * an attacker can substitute — it is how transfer-based sales are intercepted.
+ * Given by a person, on a call the buyer was told to expect, they cannot be.
+ *
+ * The price comes from the database, never the form. A price posted by the
+ * browser is a price the browser can change.
  */
 
-const apiKey = process.env.RESEND_API_KEY ?? "";
-const from = process.env.RESEND_FROM ?? "";
-const ownerTo = process.env.OWNER_NOTIFICATION_EMAIL ?? "";
-
 export type OrderResult =
-  | { ok: true; reference: string; amountCents: number; emailed: boolean }
+  | { ok: true; reference: string; emailed: boolean }
   | { ok: false; error: string };
 
 export async function placeOrder(values: OrderValues): Promise<OrderResult> {
@@ -43,23 +44,16 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
   if (puppy.status === "placed") {
     return {
       ok: false,
-      error: `${puppy.name} has already gone home. Call us and we will tell you what else is coming.`,
-    };
-  }
-  if (puppy.priceCents <= 0) {
-    return {
-      ok: false,
-      error: `${puppy.name} does not have a price set yet. Please call us instead.`,
+      error: `${puppy.name} has already gone home. Call or text us and we will tell you what else is coming.`,
     };
   }
 
   const reference = orderReference();
-  const receipt = {
-    ...v,
-    reference,
-    puppyName: puppy.name,
-    amountCents: puppy.priceCents,
-  };
+  const methodLabel =
+    paymentMethods.find((m) => m.id === v.paymentMethod)?.label ??
+    v.paymentMethod;
+
+  // --- record it ------------------------------------------------------------
 
   const supabase = await createClient();
   if (supabase) {
@@ -78,8 +72,6 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
     });
 
     if (error) {
-      /* The order is the record. Losing it while telling the buyer to send
-         money would leave payments arriving against nothing. */
       console.error(`[order] insert failed: ${error.message}`);
       return {
         ok: false,
@@ -89,44 +81,36 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
     }
   }
 
-  const emailed = await sendReceipts(receipt);
-  return { ok: true, reference, amountCents: puppy.priceCents, emailed };
-}
+  // --- tell the kennel --------------------------------------------------------
 
-async function sendReceipts(receipt: Parameters<typeof buyerReceiptHtml>[0]) {
-  if (!apiKey || !from) {
-    console.warn("[order] Resend not configured; no receipt sent.");
-    return false;
+  const sent = await sendViaWeb3Forms({
+    subject: `New order ${reference} — ${puppy.name}`,
+    fromName: `${siteConfig.shortName} website`,
+    /* Reply in the inbox reaches the buyer, which is how the kennel sends the
+       payment details. */
+    replyTo: v.buyerEmail,
+    fields: {
+      Order: reference,
+      Puppy: puppy.name,
+      Price:
+        puppy.priceCents > 0 ? formatPrice(puppy.priceCents) : "No price set",
+      "Full name": v.buyerName,
+      Email: v.buyerEmail,
+      Phone: v.buyerPhone,
+      "Wants to pay by": methodLabel,
+      Notes: v.notes || "—",
+      "Puppy page": `${siteConfig.url}/puppies/${puppy.slug}`,
+      "Next step":
+        "Call them, then send the payment details yourself. Never email the details unprompted, and never change them by message.",
+    },
+  });
+
+  if (!sent.ok) {
+    /* The order is safely recorded, so the buyer is not sent away — but the
+       kennel would not know about it, so say so rather than showing a clean
+       confirmation over a silent failure. */
+    console.error(`[order] ${reference} recorded but not emailed.`);
   }
 
-  try {
-    const resend = new Resend(apiKey);
-
-    const results = await Promise.allSettled([
-      resend.emails.send({
-        from,
-        to: receipt.buyerEmail,
-        subject: `Your order ${receipt.reference} — ${receipt.puppyName}`,
-        html: buyerReceiptHtml(receipt),
-        replyTo: siteConfig.contact.email,
-      }),
-      ownerTo
-        ? resend.emails.send({
-            from,
-            to: ownerTo,
-            subject: `Order ${receipt.reference} — ${receipt.puppyName}`,
-            html: ownerOrderHtml(receipt),
-            replyTo: receipt.buyerEmail,
-          })
-        : Promise.resolve(null),
-    ]);
-
-    const buyerSent =
-      results[0].status === "fulfilled" && !results[0].value?.error;
-    if (!buyerSent) console.error("[order] buyer receipt failed to send.");
-    return buyerSent;
-  } catch (cause) {
-    console.error("[order] sending receipts threw:", cause);
-    return false;
-  }
+  return { ok: true, reference, emailed: sent.ok };
 }

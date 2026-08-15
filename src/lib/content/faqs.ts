@@ -28,7 +28,7 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "How do I pay?",
         answer:
-          "Open the puppy you want and press Order. You give us your name, email and phone number and choose Zelle, Cash App, Chime or Apple Pay, and we email you a receipt straight away with an order number and the details to send to. You then send the money yourself from your own app. No card is entered on this website and no payment passes through it.",
+          "Open the puppy you want and press Order. You give us your name, email and phone number and say whether you would like to pay by Zelle, Cash App, Chime or Apple Pay. That places the order and gives you an order number — nothing is charged. We then call you, send you video of the puppy, and give you the payment details ourselves. No card is entered on this website and no payment passes through it.",
       },
       {
         question: "Do you take a deposit, or can I pay in instalments?",
@@ -48,22 +48,22 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "Do I pay before or after I have seen the puppy?",
         answer:
-          "You are welcome to come and meet the puppy first, and most local buyers do. If you are travelling a long way or arranging a flight nanny then payment comes first, but we will always speak to you on the phone before that, and we will send photographs and video of that particular puppy on request. If any breeder will not get on a call with you before taking your money, do not send it. That applies to us as much as to anyone.",
+          "Payment comes first — but never before we have spoken. We call you and send you video of that particular puppy before you send anything, so you know exactly which dog you are buying and who you are buying from. You are also welcome to come and meet the puppy first if you are local. If any breeder will not get on a call and send you video before taking your money, do not send it. That applies to us as much as to anyone.",
       },
       {
         question: "Is it safe to pay this way?",
         answer:
-          "Be careful, and we would rather say so plainly than pretend otherwise. Zelle, Cash App and Chime transfers are fast and very hard to reverse, which is exactly why scammers ask for them. Three things protect you with us. The payment details reach you only on the receipt we email when you order. We will never send a message asking you to change them. And we speak to you by phone before any puppy travels. If anything ever asks you to send money to a different name or tag than the one on your receipt, stop and call the number on this site.",
+          "Be careful, and we would rather say so plainly than pretend otherwise. Zelle, Cash App and Chime transfers are fast and very hard to reverse, which is exactly why scammers ask for them. Two things protect you with us. We never publish payment details or email them out of the blue — you get them from a person, on a call you were told to expect, after you have seen video of your puppy. And we will never message you asking you to change them. If anything claiming to be us sends you payment details unprompted, it is not us: call the number on this site.",
       },
       {
         question: "What happens once I have paid?",
         answer:
-          "We confirm we have received it, usually the same day, then call you to arrange collection or delivery and to go through the paperwork that travels with the puppy. Your order number is the reference for everything after that. If you have not heard from us within a day of sending payment, ring us — do not wait for us to notice.",
+          "We confirm we have received it, usually the same day, then arrange collection or delivery and go through the paperwork that travels with the puppy. Your order number is the reference for everything after that. If you have not heard from us within a day of sending payment, ring us — do not wait for us to notice.",
       },
       {
         question: "What if I change my mind, or something goes wrong?",
         answer:
-          "Tell us as soon as you know. If you change your mind before the puppy has left us, we refund what you have paid less anything we have already committed on your behalf, such as a booked flight nanny. If your own vet finds an existing health problem within seventy-two hours of collection that makes the puppy unfit to keep, you may return the puppy and we refund the purchase price in full. The rest is set out on the health guarantee page, and it is worth reading before you order rather than after.",
+          "Tell us and you get your money back. If you change your mind before the puppy has gone home, we refund what you paid in full — we would far rather that than place a puppy with someone who has had second thoughts. If your own vet finds an existing health problem within seventy-two hours of collection that makes the puppy unfit to keep, you may return the puppy and we refund the purchase price in full as well. The rest is set out on the health guarantee page, and it is worth reading before you order rather than after.",
       },
     ],
   },

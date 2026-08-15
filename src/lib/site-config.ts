@@ -104,47 +104,19 @@ export const siteConfig = {
   },
 
 /**
- * How a buyer pays.
+ * The payment methods a buyer can choose at checkout.
  *
- * None of these can be charged programmatically — they are all manual
- * transfers the buyer makes themselves — so the checkout records the order,
- * emails a receipt with these details on it, and the buyer sends the money.
- * Nothing on this site ever touches a card number.
- *
- * PLACEHOLDER handles. Every one of these must be the kennel's real account
- * before launch, or buyers will send money into the void. `enabled: false`
- * hides a method from the checkout entirely.
+ * No handles here on purpose. The site never shows an account, tag or number:
+ * the buyer chooses a method, and the kennel sends the details personally
+ * afterwards. That removes the single most dangerous moment in a transfer-based
+ * sale — payment details published on a page, or emailed automatically, are
+ * details an attacker can substitute. Given by a person on a call, they cannot.
  */
   payments: [
-    {
-      id: "zelle",
-      label: "Zelle",
-      handle: "PLACEHOLDER — Zelle email or phone",
-      instruction: "Send from your bank's Zelle screen to the address above.",
-      enabled: true,
-    },
-    {
-      id: "cashapp",
-      label: "Cash App",
-      handle: "PLACEHOLDER — $cashtag",
-      instruction: "Send to the $cashtag above and put your order number in the note.",
-      enabled: true,
-    },
-    {
-      id: "chime",
-      label: "Chime",
-      handle: "PLACEHOLDER — Chime $ChimeSign",
-      instruction: "Send with Chime Pay Anyone to the tag above.",
-      enabled: true,
-    },
-    {
-      id: "applepay",
-      label: "Apple Pay",
-      handle: "PLACEHOLDER — Apple Pay phone number",
-      instruction:
-        "Send through Apple Cash in Messages to the number above. Of the four, this is the one that runs on your card.",
-      enabled: true,
-    },
+    { id: "zelle", label: "Zelle" },
+    { id: "cashapp", label: "Cash App" },
+    { id: "chime", label: "Chime" },
+    { id: "applepay", label: "Apple Pay" },
   ],
 
   /** Registries and clearance bodies named in the marquee. All real orgs. */
@@ -165,13 +137,8 @@ export const siteConfig = {
 export type SiteConfig = typeof siteConfig;
 export type PaymentMethod = (typeof siteConfig.payments)[number];
 
-/** The methods actually offered at checkout. */
-export const paymentMethods = siteConfig.payments.filter((m) => m.enabled);
-
-/** True while any handle is still a placeholder — the checkout warns on it. */
-export const paymentsNeedSetup = paymentMethods.some((m) =>
-  m.handle.startsWith("PLACEHOLDER"),
-);
+/** The methods offered at checkout. */
+export const paymentMethods = siteConfig.payments;
 
 /** True only when the client has filled in every stat. */
 export const hasStats = Object.values(siteConfig.stats).every(

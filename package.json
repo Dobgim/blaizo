@@ -14,7 +14,8 @@
     "responsive": "node scripts/responsive.mjs",
     "photos": "node scripts/install-puppy-photos.mjs",
     "import:puppies": "node scripts/import-puppies.mjs",
-    "sync:faqs": "node scripts/sync-faqs.mjs"
+    "sync:faqs": "node scripts/sync-faqs.mjs",
+    "test:email": "node scripts/test-email.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { puppyBySlug } from "@/lib/content-source";
 import { formatDate } from "@/lib/format";
-import { paymentsNeedSetup, siteConfig } from "@/lib/site-config";
+import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Checkout",
@@ -71,29 +71,12 @@ export default async function CheckoutPage({
         eyebrow="Checkout"
         railNote={`Litter ${puppy.litterId}`}
         title={`Order ${puppy.name}`}
-        intro="Your details, how you would like to pay, and that is the order placed. Nothing is charged on this website — we send you the payment details and you send the money yourself."
+        intro="Your details, how you would like to pay, and that is the order placed. Nothing is charged here — we call you with the payment details once we have your order."
       />
 
       <section className="shell pb-24 lg:pb-32">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-7 lg:col-start-1">
-            {paymentsNeedSetup && (
-              <p
-                role="alert"
-                className="mb-8 border-l-2 border-foxred bg-ledger-bright px-4 py-3 text-small text-canvas-deep"
-              >
-                <span className="eyebrow block text-foxred">
-                  Not ready for real orders
-                </span>
-                <span className="mt-2 block">
-                  The payment handles in <code className="font-mono">site-config.ts</code>{" "}
-                  are still placeholders. Replace them with the kennel&rsquo;s real
-                  Zelle, Cash App, Chime and Apple Cash details before this page
-                  goes live, or buyers will send money nowhere.
-                </span>
-              </p>
-            )}
-
             <CheckoutForm
               puppySlug={puppy.slug}
               puppyName={puppy.name}

@@ -84,35 +84,55 @@ export function CheckoutForm({
       <div className="border border-enamel bg-ledger-bright p-7">
         <p className="eyebrow text-foxred">Order {done.reference}</p>
         <h2 className="mt-3 text-h2 text-spruce">
-          Your order is placed. Nothing has been charged yet.
+          Thank you. We will get back to you with the payment details.
         </h2>
 
         <p className="measure mt-4 text-body text-canvas-deep">
-          {done.emailed
-            ? `We have emailed a receipt to ${values.buyerEmail} with the payment details on it.`
-            : "Your order is recorded, but the receipt email did not go out. Call or text us and we will read the payment details to you."}
+          Your order for {puppyName} is with us. We will call you on the number
+          you gave, usually the same day, to talk it through and send you the{" "}
+          {chosen?.label} details for the {formatPrice(amountCents)}.
         </p>
 
-        <div className="mt-7 border border-enamel bg-ledger p-5">
-          <p className="eyebrow text-canvas-deep">
-            Send {formatPrice(amountCents)} by {chosen?.label}
-          </p>
-          <p className="mt-3 font-mono text-body-l text-spruce">
-            {chosen?.handle}
-          </p>
-          <p className="measure mt-3 text-small text-canvas-deep">
-            {chosen?.instruction} Put{" "}
-            <span className="font-mono text-spruce">{done.reference}</span> in
-            the note so we can match it to your order.
-          </p>
-        </div>
+        <p className="measure mt-4 text-body text-canvas-deep">
+          Nothing has been charged and there is nothing to pay yet. Please do
+          not send money until you have spoken to us.
+        </p>
+
+        <dl className="hairline mt-7">
+          {[
+            ["Order number", done.reference],
+            ["Puppy", puppyName],
+            ["Total, paid in full", formatPrice(amountCents)],
+            ["Paying by", chosen?.label ?? ""],
+          ].map(([label, value]) => (
+            <div
+              key={label}
+              className="flex items-baseline justify-between gap-4 border-b border-enamel py-2.5"
+            >
+              <dt className="eyebrow text-canvas">{label}</dt>
+              <dd className="font-mono text-data text-spruce">{value}</dd>
+            </div>
+          ))}
+        </dl>
 
         <p className="measure mt-6 border-l-2 border-brass pl-4 text-small text-canvas-deep">
-          Check these details against what we have told you directly. If any
-          message asks you to send money somewhere else, stop and call{" "}
-          {siteConfig.contact.phone}. We will never ask you to change payment
-          details by email.
+          We will only ever give you payment details by phone, or in a message
+          you receive after we have spoken. If anything claiming to be us emails
+          you payment details out of the blue, it is not us — call{" "}
+          {siteConfig.contact.phone}.
         </p>
+
+        {!done.emailed && (
+          <p
+            role="alert"
+            className="measure mt-5 border-l-2 border-foxred pl-4 text-small text-foxred"
+          >
+            One thing: we could not send ourselves the notification for this
+            order. It is saved, but please call or text{" "}
+            {siteConfig.contact.phone} and quote {done.reference} so we are
+            certain to see it.
+          </p>
+        )}
 
         <p className="mt-7">
           <Link
@@ -145,9 +165,9 @@ export function CheckoutForm({
       </div>
 
       <p className="measure mt-4 text-small text-canvas-deep">
-        There is no deposit option. The full amount is due, and no money is
-        taken on this website — you send it yourself from your own app once you
-        have the details.
+        There is no deposit option — the full amount is due. No money is taken
+        on this website: we will call you and give you the payment details
+        ourselves.
       </p>
 
       <div className="mt-9">
@@ -169,7 +189,7 @@ export function CheckoutForm({
 
         <Field
           label="Email"
-          help="Your receipt and payment details go here."
+          help="We use it to confirm your order in writing."
           error={errors.buyerEmail}
           required
           render={(p) => (
@@ -185,7 +205,7 @@ export function CheckoutForm({
 
         <Field
           label="Phone"
-          help="We call every buyer before a puppy travels."
+          help="We call you with the payment details, so make sure it is right."
           error={errors.buyerPhone}
           required
           render={(p) => (
@@ -230,9 +250,7 @@ export function CheckoutForm({
                     <span className="block text-body font-medium text-spruce">
                       {method.label}
                     </span>
-                    <span className="mt-1 block text-small text-canvas-deep">
-                      {method.instruction}
-                    </span>
+
                   </span>
                 </label>
               );
@@ -273,8 +291,7 @@ export function CheckoutForm({
           {submitting ? "Placing your order…" : "Place order"}
         </Button>
         <p className="text-small text-canvas-deep">
-          Nothing is charged now. You will get payment details on the next
-          screen and by email.
+          Nothing is charged now. We will call you with the payment details.
         </p>
       </div>
     </form>
