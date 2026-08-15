@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { WhatsAppLink } from "@/components/ui/WhatsAppLink";
 import { StatusSeal } from "@/components/records/StatusSeal";
+import { AddToCartButton } from "@/components/shortlist/AddToCartButton";
 import { Reveal } from "@/components/motion/Reveal";
 import { DataRows } from "@/components/records/DataRows";
 import { ClearanceTable } from "@/components/records/ClearanceTable";
@@ -135,6 +136,18 @@ export default async function PuppyPage({ params }: Params) {
                 >
                   Order {puppy.name}
                 </ButtonLink>
+                {/* Same list as the heart on the cards, in the full-width form
+                    this page has room for. */}
+                <AddToCartButton
+                  item={{
+                    id: puppy.id,
+                    slug: puppy.slug,
+                    name: puppy.name,
+                    kind: "puppy",
+                    tag: `Litter ${puppy.litterId}`,
+                    image: puppy.heroImage,
+                  }}
+                />
                 {/* WhatsApp is for questions, not ordering — hence the
                     outline treatment and the wording. */}
                 <WhatsAppLink

@@ -297,6 +297,58 @@
 }
 
 /* ==========================================================================
+   Print
+   Only the invoice is ever deliberately printed, and a buyer who prints it
+   wants the document, not the website around it. Everything outside the sheet
+   is dropped and the sheet itself loses its screen furniture: a border and a
+   tinted panel cost a visible rectangle of toner and buy nothing on paper.
+   ========================================================================== */
+
+@utility no-print {
+  @media print {
+    display: none !important;
+  }
+}
+
+@media print {
+  /* Site chrome. The drawer and the waiting-list popup need no rule: both are
+     overlays that only exist in the DOM while open, and neither can be open
+     at the moment someone prints. */
+  header[data-site-header],
+  footer[data-site-footer] {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .invoice-sheet {
+    border: 0 !important;
+    background: #fff !important;
+  }
+
+  .invoice-sheet header,
+  .invoice-sheet footer {
+    background: #fff !important;
+  }
+
+  /* A page break through the total or the address makes the document look
+     forged. Keep each block whole. */
+  .invoice-sheet section,
+  .invoice-sheet table,
+  .invoice-sheet footer {
+    break-inside: avoid;
+  }
+
+  @page {
+    margin: 18mm;
+  }
+}
+
+/* ==========================================================================
    Reduced motion
    Kills every transform-based animation and transition. Opacity survives so
    fades still read as intentional rather than as a broken page.

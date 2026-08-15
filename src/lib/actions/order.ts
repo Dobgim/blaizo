@@ -4,8 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { getPuppyBySlug } from "@/lib/queries";
 import { orderSchema, orderReference, type OrderValues } from "@/lib/schemas/order";
 import type { Web3FormsMessage } from "@/lib/web3forms";
+import type { Invoice } from "@/lib/invoice";
 import { paymentMethods, siteConfig } from "@/lib/site-config";
-import { formatPrice } from "@/lib/format";
+import { formatDate, formatPrice } from "@/lib/format";
 
 /**
  * Place an order.
@@ -24,7 +25,7 @@ import { formatPrice } from "@/lib/format";
  */
 
 export type OrderResult =
-  | { ok: true; reference: string; message: Web3FormsMessage }
+  | { ok: true; reference: string; message: Web3FormsMessage; invoice: Invoice }
   | { ok: false; error: string };
 
 export async function placeOrder(values: OrderValues): Promise<OrderResult> {
@@ -62,6 +63,7 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
       buyer_name: v.buyerName,
       buyer_email: v.buyerEmail,
       buyer_phone: v.buyerPhone,
+      buyer_location: v.buyerLocation,
       puppy_id: puppy.id,
       puppy_name: puppy.name,
       puppy_slug: puppy.slug,
@@ -99,6 +101,7 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
       "Full name": v.buyerName,
       Email: v.buyerEmail,
       Phone: v.buyerPhone,
+      Address: v.buyerLocation,
       "Wants to pay by": methodLabel,
       Notes: v.notes || "—",
       "Puppy page": `${siteConfig.url}/puppies/${puppy.slug}`,
@@ -107,5 +110,31 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
     },
   };
 
-  return { ok: true, reference, message };
+  /* --- the buyer's copy -------------------------------------------------------
+     Built here so the invoice and the kennel's email are the same numbers from
+     the same source. It is returned rather than rendered because the invoice
+     page is reached by client navigation and the data never goes in the URL. */
+  const invoice: Invoice = {
+    reference,
+    issuedAt: new Date().toISOString(),
+    buyerName: v.buyerName,
+    buyerEmail: v.buyerEmail,
+    buyerPhone: v.buyerPhone,
+    buyerLocation: v.buyerLocation,
+    puppyName: puppy.name,
+    puppySlug: puppy.slug,
+    puppyDescription: [
+      puppy.sex === "dog" ? "Male" : "Female",
+      puppy.colour,
+      puppy.collarColour ? `${puppy.collarColour} collar` : null,
+      puppy.readyOn ? `ready ${formatDate(puppy.readyOn)}` : null,
+    ]
+      .filter(Boolean)
+      .join(" · "),
+    amountCents: puppy.priceCents,
+    paymentMethodLabel: methodLabel,
+    notes: v.notes,
+  };
+
+  return { ok: true, reference, message, invoice };
 }

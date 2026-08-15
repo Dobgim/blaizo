@@ -3,7 +3,7 @@ import { z } from "zod";
 /**
  * The order form.
  *
- * Four fields and a payment choice. Anything more is friction on the one page
+ * Five fields and a payment choice. Anything more is friction on the one page
  * where friction costs the kennel a sale — the vetting conversation happens
  * afterwards, by phone, as it always did.
  */
@@ -21,6 +21,14 @@ export const orderSchema = z.object({
     .string()
     .trim()
     .min(7, "Enter a phone number we can reach you on, including the area code."),
+  /* Free text on purpose. This is the billing address on the invoice and the
+     rough answer to "how far is this puppy travelling" — both of which a
+     person types better than a set of boxes forces them to. */
+  buyerLocation: z
+    .string()
+    .trim()
+    .min(4, "Enter your address, so we can put it on your invoice.")
+    .max(300, "That is longer than we need — town, state and postcode is plenty."),
   paymentMethod: z.enum(["zelle", "cashapp", "chime", "applepay"], {
     message: "Choose how you would like to pay.",
   }),

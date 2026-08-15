@@ -10,7 +10,7 @@ const { contact } = siteConfig;
 
 export function Footer() {
   return (
-    <footer className="bg-ledger-deep">
+    <footer data-site-footer className="bg-ledger-deep">
       <ClosingInvitation />
 
       {/* ---------- Directory ---------- */}

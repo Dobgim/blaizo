@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/apply/Field";
 import { placeOrder } from "@/lib/actions/order";
 import { postToWeb3Forms } from "@/lib/web3forms";
+import { invoicePath, stashInvoice } from "@/lib/invoice";
 import { orderSchema, type OrderValues } from "@/lib/schemas/order";
 import { formatPrice } from "@/lib/format";
 import { paymentMethods } from "@/lib/site-config";
@@ -37,6 +38,7 @@ export function CheckoutForm({
     buyerName: "",
     buyerEmail: "",
     buyerPhone: "",
+    buyerLocation: "",
     paymentMethod: "zelle",
     puppySlug,
     notes: "",
@@ -85,12 +87,14 @@ export function CheckoutForm({
       );
     }
 
+    /* The invoice travels in sessionStorage, not the URL — it carries the
+       buyer's address. Written before navigating so it is there when the
+       invoice page mounts. */
+    stashInvoice(result.invoice);
+
     /* Our own confirmation, not one served by a third party. The buyer's
-       reference must survive Web3Forms being slow, blocked or down. */
-    router.push(
-      `/checkout/thank-you?ref=${encodeURIComponent(result.reference)}` +
-        `&puppy=${encodeURIComponent(puppyName)}`,
-    );
+       invoice must survive Web3Forms being slow, blocked or down. */
+    router.push(invoicePath(result.reference));
   }
 
   // --- Form -----------------------------------------------------------------
@@ -161,6 +165,27 @@ export function CheckoutForm({
               autoComplete="tel"
               value={values.buyerPhone}
               onChange={(e) => set("buyerPhone", e.target.value)}
+              {...p}
+            />
+          )}
+        />
+
+        {/* A textarea rather than the usual four boxes: this is the billing
+            address on the invoice, and it also tells us how far the puppy is
+            travelling. People type their own address more accurately than a
+            form makes them fill it in. */}
+        <Field
+          label="Address"
+          help="Where you are — this goes on your invoice as the billing address."
+          error={errors.buyerLocation}
+          required
+          render={(p) => (
+            <textarea
+              rows={3}
+              autoComplete="street-address"
+              placeholder={"123 Example Street\nTown, State 00000"}
+              value={values.buyerLocation}
+              onChange={(e) => set("buyerLocation", e.target.value)}
               {...p}
             />
           )}

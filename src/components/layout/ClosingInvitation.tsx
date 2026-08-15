@@ -19,7 +19,10 @@ const { contact } = siteConfig;
 /* "/" is here because the home page closes with its own contact band, which
    carries the same two actions plus the phone number and hours. Repeating the
    invitation 200px below it is the site asking twice. */
-const SUPPRESS_ON = ["/", "/apply", "/contact"];
+/* "/checkout" covers the invoice too. Someone who has just committed to a
+   four-figure purchase does not need to be asked to start an application —
+   under a total due, it reads as though the order did not count. */
+const SUPPRESS_ON = ["/", "/apply", "/contact", "/checkout"];
 
 export function ClosingInvitation() {
   const pathname = usePathname();

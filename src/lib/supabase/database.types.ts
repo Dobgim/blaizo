@@ -122,6 +122,8 @@ export type OrderRow = Timestamps & {
   buyer_name: string;
   buyer_email: string;
   buyer_phone: string;
+  /** Null on orders taken before the checkout asked for an address. */
+  buyer_location: string | null;
   puppy_id: string | null;
   puppy_name: string;
   puppy_slug: string | null;
