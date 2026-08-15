@@ -44,9 +44,9 @@ export default function ContactPage() {
           <div className="lg:col-span-5 lg:col-start-3">
             <h2 className="eyebrow text-foxred">The fastest way</h2>
             <p className="measure mt-4 text-body-l text-spruce">
-              WhatsApp. It is where every enquiry lands, one of us has it on
-              their phone all day, and you will usually hear back the same
-              afternoon.
+              WhatsApp, for questions. One of us has it on their phone all day and
+              you will usually hear back the same afternoon. To order a puppy,
+              use the order button on that puppy&rsquo;s page instead.
             </p>
 
             <div className="mt-7 flex flex-col items-start gap-4">
@@ -54,7 +54,7 @@ export default function ContactPage() {
                 message={generalEnquiryMessage()}
                 className={buttonClasses("solid", "lg")}
               >
-                Message us on WhatsApp
+                Ask a question on WhatsApp
               </WhatsAppLink>
               <p className="font-mono text-data text-canvas-deep">
                 {contact.whatsappDisplay}
@@ -64,7 +64,7 @@ export default function ContactPage() {
             <h2 className="eyebrow mt-14 text-foxred">Or, if you prefer</h2>
             <dl className="hairline mt-4">
               <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-enamel py-3">
-                <dt className="eyebrow text-canvas">Phone</dt>
+                <dt className="eyebrow text-canvas">Call or text</dt>
                 <dd className="font-mono text-data">
                   <a
                     href={contact.phoneHref}
@@ -88,10 +88,11 @@ export default function ContactPage() {
             </dl>
 
             <p className="measure mt-8 text-small text-canvas-deep">
-              Nothing is ever paid through this website. If anyone contacts you
-              claiming to be us and asks for money by gift card, wire transfer
-              or cryptocurrency, it is not us — call the number above and tell
-              us about it.
+              We never take card details, and we never ask for payment by gift card
+              or cryptocurrency. Payment details come only on the receipt we
+              email after you order. If anyone asks you to send money somewhere
+              else — even in a message that looks like it is from us — stop and
+              call the number above.
             </p>
           </div>
 

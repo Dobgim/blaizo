@@ -39,11 +39,11 @@ export function ContactSection() {
             Ask us anything before you decide anything
           </h2>
           <p className="measure mt-5 text-body text-ledger/80">
-            Nothing is paid on this website. Message us and you will usually
-            hear back the same afternoon — and we would rather spend twenty
-            minutes talking you out of a Labrador than place one badly. If we
-            are not the right kennel for you, we will say so and give you two
-            other names.
+            WhatsApp, call or text — whichever suits you. You will usually hear
+            back the same afternoon, and we would rather spend twenty minutes
+            talking you out of a Labrador than place one badly. If we are not
+            the right kennel for you, we will say so and give you two other
+            names.
           </p>
 
           <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -58,7 +58,7 @@ export function ContactSection() {
                 "border border-ledger/40 bg-transparent text-ledger hover:bg-ledger hover:text-spruce",
               )}
             >
-              Message us on WhatsApp
+              Ask a question on WhatsApp
             </WhatsAppLink>
           </div>
         </Reveal>
@@ -67,7 +67,7 @@ export function ContactSection() {
         <Reveal className="lg:col-span-5 lg:col-start-8">
           <dl className="hairline-dark">
             <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-spruce-line py-3">
-              <dt className="eyebrow text-enamel">Phone</dt>
+              <dt className="eyebrow text-enamel">Call or text</dt>
               <dd className="font-mono text-data">
                 <a
                   href={contact.phoneHref}

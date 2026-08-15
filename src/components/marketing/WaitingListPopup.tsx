@@ -212,8 +212,8 @@ export function WaitingListPopup() {
           >
             Most of our puppies are spoken for before they are listed publicly.
             Leave your name and we will write to you when a pairing is
-            confirmed. No charge, no deposit, and we do not pass your details
-            to anyone.
+            confirmed. Joining costs nothing, commits you to nothing, and we do
+            not pass your details to anyone.
           </p>
 
           <form onSubmit={onSubmit} className="mt-6" noValidate>

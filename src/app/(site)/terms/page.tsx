@@ -29,13 +29,20 @@ export default function TermsPage() {
       <section className="shell pb-24 lg:pb-32">
         <div className="grid lg:grid-cols-12">
           <div className="longform text-body text-spruce lg:col-span-8 lg:col-start-3">
-            <h2>This site is not a shop</h2>
+            <h2>Ordering, and what an order is</h2>
             <p>
-              Nothing here can be bought. There is no checkout and no payment is
-              taken at any point. Submitting an application is a request to
-              start a conversation — it does not reserve a puppy, it does not
-              create a contract, and it does not oblige us to sell you a dog.
-              Equally, it does not oblige you to buy one.
+              You can order a puppy on this site. Doing so records your details
+              and the puppy you want, and sends you a receipt with payment
+              details on it. No card is taken and no money passes through this
+              website: Zelle, Cash App, Chime and Apple Cash are all transfers
+              you make yourself from your own app afterwards.
+            </p>
+            <p>
+              An order is therefore not a completed sale, and a receipt is not
+              proof of payment. Puppies are paid for in full — we do not take
+              deposits or part payments — and we will always speak to you before
+              a puppy travels. If we conclude we are not the right kennel for
+              you, we will say so and return anything you have sent.
             </p>
 
             <h2>The puppy contract is separate</h2>

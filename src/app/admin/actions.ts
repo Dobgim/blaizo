@@ -260,6 +260,41 @@ export async function deleteClearance(formData: FormData): Promise<void> {
   revalidatePath("/", "layout");
 }
 
+/**
+ * Move an order along.
+ *
+ * Marking it paid stamps the moment of confirmation, and clearing that status
+ * again wipes the stamp — a paid date left behind on an order that turned out
+ * not to be paid is worse than no date at all.
+ */
+export async function setOrderStatus(
+  id: string,
+  status:
+    | "placed"
+    | "paid"
+    | "preparing"
+    | "completed"
+    | "cancelled"
+    | "refunded",
+): Promise<Result> {
+  const supabase = await client();
+  const confirmed = status === "paid" || status === "preparing" || status === "completed";
+
+  const { error } = await supabase
+    .from("orders")
+    .update({
+      status,
+      paid_confirmed_at: confirmed ? new Date().toISOString() : null,
+    })
+    .eq("id", id);
+
+  if (error) return { ok: false, error: error.message };
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+  return { ok: true };
+}
+
 /** Toggle the publish flag straight from a list row. */
 export async function togglePublished(
   resourceKey: string,

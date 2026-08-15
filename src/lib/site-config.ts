@@ -65,9 +65,8 @@ export const siteConfig = {
     email: "hello@goldenpupkennel.com",
 
     /**
-     * WhatsApp is where every enquiry lands. No payment is taken on this
-     * site — the application form hands off to a WhatsApp conversation with
-     * the answers already written out.
+     * WhatsApp is for questions, not for ordering. Orders go through
+     * /checkout, which sends a receipt by email.
      *
      * Digits only, full international format, no plus sign and no spaces —
      * wa.me rejects anything else. Same line as the phone number above.
@@ -75,15 +74,14 @@ export const siteConfig = {
     whatsappNumber: "12026438872",
     /** How the same number is shown to a reader. */
     whatsappDisplay: "+1 (202) 643-8872",
-    /** PLACEHOLDER — client to confirm town before launch. */
-    addressLine: "1408 Ridge Road",
-    locality: "PLACEHOLDER TOWN",
-    region: "VT",
-    postalCode: "05001",
+    addressLine: "Petworth",
+    locality: "Washington",
+    region: "DC",
+    postalCode: "20011",
     country: "US",
-    /** PLACEHOLDER — approximate, used for the ledger rail and map. */
-    lat: 44.4,
-    lng: -72.7,
+    /** Petworth, DC. Used for the ledger rail coordinates and the map link. */
+    lat: 38.94,
+    lng: -77.02,
     hours: [
       { days: "Monday – Friday", time: "8:00am – 6:00pm" },
       { days: "Saturday", time: "9:00am – 2:00pm" },
@@ -105,6 +103,50 @@ export const siteConfig = {
     dogsHealthTested: null as number | null,
   },
 
+/**
+ * How a buyer pays.
+ *
+ * None of these can be charged programmatically — they are all manual
+ * transfers the buyer makes themselves — so the checkout records the order,
+ * emails a receipt with these details on it, and the buyer sends the money.
+ * Nothing on this site ever touches a card number.
+ *
+ * PLACEHOLDER handles. Every one of these must be the kennel's real account
+ * before launch, or buyers will send money into the void. `enabled: false`
+ * hides a method from the checkout entirely.
+ */
+  payments: [
+    {
+      id: "zelle",
+      label: "Zelle",
+      handle: "PLACEHOLDER — Zelle email or phone",
+      instruction: "Send from your bank's Zelle screen to the address above.",
+      enabled: true,
+    },
+    {
+      id: "cashapp",
+      label: "Cash App",
+      handle: "PLACEHOLDER — $cashtag",
+      instruction: "Send to the $cashtag above and put your order number in the note.",
+      enabled: true,
+    },
+    {
+      id: "chime",
+      label: "Chime",
+      handle: "PLACEHOLDER — Chime $ChimeSign",
+      instruction: "Send with Chime Pay Anyone to the tag above.",
+      enabled: true,
+    },
+    {
+      id: "applepay",
+      label: "Apple Pay",
+      handle: "PLACEHOLDER — Apple Pay phone number",
+      instruction:
+        "Send through Apple Cash in Messages to the number above. Of the four, this is the one that runs on your card.",
+      enabled: true,
+    },
+  ],
+
   /** Registries and clearance bodies named in the marquee. All real orgs. */
   registries: [
     "AKC Registered",
@@ -121,6 +163,15 @@ export const siteConfig = {
 } as const;
 
 export type SiteConfig = typeof siteConfig;
+export type PaymentMethod = (typeof siteConfig.payments)[number];
+
+/** The methods actually offered at checkout. */
+export const paymentMethods = siteConfig.payments.filter((m) => m.enabled);
+
+/** True while any handle is still a placeholder — the checkout warns on it. */
+export const paymentsNeedSetup = paymentMethods.some((m) =>
+  m.handle.startsWith("PLACEHOLDER"),
+);
 
 /** True only when the client has filled in every stat. */
 export const hasStats = Object.values(siteConfig.stats).every(

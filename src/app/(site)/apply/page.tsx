@@ -21,7 +21,7 @@ export default async function ApplyPage({
         eyebrow="Apply"
         railNote="03 steps"
         title="Apply for a puppy"
-        intro="About fifteen minutes. There is no charge and no deposit taken here — when you finish, your answers are written into a WhatsApp message you send us in one tap, and we carry on from there."
+        intro="About fifteen minutes, and it costs nothing. When you finish, your answers are written into a WhatsApp message you send us in one tap. Applying is separate from ordering — it is how we get to know you before a puppy is agreed."
       />
 
       <section className="shell pb-24 lg:pb-32">
@@ -34,10 +34,10 @@ export default async function ApplyPage({
             <h2 className="eyebrow text-canvas-deep">What happens next</h2>
             <ol className="mt-4">
               {[
-                "You send the WhatsApp message. That is the whole submission — there is nothing else to pay or sign yet.",
+                "You send the WhatsApp message. That is the whole submission — nothing to pay and nothing to sign.",
                 "We read it. Every one, usually within two days.",
                 "We call you. Always, before anything is agreed, including when the answer is no.",
-                "If it is a yes, we talk about a deposit directly. Never through this website, and never by gift card or wire transfer.",
+                "If it is a yes, we agree a puppy and you order it on the site. Paid in full, never by gift card, and never to details that did not come on your receipt.",
               ].map((line, i) => (
                 <li key={i} className="border-b border-enamel py-4">
                   <span className="font-mono text-data text-foxred">

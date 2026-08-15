@@ -29,7 +29,7 @@ export default async function UpcomingLittersPage() {
         eyebrow="Puppies"
         railNote="Upcoming"
         title="Litters we are planning"
-        intro="A planned litter is exactly that — planned. Nothing here is guaranteed until a dam is confirmed in whelp, and we would rather list a pairing honestly than take deposits against a litter that may not happen."
+        intro="A planned litter is exactly that — planned. Nothing here is guaranteed until a dam is confirmed in whelp, and we would rather list a pairing honestly than take money against a litter that may not happen."
       />
 
       <section className="shell pb-24 lg:pb-32">

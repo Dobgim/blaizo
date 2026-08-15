@@ -12,6 +12,8 @@ import { parentsOf, puppyBySlug } from "@/lib/content-source";
 import { getPuppySlugs } from "@/lib/queries";
 import { formatDate, formatPrice } from "@/lib/format";
 import { puppyEnquiryMessage } from "@/lib/whatsapp";
+import { Gallery } from "@/components/records/Gallery";
+import { siteConfig } from "@/lib/site-config";
 
 /* Re-read the database at most once a minute.
 
@@ -53,6 +55,17 @@ export default async function PuppyPage({ params }: Params) {
   if (!puppy) notFound();
 
   const { sire, dam } = await parentsOf(puppy);
+
+  /* Hero first, then the gallery, with duplicates dropped — the hero is
+     routinely also the first gallery entry, and showing it twice makes the
+     strip look padded. */
+  const gallery = [
+    { src: puppy.heroImage, alt: puppy.heroAlt },
+    ...puppy.gallery.map((src, i) => ({
+      src,
+      alt: `${puppy.name}, photograph ${i + 2}`,
+    })),
+  ].filter((img, i, all) => all.findIndex((o) => o.src === img.src) === i);
 
   return (
     <article className="shell pb-24 pt-32 lg:pb-32 lg:pt-44">
@@ -115,22 +128,52 @@ export default async function PuppyPage({ params }: Params) {
 
           <div className="mt-10 flex flex-col gap-3">
             {puppy.status !== "placed" && (
-              <WhatsAppLink
-                message={puppyEnquiryMessage(puppy)}
-                className={buttonClasses("solid", "lg")}
-              >
-                Ask about {puppy.name}
-              </WhatsAppLink>
+              <>
+                <ButtonLink
+                  href={`/checkout?puppy=${puppy.slug}`}
+                  size="lg"
+                >
+                  Order {puppy.name}
+                </ButtonLink>
+                {/* WhatsApp is for questions, not ordering — hence the
+                    outline treatment and the wording. */}
+                <WhatsAppLink
+                  message={puppyEnquiryMessage(puppy)}
+                  className={buttonClasses("outline", "lg")}
+                >
+                  Ask a question on WhatsApp
+                </WhatsAppLink>
+              </>
             )}
-            <ButtonLink href="/apply" variant="outline" size="lg">
-              Start an application
+            <ButtonLink href="/apply" variant="quiet" size="lg">
+              Or start an application first
             </ButtonLink>
           </div>
-          <p className="mt-4 text-small text-canvas-deep">
-            No payment is taken on this site.
+          <p className="measure mt-4 text-small text-canvas-deep">
+            Paid in full, with no deposit option. Nothing is charged on this
+            website — you send payment yourself once we have sent you the
+            details. Call or text {siteConfig.contact.phone} with any question
+            before you order.
           </p>
         </div>
       </div>
+
+      {/* --- Every photograph of this puppy. --- */}
+      {gallery.length > 1 && (
+        <section aria-labelledby="gallery-heading" className="hairline mt-20 pt-12">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h2 id="gallery-heading" className="text-h2 text-spruce">
+              More of {puppy.name}
+            </h2>
+            <p className="eyebrow text-canvas-deep">
+              {String(gallery.length).padStart(2, "0")} photographs · tap to enlarge
+            </p>
+          </div>
+          <div className="mt-8">
+            <Gallery images={gallery} name={puppy.name} />
+          </div>
+        </section>
+      )}
 
       {/* --- The parents. The reason to trust any of the above. --- */}
       {(sire || dam) && (

@@ -9,6 +9,7 @@ import { siteConfig } from "@/lib/site-config";
 
 const LINKS = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/orders", label: "Orders" },
   { href: "/admin/applications", label: "Applications" },
   ...resources.map((r) => ({ href: `/admin/${r.key}`, label: r.title })),
 ];

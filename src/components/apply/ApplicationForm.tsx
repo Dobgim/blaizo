@@ -101,7 +101,7 @@ export function ApplicationForm({ puppyName }: { puppyName?: string }) {
         <p className="measure mt-4 text-body text-canvas-deep">
           Your answers are already written into the message. Press send and we
           have everything we need — you do not have to type anything else.
-          Nothing has been charged, and nothing will be through this website.
+          Nothing has been charged: applying is free and separate from ordering.
         </p>
         <p className="mt-7">
           <a
@@ -314,7 +314,7 @@ export function ApplicationForm({ puppyName }: { puppyName?: string }) {
         )}
 
         <p className="text-small text-canvas-deep">
-          Step {step + 1} of {STEP_FIELDS.length} · no payment is taken
+          Step {step + 1} of {STEP_FIELDS.length} · free, and commits you to nothing
         </p>
       </div>
     </form>

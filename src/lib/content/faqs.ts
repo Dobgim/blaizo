@@ -39,12 +39,12 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "How does the application work?",
         answer:
-          "You answer about fifteen minutes of questions on this site. Nothing is paid here — when you finish, the form hands your answers to us on WhatsApp so you can send them in one tap, and we carry on from there. We read every application and we reply to every application, including the ones we cannot help.",
+          "You answer about fifteen minutes of questions on this site and the form hands your answers to us on WhatsApp, so you can send them in one tap. We read every application and we reply to every application, including the ones we cannot help. Applying costs nothing and commits you to nothing — it is separate from ordering.",
       },
       {
-        question: "Do I have to pay a deposit to be on the list?",
+        question: "How does paying work?",
         answer:
-          "Not through this website. We take no payment online at all. If we agree on a puppy, we will talk about a deposit directly, and we will tell you exactly what it covers and when it is refundable before you send anything.",
+          "We do not take deposits or part payments — a puppy is paid for in full or not at all. You order on this site, choose Zelle, Cash App, Chime or Apple Pay, and we email you a receipt with the details to send to. No card is taken and no money moves through the website itself; you send it yourself from your own app. We will never ask you to send payment anywhere other than the details on that receipt, and we will never ask you to change them by email.",
       },
       {
         question: "How long is the wait?",

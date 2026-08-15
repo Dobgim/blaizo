@@ -16,6 +16,15 @@ export type LitterStatus =
   | "born"
   | "weaning"
   | "placed";
+export type OrderStatus =
+  | "placed"
+  | "paid"
+  | "preparing"
+  | "completed"
+  | "cancelled"
+  | "refunded";
+export type PaymentMethodId = "zelle" | "cashapp" | "chime" | "applepay";
+
 export type ApplicationStatus =
   | "new"
   | "reading"
@@ -107,6 +116,22 @@ export type ApplicationRow = Timestamps & {
   handoff_opened_at: string | null;
 };
 
+export type OrderRow = Timestamps & {
+  id: string;
+  reference: string;
+  buyer_name: string;
+  buyer_email: string;
+  buyer_phone: string;
+  puppy_id: string | null;
+  puppy_name: string;
+  puppy_slug: string | null;
+  amount_cents: number;
+  payment_method: PaymentMethodId;
+  status: OrderStatus;
+  paid_confirmed_at: string | null;
+  notes: string | null;
+};
+
 export type PostRow = Timestamps & {
   id: string;
   slug: string;
@@ -165,6 +190,12 @@ export type Database = {
           status?: ApplicationStatus;
         }
       >;
+      orders: Table<
+        OrderRow,
+        Omit<OrderRow, "id" | "created_at" | "updated_at" | "status"> & {
+          status?: OrderStatus;
+        }
+      >;
       posts: Table<PostRow>;
       testimonials: Table<TestimonialRow>;
       faqs: Table<FaqRow>;
@@ -177,6 +208,8 @@ export type Database = {
       puppy_status: PuppyStatus;
       litter_status: LitterStatus;
       application_status: ApplicationStatus;
+      order_status: OrderStatus;
+      payment_method: PaymentMethodId;
     };
   };
 };

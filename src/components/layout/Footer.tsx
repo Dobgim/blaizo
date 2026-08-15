@@ -41,7 +41,7 @@ export function Footer() {
                   message={generalEnquiryMessage()}
                   className="inline-flex items-center gap-2 text-small text-spruce underline decoration-brass decoration-1 underline-offset-4 transition-colors duration-300 hover:text-foxred"
                 >
-                  {contact.whatsappDisplay} on WhatsApp
+                  {contact.whatsappDisplay} — WhatsApp questions
                 </WhatsAppLink>
               </p>
             </address>

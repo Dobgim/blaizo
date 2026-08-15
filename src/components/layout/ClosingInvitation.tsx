@@ -36,11 +36,10 @@ export function ClosingInvitation() {
             Applications take about fifteen minutes, and we read every one.
           </h2>
           <p className="measure mt-5 text-body text-canvas-deep">
-            Nothing is paid on this website. You answer the questions, the form
-            hands your answers to us on WhatsApp, and we carry on the
-            conversation from there. If we think another breeder is a better fit
-            for what you are after, we will tell you that and give you two
-            names.
+            Applying is free and commits you to nothing — it is how we get to know
+            you, and it is separate from ordering. If we think another breeder
+            is a better fit for what you are after, we will tell you that and
+            give you two names.
           </p>
         </div>
 
@@ -52,13 +51,13 @@ export function ClosingInvitation() {
             message={generalEnquiryMessage()}
             className={buttonClasses("outline", "lg")}
           >
-            Message us on WhatsApp
+            Ask a question on WhatsApp
           </WhatsAppLink>
           <a
             href={contact.phoneHref}
             className="eyebrow inline-flex min-h-11 items-center text-canvas-deep transition-colors duration-300 hover:text-foxred"
           >
-            or call {contact.phone}
+            or call or text {contact.phone}
           </a>
         </div>
       </div>

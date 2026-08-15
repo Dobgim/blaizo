@@ -36,12 +36,15 @@ export default function PrivacyPage() {
               third-party tracker on this website.
             </p>
 
-            <h2>No payment details, ever</h2>
+            <h2>No card details, ever</h2>
             <p>
-              Nothing is charged through this site. There is no checkout, no
-              card form and no payment processor connected to it. If a page
-              claiming to be us ever asks you for card details, a wire transfer
-              or a gift card, it is not us — call{" "}
+              There is a checkout, but no card form and no payment processor.
+              Every method we accept is a transfer you make from your own
+              banking or payment app, so no card number, bank account number or
+              payment token is ever entered here or stored by us. What we keep
+              is the order: your name, contact details, the puppy and which
+              method you said you would use. If a page claiming to be us ever
+              asks you to type card details, or asks for a gift card, call{" "}
               <a href={siteConfig.contact.phoneHref}>
                 {siteConfig.contact.phone}
               </a>{" "}

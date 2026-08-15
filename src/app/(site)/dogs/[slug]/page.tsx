@@ -11,6 +11,7 @@ import { breadcrumbSchema, dogSchema } from "@/lib/schema";
 import { allPuppies, dogBySlug } from "@/lib/content-source";
 import { getDogSlugs } from "@/lib/queries";
 import { ageInYears, formatDate } from "@/lib/format";
+import { Gallery } from "@/components/records/Gallery";
 
 /* Re-read the database at most once a minute.
 
@@ -53,6 +54,12 @@ export default async function DogPage({ params }: Params) {
   if (!dog) notFound();
 
   const call = dog.callName ?? dog.name;
+  /* Hero first, then the gallery, duplicates dropped. */
+  const gallery = [
+    { src: dog.heroImage, alt: dog.heroAlt },
+    ...dog.gallery.map((src, i) => ({ src, alt: `${call}, photograph ${i + 2}` })),
+  ].filter((img, i, all) => all.findIndex((o) => o.src === img.src) === i);
+
   const puppies = await allPuppies();
   const offspring = puppies.filter(
     (p) => p.sireName === call || p.damName === call,
@@ -146,6 +153,23 @@ export default async function DogPage({ params }: Params) {
           </div>
         </div>
       </section>
+
+      {/* --- Every photograph of this dog. --- */}
+      {gallery.length > 1 && (
+        <section aria-labelledby="dog-gallery-heading" className="shell py-20 lg:py-28">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
+            <h2 id="dog-gallery-heading" className="text-h2 text-spruce">
+              More of {call}
+            </h2>
+            <p className="eyebrow text-canvas-deep">
+              {String(gallery.length).padStart(2, "0")} photographs · tap to enlarge
+            </p>
+          </div>
+          <div className="mt-8">
+            <Gallery images={gallery} name={call} />
+          </div>
+        </section>
+      )}
 
       {/* --- Offspring. --- */}
       {offspring.length > 0 && (
