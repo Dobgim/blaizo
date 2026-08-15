@@ -1,10 +1,19 @@
 /**
- * Fallback FAQ content, used until the client's Supabase project is populated.
+ * The FAQ content.
  *
- * Kept in step with `supabase/seed.sql` — same questions, same answers. The
- * duplication is deliberate: the site has to be readable and useful before a
- * database exists, and the FAQs are load-bearing enough that an empty state
- * would be worse than a duplicated source.
+ * This file is the source of truth. `npm run sync:faqs` pushes it to the
+ * database, which is what the site actually reads; the file also serves as the
+ * fallback before a Supabase project exists.
+ *
+ * "Paying for a puppy" comes first on purpose. It is the section this audience
+ * scrolls to, and the one where vagueness reads as evasion — a breeder who is
+ * breezy about money is the breeder people have been warned about. Every
+ * answer in it is written to survive being quoted back at the kennel later.
+ *
+ * NOTE FOR THE OWNER: two answers state a policy rather than a fact — "Do I
+ * pay before or after I have seen the puppy" and "What if I change my mind".
+ * Confirm both say what you actually do before launch. They are the two a
+ * buyer will hold you to.
  */
 
 export type FaqGroup = {
@@ -13,6 +22,51 @@ export type FaqGroup = {
 };
 
 export const fallbackFaqs: FaqGroup[] = [
+  {
+    category: "Paying for a puppy",
+    items: [
+      {
+        question: "How do I pay?",
+        answer:
+          "Open the puppy you want and press Order. You give us your name, email and phone number and choose Zelle, Cash App, Chime or Apple Pay, and we email you a receipt straight away with an order number and the details to send to. You then send the money yourself from your own app. No card is entered on this website and no payment passes through it.",
+      },
+      {
+        question: "Do you take a deposit, or can I pay in instalments?",
+        answer:
+          "Neither. A puppy is paid for in full or not at all. We would rather you waited until you can pay the whole amount than hold a puppy against a part payment — it is simpler for both of us, and it means nobody is ever half-way into a purchase they cannot finish.",
+      },
+      {
+        question: "How much is a puppy?",
+        answer:
+          "Between $750 and $800 depending on the puppy, and the price is on each puppy's own page. That is the whole cost — there is no separate registration, paperwork or handling fee added at checkout. Delivery, if you want it, is quoted separately before you commit to anything.",
+      },
+      {
+        question: "Do you take cards, PayPal or a bank transfer?",
+        answer:
+          "We take Zelle, Cash App, Chime and Apple Pay. Of those, Apple Pay is the one that runs on your card, through Apple Cash. We never take a card number directly, and there is no card form anywhere on this site — if you are ever asked to type one, you are not on our website.",
+      },
+      {
+        question: "Do I pay before or after I have seen the puppy?",
+        answer:
+          "You are welcome to come and meet the puppy first, and most local buyers do. If you are travelling a long way or arranging a flight nanny then payment comes first, but we will always speak to you on the phone before that, and we will send photographs and video of that particular puppy on request. If any breeder will not get on a call with you before taking your money, do not send it. That applies to us as much as to anyone.",
+      },
+      {
+        question: "Is it safe to pay this way?",
+        answer:
+          "Be careful, and we would rather say so plainly than pretend otherwise. Zelle, Cash App and Chime transfers are fast and very hard to reverse, which is exactly why scammers ask for them. Three things protect you with us. The payment details reach you only on the receipt we email when you order. We will never send a message asking you to change them. And we speak to you by phone before any puppy travels. If anything ever asks you to send money to a different name or tag than the one on your receipt, stop and call the number on this site.",
+      },
+      {
+        question: "What happens once I have paid?",
+        answer:
+          "We confirm we have received it, usually the same day, then call you to arrange collection or delivery and to go through the paperwork that travels with the puppy. Your order number is the reference for everything after that. If you have not heard from us within a day of sending payment, ring us — do not wait for us to notice.",
+      },
+      {
+        question: "What if I change my mind, or something goes wrong?",
+        answer:
+          "Tell us as soon as you know. If you change your mind before the puppy has left us, we refund what you have paid less anything we have already committed on your behalf, such as a booked flight nanny. If your own vet finds an existing health problem within seventy-two hours of collection that makes the puppy unfit to keep, you may return the puppy and we refund the purchase price in full. The rest is set out on the health guarantee page, and it is worth reading before you order rather than after.",
+      },
+    ],
+  },
   {
     category: "Health testing",
     items: [
@@ -27,9 +81,9 @@ export const fallbackFaqs: FaqGroup[] = [
           "They are spayed or neutered and they stay here as a family dog, or they go to a pet home we know. They are not bred from, and we do not sell them on as breeding stock to somebody else.",
       },
       {
-        question: "Can I see the certificates before I commit?",
+        question: "Can I see the certificates before I pay?",
         answer:
-          "Yes, and you should. They are on the site. If any breeder is reluctant to show you the paperwork, that reluctance is the answer to your question.",
+          "Yes, and you should. They are already on each dog's page, and we will send them to you directly if you would rather have them in writing. If a breeder is reluctant to show you the paperwork before taking your money, that reluctance is the answer to your question.",
       },
     ],
   },
@@ -37,19 +91,19 @@ export const fallbackFaqs: FaqGroup[] = [
     category: "Applying",
     items: [
       {
-        question: "How does the application work?",
+        question: "Do I have to apply before I can order?",
         answer:
-          "You answer about fifteen minutes of questions on this site and the form hands your answers to us on WhatsApp, so you can send them in one tap. We read every application and we reply to every application, including the ones we cannot help. Applying costs nothing and commits you to nothing — it is separate from ordering.",
-      },
-      {
-        question: "How does paying work?",
-        answer:
-          "We do not take deposits or part payments — a puppy is paid for in full or not at all. You order on this site, choose Zelle, Cash App, Chime or Apple Pay, and we email you a receipt with the details to send to. No card is taken and no money moves through the website itself; you send it yourself from your own app. We will never ask you to send payment anywhere other than the details on that receipt, and we will never ask you to change them by email.",
+          "No — you can order a puppy directly. The application is for people who want help choosing, or who are waiting on a litter that has not been born yet. It costs nothing, commits you to nothing, and it is how we get to know a family before a puppy is agreed.",
       },
       {
         question: "How long is the wait?",
         answer:
           "It depends on the litter and on what you are after. We would rather tell you eight months and be right than tell you eight weeks and keep you hoping. Ask us and we will give you the honest number.",
+      },
+      {
+        question: "Would you ever turn me down?",
+        answer:
+          "Yes, and we do. If we think the timing is wrong for you, or that another breeder suits what you are after better, we will say so and give you two other names. If you have already paid by that point, you get all of it back.",
       },
     ],
   },
@@ -69,7 +123,7 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "Can you deliver, or do I collect?",
         answer:
-          "You are welcome to collect, and most people do. We deliver ourselves within about four hours' drive, or we can arrange a flight nanny who carries the puppy in the cabin. Puppies do not travel as cargo.",
+          "You are welcome to collect, and most people do. We deliver ourselves within about four hours' drive, or we can arrange a flight nanny who carries the puppy in the cabin. Delivery is quoted separately from the price of the puppy. Puppies do not travel as cargo, in any weather, for any price.",
       },
     ],
   },
@@ -84,7 +138,7 @@ export const fallbackFaqs: FaqGroup[] = [
       {
         question: "What does the health guarantee actually cover?",
         answer:
-          "The full text is on the guarantee page rather than summarised here, because a warranty you have only read a summary of is not much use. Read it before you apply, and ask us about anything in it you do not like.",
+          "The full text is on the guarantee page rather than summarised here, because a warranty you have only read a summary of is not much use. Read it before you order, and ask us about anything in it you do not like.",
       },
     ],
   },

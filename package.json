@@ -13,7 +13,8 @@
     "a11y": "node scripts/a11y.mjs",
     "responsive": "node scripts/responsive.mjs",
     "photos": "node scripts/install-puppy-photos.mjs",
-    "import:puppies": "node scripts/import-puppies.mjs"
+    "import:puppies": "node scripts/import-puppies.mjs",
+    "sync:faqs": "node scripts/sync-faqs.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

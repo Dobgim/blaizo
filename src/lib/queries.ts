@@ -380,10 +380,14 @@ export async function getFaqsByCategory(): Promise<
   const supabase = createStaticClient();
   if (!supabase) return [];
 
+  /* Ordered by sort_order alone, not by category name. Sorting by category
+     first put them in alphabetical order, which buried "Paying for a puppy"
+     at the bottom — the section this audience opens the page for. The sync
+     script encodes the group's position in sort_order, and the grouping below
+     preserves first-appearance order. */
   const { data, error } = await supabase
     .from("faqs")
     .select("*")
-    .order("category", { ascending: true })
     .order("sort_order", { ascending: true });
 
   if (error) {
