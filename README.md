@@ -1,6 +1,6 @@
 # Golden Pup Kennel
 
-Marketing and lead-generation site for a family kennel. It sells nothing. Its
+Marketing and sales site for a family kennel breeding chocolate Labradors. Its
 job is to make an anxious visitor trust the breeder enough to order a puppy or
 pick up the phone.
 
