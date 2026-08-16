@@ -15,8 +15,9 @@ const { contact } = siteConfig;
  * once, in one place, with the actual phone number in front of them. See
  * ClosingInvitation, which suppresses itself here for that reason.
  *
- * Spruce ground because it is a closing statement, and because the home page
- * is allowed exactly two dark bands: this and Meet the parents.
+ * Spruce ground because it is a closing statement, and because it is now the
+ * home page's only dark band — the hero opens dark, everything between is
+ * light, and this closes it.
  */
 export function ContactSection() {
   const mapQuery = encodeURIComponent(

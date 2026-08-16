@@ -3,7 +3,6 @@ import { ButtonLink } from "@/components/ui/Button";
 import { HeroHeadline } from "@/components/motion/HeroHeadline";
 import { AvailablePuppies } from "@/components/home/AvailablePuppies";
 import { WhyThisKennel } from "@/components/home/WhyThisKennel";
-import { MeetTheParents } from "@/components/home/MeetTheParents";
 import { ProcessInBrief } from "@/components/home/ProcessInBrief";
 import { PlacementQuote } from "@/components/home/PlacementQuote";
 import { ReviewsWall } from "@/components/home/ReviewsWall";
@@ -12,7 +11,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { images } from "@/lib/images";
 import { siteConfig } from "@/lib/site-config";
 import { localBusinessSchema } from "@/lib/schema";
-import { allDogs, puppiesByStatus } from "@/lib/content-source";
+import { puppiesByStatus } from "@/lib/content-source";
 
 /* Re-read the database at most once a minute.
 
@@ -36,16 +35,7 @@ export const revalidate = 60;
 export default async function HomePage() {
   const { contact } = siteConfig;
 
-  const [puppies, parents] = await Promise.all([
-    puppiesByStatus(["available", "reserved"]),
-    allDogs(),
-  ]);
-
-  /* Only the dogs actually being bred from belong in "Meet the parents";
-     retired and companion dogs live on /dogs. */
-  const breedingDogs = parents.filter(
-    (dog) => dog.role === "sire" || dog.role === "dam",
-  );
+  const puppies = await puppiesByStatus(["available", "reserved"]);
 
   return (
     <>
@@ -103,10 +93,11 @@ export default async function HomePage() {
                 data-hero-trail
                 className="measure mt-7 text-body-l text-ledger/85"
               >
-                A family kennel in the Vermont hills raising {siteConfig.breed}s
-                for shooting, for service work, and for families who want a dog
-                that settles. Both parents cleared on hips, elbows, eyes and a
-                full DNA panel, with every certificate published on this site.
+                A family kennel in {contact.addressLine}, {contact.locality},
+                raising {siteConfig.breed}s for shooting, for service work, and
+                for families who want a dog that settles. Both parents cleared
+                on hips, elbows, eyes and a full DNA panel, with every
+                certificate published on this site.
               </p>
 
               <div
@@ -131,7 +122,6 @@ export default async function HomePage() {
 
       <AvailablePuppies puppies={puppies} />
       <WhyThisKennel />
-      {breedingDogs.length > 0 && <MeetTheParents dogs={breedingDogs} />}
       <ProcessInBrief />
       <PlacementQuote testimonial={null} />
       <ReviewsWall />
