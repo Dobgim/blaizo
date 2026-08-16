@@ -37,6 +37,8 @@ export function PuppyCard({
         kind: "puppy",
         tag: `Litter ${puppy.litterId}`,
         image: puppy.heroImage,
+        priceCents: puppy.priceCents,
+        orderable: puppy.status !== "placed",
       }}
       rows={[
         { label: "Collar", value: puppy.collarColour },

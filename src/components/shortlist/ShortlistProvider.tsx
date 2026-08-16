@@ -32,6 +32,16 @@ export type ShortlistItem = {
   /** "Litter A-2025" or "Dam" — whatever the card's brass tag says. */
   tag: string;
   image: string;
+  /**
+   * Set on puppies, so the cart can show a price and offer to order.
+   *
+   * Both optional because adult dogs have neither, and because a list saved
+   * before these existed is still in someone's browser — anything reading
+   * them has to cope with their absence rather than assume a shape.
+   */
+  priceCents?: number;
+  /** False once a puppy is placed. Undefined on anything not orderable. */
+  orderable?: boolean;
 };
 
 type ShortlistContext = {

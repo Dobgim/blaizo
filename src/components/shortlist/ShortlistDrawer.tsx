@@ -5,15 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useShortlist } from "@/components/shortlist/ShortlistProvider";
 import { buttonClasses } from "@/components/ui/Button";
+import { formatPrice } from "@/lib/format";
 import { shortlistMessage, whatsappUrl } from "@/lib/whatsapp";
 
 /**
- * The shortlist drawer.
+ * The cart.
  *
- * The equivalent of a cart panel, except the primary action opens a WhatsApp
- * conversation about the dogs rather than a checkout. Same modal discipline as
- * the waiting-list popup: focus in, trapped, returned; Escape and backdrop
- * close it; the page behind does not scroll.
+ * Everything saved, in one panel, each puppy carrying its own Order button.
+ * That per-item button is the only honest shape here: an order is for one
+ * named puppy at one price, and the invoice, the email and the `orders` row
+ * are all built that way. A single "check out all" control would imply the
+ * kennel sells three puppies in one transaction, which it does not — and a
+ * cart total would be a number nobody is ever asked to pay.
+ *
+ * Adult dogs can sit in the list too. They are not for sale, so they get no
+ * price and no Order button, only a link to their record.
+ *
+ * Same modal discipline as the waiting-list popup: focus in, trapped,
+ * returned; Escape and backdrop close it; the page behind does not scroll.
  */
 export function ShortlistDrawer() {
   const { items, isOpen, close, remove, clear } = useShortlist();
@@ -82,14 +91,14 @@ export function ShortlistDrawer() {
       >
         <div className="flex items-start justify-between gap-4 border-b border-enamel p-6">
           <div>
-            <p className="eyebrow text-brass-text">Your shortlist</p>
+            <p className="eyebrow text-brass-text">Your cart</p>
             <h2
               id="shortlist-heading"
               className="mt-2 font-display text-h3 text-spruce"
             >
               {items.length === 0
-                ? "Nothing saved yet"
-                : `${items.length} saved`}
+                ? "Nothing added yet"
+                : `${items.length} ${items.length === 1 ? "item" : "items"}`}
             </h2>
           </div>
           <button
@@ -108,9 +117,10 @@ export function ShortlistDrawer() {
         {items.length === 0 ? (
           <div className="flex-1 overflow-y-auto p-6">
             <p className="text-body text-canvas-deep">
-              Tap the heart on any puppy or dog to keep it here while you look
-              around. Nothing is reserved by saving it, and nothing is charged
-              — the list is just a way to remember which ones you liked.
+              Use &ldquo;Add to cart&rdquo; on a puppy&rsquo;s page, or the
+              heart on any card, and they will wait for you here. Adding does
+              not reserve anything and nothing is charged — you place the order
+              from this panel when you are ready.
             </p>
             <p className="mt-6">
               <Link
@@ -126,53 +136,75 @@ export function ShortlistDrawer() {
           <>
             <ul className="flex-1 overflow-y-auto">
               {items.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center gap-4 border-b border-enamel p-4"
-                >
-                  <div className="relative size-16 shrink-0 overflow-hidden bg-canvas">
-                    <Image
-                      src={item.image}
-                      alt=""
-                      fill
-                      sizes="64px"
-                      className="object-cover"
-                    />
-                  </div>
+                <li key={item.id} className="border-b border-enamel p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="relative size-16 shrink-0 overflow-hidden bg-canvas">
+                      <Image
+                        src={item.image}
+                        alt=""
+                        fill
+                        sizes="64px"
+                        className="object-cover"
+                      />
+                    </div>
 
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      href={`/${item.kind === "puppy" ? "puppies" : "dogs"}/${item.slug}`}
-                      onClick={close}
-                      className="font-display text-h3 leading-none text-spruce transition-colors duration-200 hover:text-foxred"
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        href={`/${item.kind === "puppy" ? "puppies" : "dogs"}/${item.slug}`}
+                        onClick={close}
+                        className="font-display text-h3 leading-none text-spruce transition-colors duration-200 hover:text-foxred"
+                      >
+                        {item.name}
+                      </Link>
+                      <p className="eyebrow mt-1.5 text-canvas-deep">
+                        {item.tag}
+                      </p>
+                      {/* Nothing at all rather than "$0" — a puppy whose price
+                          has not been set yet is an "ask us", not a freebie. */}
+                      {item.priceCents ? (
+                        <p className="mt-1.5 font-mono text-data text-spruce">
+                          {formatPrice(item.priceCents)}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => remove(item.id)}
+                      className="eyebrow shrink-0 text-canvas-deep transition-colors duration-200 hover:text-foxred"
                     >
-                      {item.name}
-                    </Link>
-                    <p className="eyebrow mt-1.5 text-canvas-deep">
-                      {item.tag}
-                    </p>
+                      Remove
+                      <span className="sr-only"> {item.name} from your cart</span>
+                    </button>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => remove(item.id)}
-                    className="eyebrow shrink-0 text-canvas-deep transition-colors duration-200 hover:text-foxred"
-                  >
-                    Remove
-                    <span className="sr-only"> {item.name} from shortlist</span>
-                  </button>
+                  {/* The order route, one puppy at a time. Adult dogs and
+                      placed puppies fall through to nothing. */}
+                  {item.kind === "puppy" && item.orderable !== false && (
+                    <Link
+                      href={`/checkout?puppy=${item.slug}`}
+                      onClick={close}
+                      className={buttonClasses("solid", "md", "mt-3 w-full")}
+                    >
+                      Order {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
 
+            {/* Ordering happens on the rows above, so both of these are
+                outlined. WhatsApp is for questions — making it the loudest
+                control here would send buyers to a chat when they came to
+                order. */}
             <div className="border-t border-enamel p-6">
               <a
                 href={whatsappUrl(shortlistMessage(items))}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonClasses("solid", "lg", "w-full")}
+                className={buttonClasses("outline", "lg", "w-full")}
               >
-                Ask about these on WhatsApp
+                Ask a question on WhatsApp
               </a>
 
               <Link
@@ -185,7 +217,7 @@ export function ShortlistDrawer() {
 
               <div className="mt-5 flex items-center justify-between gap-4">
                 <p className="text-small text-canvas-deep">
-                  Saving does not reserve a puppy.
+                  Adding does not reserve a puppy.
                 </p>
                 <button
                   type="button"

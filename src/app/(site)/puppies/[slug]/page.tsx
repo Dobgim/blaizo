@@ -146,6 +146,10 @@ export default async function PuppyPage({ params }: Params) {
                     kind: "puppy",
                     tag: `Litter ${puppy.litterId}`,
                     image: puppy.heroImage,
+                    priceCents: puppy.priceCents,
+                    /* Unconditionally true: this whole block only renders
+                       for a puppy that is not placed. */
+                    orderable: true,
                   }}
                 />
                 {/* WhatsApp is for questions, not ordering — hence the
