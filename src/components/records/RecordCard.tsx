@@ -25,6 +25,15 @@ type Props = {
   priority?: boolean;
   /** Enables the shortlist heart. Omit on cards that are not saveable. */
   saveItem?: ShortlistItem;
+  /**
+   * Strips the card back to photo, name and seal below `sm`.
+   *
+   * For three-across grids on a phone, where a card is about 110px wide. The
+   * mono rows and the colour strapline do not survive that column — they wrap
+   * to a paragraph of six-character lines. The whole card is still a link to
+   * the full record, so nothing is lost, only deferred.
+   */
+  compact?: boolean;
 };
 
 /**
@@ -51,13 +60,19 @@ export function RecordCard({
   sizes = "(max-width: 640px) 78vw, (max-width: 1024px) 40vw, 22vw",
   priority = false,
   saveItem,
+  compact = false,
 }: Props) {
+  /* Hidden on a phone, back from `sm`. Applied to everything that needs a
+     column wider than a three-up grid gives it. */
+  const wideOnly = compact ? "hidden sm:block" : "";
+
   return (
     <article
       className={[
         // h-full so a row of cards shares one height and the seals land on
         // a common baseline however the meta line wraps.
-        "group relative flex h-full flex-col px-4 pb-5 pt-9",
+        "group relative flex h-full flex-col pb-5 pt-9",
+        compact ? "px-2 sm:px-4" : "px-4",
         "transition-colors duration-[400ms] ease-out-quad",
         onDark
           ? "border border-spruce-line bg-spruce-soft"
@@ -77,7 +92,9 @@ export function RecordCard({
 
       {/* Outside the stretched link and above it, so the heart is its own
           target rather than a button nested in an anchor. */}
-      {saveItem && <SaveButton item={saveItem} onDark={onDark} />}
+      {saveItem && (
+        <SaveButton item={saveItem} onDark={onDark} compact={compact} />
+      )}
 
       <div
         className={[
@@ -99,7 +116,8 @@ export function RecordCard({
       <div className="mt-4 flex items-start justify-between gap-3 pr-2">
         <h3
           className={[
-            "font-display text-h3 leading-none",
+            "font-display leading-none",
+            compact ? "text-body sm:text-h3" : "text-h3",
             onDark ? "text-ledger" : "text-spruce",
           ].join(" ")}
         >
@@ -113,9 +131,15 @@ export function RecordCard({
           </Link>
         </h3>
 
+        {/* A litter code is twelve characters. There is no room for it beside
+            a name in a three-up phone column, so it waits for `sm`. */}
         <span
           aria-hidden
-          className="eyebrow shrink-0 bg-brass-tag px-2.5 py-1 text-spruce transition-transform duration-[400ms] ease-out-quad group-hover:translate-x-2 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+          className={[
+            "eyebrow shrink-0 bg-brass-tag px-2.5 py-1 text-spruce",
+            wideOnly,
+            "transition-transform duration-[400ms] ease-out-quad group-hover:translate-x-2 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0",
+          ].join(" ")}
         >
           {tag}
         </span>
@@ -124,6 +148,7 @@ export function RecordCard({
       <p
         className={[
           "eyebrow mt-2.5",
+          wideOnly,
           onDark ? "text-enamel" : "text-canvas-deep",
         ].join(" ")}
       >
@@ -135,6 +160,7 @@ export function RecordCard({
       <dl
         className={[
           "mt-4 border-t pt-3",
+          wideOnly,
           onDark ? "border-spruce-line" : "border-enamel",
         ].join(" ")}
       >
@@ -167,8 +193,15 @@ export function RecordCard({
       </dl>
 
       {status && (
-        <div className="mt-auto flex justify-end pt-5">
-          <StatusSeal status={status} />
+        <div
+          className={[
+            "mt-auto flex pt-5",
+            /* Centred in a narrow column: right-aligned, a rotated seal hangs
+               its corner over the card edge. */
+            compact ? "justify-center sm:justify-end" : "justify-end",
+          ].join(" ")}
+        >
+          <StatusSeal status={status} compact={compact} />
         </div>
       )}
     </article>

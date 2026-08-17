@@ -24,13 +24,27 @@ const seal: Record<PuppyStatus, { label: string; className: string }> = {
  * does. The rotation is decoration; the label is real text, read normally by
  * a screen reader in the flow of the card.
  */
-export function StatusSeal({ status }: { status: PuppyStatus }) {
+export function StatusSeal({
+  status,
+  compact = false,
+}: {
+  status: PuppyStatus;
+  /**
+   * Tighter below `sm`.
+   *
+   * A seal is as wide as its word plus 24px of padding, and it is rotated. On
+   * a 110px card in a three-up grid that puts the corners outside the card
+   * border, which reads as a mistake rather than as a hand-pressed stamp.
+   */
+  compact?: boolean;
+}) {
   const { label, className } = seal[status];
 
   return (
     <span
       className={[
-        "eyebrow inline-block -rotate-3 border-2 px-3 py-1.5 mix-blend-multiply",
+        "eyebrow inline-block -rotate-3 border-2 mix-blend-multiply",
+        compact ? "px-1.5 py-1 sm:px-3 sm:py-1.5" : "px-3 py-1.5",
         "transition-transform duration-[400ms] ease-out-quad",
         "group-hover:-rotate-1",
         className,

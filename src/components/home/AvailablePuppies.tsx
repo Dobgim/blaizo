@@ -4,11 +4,13 @@ import { Reveal } from "@/components/motion/Reveal";
 import type { Puppy } from "@/lib/types";
 
 /**
- * The available strip.
+ * The available puppies, three across.
  *
- * Runs off the right edge on purpose — you can see there are more than fit,
- * which is the thing a tidy three-up grid cannot say. The count lives in the
- * ledger rail rather than being implied by how full the row looks.
+ * This was a rail that ran off the right edge — a nice gesture, and it meant
+ * the fourth puppy onwards was behind a sideways scroll most visitors never
+ * made. Three to a row shows the whole litter at once, on a phone as much as
+ * on a desktop. The count still lives in the ledger rail rather than being
+ * implied by how full the row looks.
  */
 export function AvailablePuppies({ puppies }: { puppies: Puppy[] }) {
   const availableCount = puppies.filter((p) => p.status === "available").length;
@@ -42,15 +44,24 @@ export function AvailablePuppies({ puppies }: { puppies: Puppy[] }) {
 
       {puppies.length > 0 ? (
         <>
-          {/* Negative right margin runs the rail to the viewport edge. */}
+          {/* Three across at every width, including a phone. Was a rail that
+              ran off the right edge, which said "there are more than fit" but
+              hid most of the litter behind a sideways scroll nobody made. */}
+          {/* Capped rather than filling the shell. Three columns across 1440px
+              gives 424px cards — half again the size they were as a rail, and
+              a section two thousand pixels tall. The cap keeps them near 330px
+              and aligned under the heading. */}
           <Reveal
             stagger
-            className="mt-12 flex gap-5 overflow-x-auto pb-5 -mr-5 pr-5 md:-mr-10 md:pr-10 xl:-mr-16 xl:pr-16"
+            className="mt-12 grid max-w-[64rem] grid-cols-3 gap-2.5 sm:gap-5"
           >
             {puppies.map((puppy) => (
-              <div key={puppy.id} className="w-[78vw] max-w-[320px] shrink-0 sm:w-[300px]">
-                <PuppyCard puppy={puppy} />
-              </div>
+              <PuppyCard
+                key={puppy.id}
+                puppy={puppy}
+                compact
+                sizes="(max-width: 640px) 32vw, (max-width: 1024px) 31vw, 21rem"
+              />
             ))}
           </Reveal>
 

@@ -16,9 +16,18 @@ import { useShortlist, type ShortlistItem } from "@/components/shortlist/Shortli
 export function SaveButton({
   item,
   onDark = false,
+  compact = false,
 }: {
   item: ShortlistItem;
   onDark?: boolean;
+  /**
+   * Smaller on a phone, for three-up grids.
+   *
+   * 44px on a 110px card covers the puppy's face, which is the one thing the
+   * card exists to show. 32px still clears the 24px WCAG 2.2 target minimum
+   * comfortably, and it goes back to 44 as soon as there is room.
+   */
+  compact?: boolean;
 }) {
   const { has, toggle, ready } = useShortlist();
   const saved = ready && has(item.id);
@@ -29,7 +38,10 @@ export function SaveButton({
       onClick={() => toggle(item)}
       aria-pressed={saved}
       className={[
-        "absolute right-2.5 top-10 z-20 flex size-11 items-center justify-center rounded-full",
+        "absolute z-20 flex items-center justify-center rounded-full",
+        compact
+          ? "right-1 top-8 size-8 sm:right-2.5 sm:top-10 sm:size-11"
+          : "right-2.5 top-10 size-11",
         "transition-colors duration-[400ms] ease-out-quad",
         saved
           ? "bg-foxred text-ledger"
@@ -42,7 +54,7 @@ export function SaveButton({
         viewBox="0 0 24 24"
         aria-hidden="true"
         focusable="false"
-        className="size-[1.05rem]"
+        className={compact ? "size-[0.85rem] sm:size-[1.05rem]" : "size-[1.05rem]"}
         fill={saved ? "currentColor" : "none"}
         stroke="currentColor"
         strokeWidth={saved ? 0 : 1.8}

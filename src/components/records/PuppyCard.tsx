@@ -12,14 +12,18 @@ export function PuppyCard({
   onDark = false,
   sizes,
   priority = false,
+  compact = false,
 }: {
   puppy: Puppy;
   onDark?: boolean;
   sizes?: string;
   priority?: boolean;
+  /** Photo and name only below `sm`. For three-across grids on a phone. */
+  compact?: boolean;
 }) {
   return (
     <RecordCard
+      compact={compact}
       href={`/puppies/${puppy.slug}`}
       name={puppy.name}
       tag={puppy.litterId || (puppy.ageLabel ? puppy.ageLabel : "Puppy")}
