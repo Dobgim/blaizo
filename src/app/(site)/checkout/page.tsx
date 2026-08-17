@@ -5,7 +5,6 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { puppyBySlug } from "@/lib/content-source";
-import { formatDate } from "@/lib/format";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -69,7 +68,7 @@ export default async function CheckoutPage({
     <>
       <PageHeader
         eyebrow="Checkout"
-        railNote={`Litter ${puppy.litterId}`}
+        railNote={puppy.litterId ? `Litter ${puppy.litterId}` : undefined}
         title={`Order ${puppy.name}`}
         intro="Your details, how you would like to pay, and that is the order placed. Nothing is charged here — we call you with the payment details once we have your order."
       />
@@ -105,9 +104,9 @@ export default async function CheckoutPage({
                 {[
                   { label: "Sex", value: puppy.sex === "dog" ? "Male" : "Female" },
                   { label: "Colour", value: puppy.colour },
-                  { label: "Collar", value: puppy.collarColour },
-                  { label: "Dam", value: puppy.damName },
-                  { label: "Ready", value: formatDate(puppy.readyOn) },
+                  ...(puppy.ageLabel
+                    ? [{ label: "Age", value: puppy.ageLabel }]
+                    : []),
                 ].map((r) => (
                   <div
                     key={r.label}

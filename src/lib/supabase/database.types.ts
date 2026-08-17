@@ -80,11 +80,14 @@ export type LitterRow = Timestamps & {
 
 export type PuppyRow = Timestamps & {
   id: string;
-  litter_id: string;
+  /** Null on puppies added since the Litters screen was removed. */
+  litter_id: string | null;
   slug: string;
   name: string;
   sex: DogSex;
   colour: string;
+  /** Typed by hand — "8 weeks old". Not computed from a date. */
+  age_label: string | null;
   collar_colour: string | null;
   price_cents: number | null;
   status: PuppyStatus;

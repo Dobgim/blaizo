@@ -79,6 +79,7 @@ function toPuppy(row: PuppyWithLitter): Puppy {
     name: row.name,
     sex: row.sex,
     colour: row.colour,
+    ageLabel: row.age_label ?? "",
     collarColour: row.collar_colour ?? "—",
     priceCents: row.price_cents ?? 0,
     status: row.status,
@@ -86,7 +87,9 @@ function toPuppy(row: PuppyWithLitter): Puppy {
     heroAlt: row.hero_alt ?? fallback.alt,
     gallery: row.gallery ?? [],
     notes: row.notes,
-    litterId: row.litters?.code ?? "—",
+    /* Empty, not "—", when there is no litter. Callers hide the tag rather
+       than print a dash where a litter code would go. */
+    litterId: row.litters?.code ?? "",
     sireName: dogLabel(row.litters?.sire),
     damName: dogLabel(row.litters?.dam),
     bornOn: row.litters?.born_on ?? null,
@@ -111,9 +114,12 @@ function toTestimonial(row: TestimonialRow): Testimonial {
 // --- Selects -----------------------------------------------------------------
 // The join aliases have to match the foreign key names in 0001_schema.sql.
 
+/* A left join, not `!inner`. A puppy added since the Litters screen was
+   removed has no litter at all, and an inner join would drop it from every
+   listing — published, in stock, and invisible. */
 const PUPPY_SELECT = `
   *,
-  litters!inner (
+  litters (
     code, born_on, ready_on,
     sire:dogs!litters_sire_id_fkey (name, call_name),
     dam:dogs!litters_dam_id_fkey (name, call_name)

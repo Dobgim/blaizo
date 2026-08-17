@@ -194,7 +194,7 @@ export function ResourceForm({
         </p>
       )}
 
-      {resource.fields.map((field) => (
+      {resource.fields.filter((f) => !f.hidden).map((field) => (
         <div key={field.name} className="mb-6">
           <label
             htmlFor={`f-${field.name}`}

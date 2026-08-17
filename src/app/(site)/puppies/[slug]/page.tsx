@@ -38,17 +38,14 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return {
     title: `${puppy.name} — ${puppy.colour} ${puppy.sex === "dog" ? "male" : "female"}`,
-    description: `${puppy.name}, a ${puppy.colour.toLowerCase()} ${puppy.sex === "dog" ? "male" : "female"} from litter ${puppy.litterId} out of ${puppy.damName} by ${puppy.sireName}. Both parents fully health tested.`,
+    description: [
+      `${puppy.name}, a ${puppy.colour.toLowerCase()} ${puppy.sex === "dog" ? "male" : "female"}`,
+      puppy.ageLabel ? `, ${puppy.ageLabel}` : "",
+      ". Raised at home and fully health tested.",
+    ].join(""),
     openGraph: { images: [{ url: puppy.heroImage }] },
   };
 }
-
-const STATUS_NOTE: Record<string, string> = {
-  available: "Available. Nothing is paid on this website — send us a message and we will talk.",
-  reserved:
-    "Reserved for a family we are already talking to. Deposits fall through sometimes, so it is worth asking.",
-  placed: "Placed. Kept here as part of the record.",
-};
 
 export default async function PuppyPage({ params }: Params) {
   const { slug } = await params;
@@ -96,7 +93,9 @@ export default async function PuppyPage({ params }: Params) {
 
         {/* --- The record. --- */}
         <div className="lg:col-span-4 lg:col-start-9">
-          <p className="eyebrow text-canvas-deep">Litter {puppy.litterId}</p>
+          {puppy.litterId && (
+            <p className="eyebrow text-canvas-deep">Litter {puppy.litterId}</p>
+          )}
           <h1 className="mt-3 text-display-l text-spruce">{puppy.name}</h1>
 
           <div className="mt-6 flex items-center gap-5">
@@ -106,20 +105,17 @@ export default async function PuppyPage({ params }: Params) {
             </p>
           </div>
 
-          <p className="measure mt-6 text-body text-canvas-deep">
-            {STATUS_NOTE[puppy.status]}
-          </p>
-
+          {/* Age, not a date of birth and a ready date. The owner types it in
+              words, and parentage came out at their request — a buyer who
+              wants the parents has the dogs' own pages. */}
           <DataRows
             className="mt-8"
             rows={[
               { label: "Sex", value: puppy.sex === "dog" ? "Male" : "Female" },
               { label: "Colour", value: puppy.colour },
-              { label: "Collar", value: puppy.collarColour },
-              { label: "Sire", value: puppy.sireName },
-              { label: "Dam", value: puppy.damName },
-              { label: "Born", value: formatDate(puppy.bornOn) },
-              { label: "Ready", value: formatDate(puppy.readyOn) },
+              ...(puppy.ageLabel
+                ? [{ label: "Age", value: puppy.ageLabel }]
+                : []),
             ]}
           />
 

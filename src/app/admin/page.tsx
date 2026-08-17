@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
   const [puppies, newApplications, counts] = await Promise.all([
     supabase
       .from("puppies")
-      .select("id, name, status, slug, is_published, litters (code)")
+      .select("id, name, status, slug, is_published, age_label")
       .neq("status", "placed")
       .order("sort_order", { ascending: true }),
     supabase
@@ -48,7 +48,7 @@ export default async function AdminDashboard() {
     status: "available" | "reserved" | "placed";
     slug: string;
     is_published: boolean;
-    litters: { code: string } | null;
+    age_label: string | null;
   }[];
 
   const pending = newApplications.data ?? [];
@@ -74,7 +74,23 @@ export default async function AdminDashboard() {
           One click. The change is live on the website immediately.
         </p>
 
-        {rows.length === 0 ? (
+        {/* A failed query and an empty kennel look identical once the rows are
+            defaulted to [], and they need opposite responses. The usual cause
+            is a migration in supabase/ that has not been run yet, so the
+            message says where to look. */}
+        {puppies.error ? (
+          <p
+            role="alert"
+            className="hairline mt-6 pt-6 text-body font-medium text-foxred"
+          >
+            Could not read the puppies: {puppies.error.message}
+            <span className="mt-2 block text-small font-normal text-canvas-deep">
+              If that mentions a column that does not exist, there is a patch in{" "}
+              <code className="font-mono text-data">supabase/</code> still to
+              run in the SQL editor.
+            </span>
+          </p>
+        ) : rows.length === 0 ? (
           <p className="hairline mt-6 pt-6 text-body text-canvas-deep">
             No puppies currently available or reserved.{" "}
             <Link
@@ -99,9 +115,11 @@ export default async function AdminDashboard() {
                   >
                     {row.name}
                   </Link>
-                  <span className="eyebrow ml-3 text-canvas">
-                    {row.litters?.code ?? "—"}
-                  </span>
+                  {row.age_label && (
+                    <span className="eyebrow ml-3 text-canvas">
+                      {row.age_label}
+                    </span>
+                  )}
                   {!row.is_published && (
                     <span className="eyebrow ml-3 text-foxred">Draft</span>
                   )}

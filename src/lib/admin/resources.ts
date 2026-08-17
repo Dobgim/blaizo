@@ -1,11 +1,17 @@
 /**
  * The admin panel, declared rather than hand-built.
  *
- * Seven tables need the same four screens each. Describing the fields once and
+ * Each table needs the same four screens. Describing the fields once and
  * generating the list and the form from that description means a new column is
  * one line here instead of edits in three files — and it keeps every screen
  * behaving identically, which matters more for the person using it every week
  * than any per-table cleverness would.
+ *
+ * Dogs, Litters and Journal used to be here and were removed at the owner's
+ * request, to leave a panel with only the things they actually touch. The
+ * tables and their data are untouched, and the public pages that read them
+ * still work — but there is no longer any way to edit that content from here.
+ * Restoring a screen means restoring its entry in this array and nothing else.
  */
 
 export type FieldType =
@@ -34,6 +40,15 @@ export type Field = {
   inList?: boolean;
   /** Generated from another field when left blank. */
   slugFrom?: string;
+  /**
+   * Kept out of the form, but still saved.
+   *
+   * For columns the database needs and the owner should never have to think
+   * about — a slug being the case in point. Dropping the field from the
+   * resource entirely would also drop the `slugFrom` generation that fills
+   * it, and every new row would save without a web address.
+   */
+  hidden?: boolean;
 };
 
 /** Kept in step with `Database["public"]["Tables"]` so `supabase.from()`
@@ -79,143 +94,6 @@ const SORT_ORDER: Field = {
 };
 
 export const resources: Resource[] = [
-  // --- Dogs -----------------------------------------------------------------
-  {
-    key: "dogs",
-    table: "dogs",
-    title: "Dogs",
-    singular: "dog",
-    blurb:
-      "The sires, dams and retired dogs. Clearances are edited on each dog's own page.",
-    titleField: "call_name",
-    orderBy: { column: "sort_order", ascending: true },
-    fields: [
-      {
-        name: "call_name",
-        label: "Call name",
-        type: "text",
-        required: true,
-        inList: true,
-        help: "What you actually call them. This is the name the website shows.",
-      },
-      {
-        name: "name",
-        label: "Registered name",
-        type: "text",
-        required: true,
-        help: "The full name on the registration paperwork.",
-      },
-      {
-        name: "slug",
-        label: "Web address",
-        type: "text",
-        slugFrom: "call_name",
-        help: "Leave blank and we will make one from the call name. Changing it breaks any link people have saved.",
-      },
-      {
-        name: "role",
-        label: "Role",
-        type: "select",
-        required: true,
-        inList: true,
-        options: [
-          { value: "sire", label: "Sire" },
-          { value: "dam", label: "Dam" },
-          { value: "retired", label: "Retired" },
-          { value: "companion", label: "Companion" },
-        ],
-      },
-      {
-        name: "sex",
-        label: "Sex",
-        type: "select",
-        required: true,
-        options: [
-          { value: "dog", label: "Male" },
-          { value: "bitch", label: "Female" },
-        ],
-      },
-      { name: "colour", label: "Colour", type: "text", required: true },
-      { name: "dob", label: "Date of birth", type: "date", required: true, inList: true },
-      { name: "weight_lbs", label: "Weight (lb)", type: "number" },
-      {
-        name: "registry_number",
-        label: "Registry number",
-        type: "text",
-        help: "Published so buyers can look the dog up on the OFA site themselves.",
-      },
-      {
-        name: "bio",
-        label: "About this dog",
-        type: "textarea",
-        help: "Two or three sentences. What they are like to live with beats a list of titles.",
-      },
-      {
-        name: "hero_image",
-        label: "Main photograph",
-        type: "image",
-        help: "Take one on your phone or pick from your camera roll. Portrait crops best.",
-      },
-      {
-        name: "hero_alt",
-        label: "Photograph description",
-        type: "text",
-        help: "For people using a screen reader. Describe what is in the picture, plainly.",
-      },
-      {
-        name: "gallery",
-        label: "More photographs",
-        type: "gallery",
-        help: "Add as many as you like. They upload as you choose them.",
-      },
-      SORT_ORDER,
-      PUBLISHED,
-    ],
-  },
-
-  // --- Litters --------------------------------------------------------------
-  {
-    key: "litters",
-    table: "litters",
-    title: "Litters",
-    singular: "litter",
-    blurb:
-      "Unpublishing a litter hides its puppies too, so you can take a whole litter off the site in one move.",
-    titleField: "code",
-    orderBy: { column: "created_at", ascending: false },
-    fields: [
-      {
-        name: "code",
-        label: "Litter code",
-        type: "text",
-        required: true,
-        inList: true,
-        help: "Short, like A-2025. It appears on the brass tag of every puppy card.",
-      },
-      { name: "sire_id", label: "Sire", type: "reference", refTable: "dogs", inList: true },
-      { name: "dam_id", label: "Dam", type: "reference", refTable: "dogs", inList: true },
-      {
-        name: "status",
-        label: "Stage",
-        type: "select",
-        required: true,
-        inList: true,
-        options: [
-          { value: "planned", label: "Planned" },
-          { value: "expected", label: "Expected" },
-          { value: "born", label: "Born" },
-          { value: "weaning", label: "Weaning" },
-          { value: "placed", label: "All placed" },
-        ],
-      },
-      { name: "expected_on", label: "Expected", type: "date" },
-      { name: "born_on", label: "Born", type: "date" },
-      { name: "ready_on", label: "Ready to go home", type: "date" },
-      { name: "notes", label: "Notes", type: "textarea" },
-      PUBLISHED,
-    ],
-  },
-
   // --- Puppies --------------------------------------------------------------
   {
     key: "puppies",
@@ -229,12 +107,11 @@ export const resources: Resource[] = [
     fields: [
       { name: "name", label: "Name", type: "text", required: true, inList: true },
       {
-        name: "litter_id",
-        label: "Litter",
-        type: "reference",
-        refTable: "litters",
-        required: true,
+        name: "age_label",
+        label: "Age",
+        type: "text",
         inList: true,
+        help: 'Write it how you would say it — "8 weeks old", "3 months". It is shown on the website exactly as typed.',
       },
       {
         name: "status",
@@ -248,7 +125,15 @@ export const resources: Resource[] = [
           { value: "placed", label: "Placed" },
         ],
       },
-      { name: "slug", label: "Web address", type: "text", slugFrom: "name" },
+      /* Hidden, not removed: it still has to be generated from the name, and
+         a puppy with no web address has no page. */
+      {
+        name: "slug",
+        label: "Web address",
+        type: "text",
+        slugFrom: "name",
+        hidden: true,
+      },
       {
         name: "sex",
         label: "Sex",
@@ -260,12 +145,6 @@ export const resources: Resource[] = [
         ],
       },
       { name: "colour", label: "Colour", type: "text", required: true },
-      {
-        name: "collar_colour",
-        label: "Collar colour",
-        type: "text",
-        help: "How the family tells them apart before they have names.",
-      },
       {
         name: "price_cents",
         label: "Price",
@@ -288,48 +167,6 @@ export const resources: Resource[] = [
       { name: "notes", label: "Notes", type: "textarea" },
       SORT_ORDER,
       PUBLISHED,
-    ],
-  },
-
-  // --- Posts ----------------------------------------------------------------
-  {
-    key: "posts",
-    table: "posts",
-    title: "Journal",
-    singular: "entry",
-    blurb:
-      "An entry appears on the site once its published date has arrived, so you can write ahead.",
-    titleField: "title",
-    orderBy: { column: "published_at", ascending: false },
-    fields: [
-      { name: "title", label: "Title", type: "text", required: true, inList: true },
-      { name: "slug", label: "Web address", type: "text", slugFrom: "title" },
-      {
-        name: "published_at",
-        label: "Publish on",
-        type: "date",
-        inList: true,
-        help: "Leave blank to keep it a draft. A future date publishes itself.",
-      },
-      {
-        name: "excerpt",
-        label: "Standfirst",
-        type: "textarea",
-        help: "One or two sentences, shown in the list and in search results.",
-      },
-      {
-        name: "body",
-        label: "The entry",
-        type: "textarea",
-        help: "Plain text. Leave a blank line between paragraphs.",
-      },
-      {
-        name: "cover_image",
-        label: "Cover photograph",
-        type: "image",
-      },
-      { name: "cover_alt", label: "Photograph description", type: "text" },
-      { name: "author", label: "Written by", type: "text", inList: true },
     ],
   },
 

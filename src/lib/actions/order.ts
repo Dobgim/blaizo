@@ -126,8 +126,7 @@ export async function placeOrder(values: OrderValues): Promise<OrderResult> {
     puppyDescription: [
       puppy.sex === "dog" ? "Male" : "Female",
       puppy.colour,
-      puppy.collarColour ? `${puppy.collarColour} collar` : null,
-      puppy.readyOn ? `ready ${formatDate(puppy.readyOn)}` : null,
+      puppy.ageLabel || null,
     ]
       .filter(Boolean)
       .join(" · "),

@@ -105,7 +105,53 @@ export default async function ResourceListPage({
           </p>
         </div>
       ) : (
-        <div className="mt-8 overflow-x-auto">
+        <>
+          {/* --- Phones: one card per row -----------------------------------
+              A table on a 390px screen either scrolls sideways, which hides
+              the Edit link exactly where a thumb reaches for it, or squeezes
+              every column to two words. Stacked cards keep the whole row on
+              screen and give the tap targets room. */}
+          <ul className="mt-8 sm:hidden">
+            {rows.map((row) => (
+              <li
+                key={String(row.id)}
+                className="border-b border-enamel py-4 first:border-t"
+              >
+                <Link
+                  href={`/admin/${resource.key}/${row.id}`}
+                  className="block text-body font-medium text-spruce underline decoration-brass underline-offset-4"
+                >
+                  {cell(columns[0], row, refLabels)}
+                </Link>
+
+                {columns.length > 1 && (
+                  <dl className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
+                    {columns.slice(1).map((f) => (
+                      <div key={f.name} className="flex items-baseline gap-2">
+                        <dt className="eyebrow text-canvas">{f.label}</dt>
+                        <dd className="font-mono text-data text-canvas-deep">
+                          {cell(f, row, refLabels)}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+
+                {hasPublish && (
+                  <div className="mt-3">
+                    <PublishToggle
+                      resourceKey={resource.key}
+                      id={String(row.id)}
+                      published={Boolean(row.is_published)}
+                    />
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* --- Everything else: the table ---------------------------------- */}
+          <div className="mt-8 hidden overflow-x-auto sm:block">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-enamel">
@@ -170,7 +216,8 @@ export default async function ResourceListPage({
               ))}
             </tbody>
           </table>
-        </div>
+          </div>
+        </>
       )}
     </>
   );

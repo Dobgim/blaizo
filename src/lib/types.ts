@@ -42,6 +42,14 @@ export type Puppy = {
   name: string;
   sex: Sex;
   colour: string;
+  /**
+   * The age, written out by the owner: "8 weeks old", "almost 4 months".
+   *
+   * Not derived from a date of birth. The owner knows the age and says it in
+   * words; a computed one would also have to keep being right, and a page
+   * cached for an hour cannot promise that.
+   */
+  ageLabel: string;
   collarColour: string;
   priceCents: number;
   status: PuppyStatus;

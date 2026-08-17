@@ -1,5 +1,5 @@
 import { RecordCard } from "@/components/records/RecordCard";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatPrice } from "@/lib/format";
 import type { Dog, Puppy } from "@/lib/types";
 
 /**
@@ -22,7 +22,7 @@ export function PuppyCard({
     <RecordCard
       href={`/puppies/${puppy.slug}`}
       name={puppy.name}
-      tag={puppy.litterId}
+      tag={puppy.litterId || (puppy.ageLabel ? puppy.ageLabel : "Puppy")}
       meta={`${puppy.sex === "dog" ? "Male" : "Female"} · ${puppy.colour}`}
       image={puppy.heroImage}
       imageAlt={puppy.heroAlt}
@@ -35,17 +35,21 @@ export function PuppyCard({
         slug: puppy.slug,
         name: puppy.name,
         kind: "puppy",
-        tag: `Litter ${puppy.litterId}`,
+        tag: puppy.litterId ? `Litter ${puppy.litterId}` : puppy.ageLabel,
         image: puppy.heroImage,
         priceCents: puppy.priceCents,
         orderable: puppy.status !== "placed",
       }}
+      /* Sex and colour are already in `meta` above, so the rows carry what is
+         left that a buyer actually asks: how old, and how much. Parentage and
+         dates were removed at the owner's request — the ages are typed by
+         hand now, not worked out from a litter. */
       rows={[
-        { label: "Collar", value: puppy.collarColour },
-        { label: "Sire", value: puppy.sireName },
-        { label: "Dam", value: puppy.damName },
-        { label: "Born", value: formatDate(puppy.bornOn) },
-        { label: "Ready", value: formatDate(puppy.readyOn) },
+        { label: "Age", value: puppy.ageLabel || "Ask us" },
+        {
+          label: "Price",
+          value: puppy.priceCents > 0 ? formatPrice(puppy.priceCents) : "Ask us",
+        },
       ]}
     />
   );
