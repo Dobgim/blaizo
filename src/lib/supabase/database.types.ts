@@ -128,13 +128,34 @@ export type OrderRow = Timestamps & {
   /** Null on orders taken before the checkout asked for an address. */
   buyer_location: string | null;
   puppy_id: string | null;
-  puppy_name: string;
+  /** A summary on multi-puppy orders ("Truffle + Daisy") — the admin row label. */
+  puppy_name: string | null;
+  /** Only set when the order is for exactly one puppy. */
   puppy_slug: string | null;
+  /** The order total: the sum of its `order_items`. */
   amount_cents: number;
   payment_method: PaymentMethodId;
   status: OrderStatus;
   paid_confirmed_at: string | null;
   notes: string | null;
+};
+
+/**
+ * One puppy on an order. `orders.amount_cents` is the total of these.
+ *
+ * The names and the price are copied rather than joined, so a renamed or
+ * deleted puppy cannot change what an existing invoice says was bought.
+ */
+export type OrderItemRow = {
+  id: string;
+  order_id: string;
+  puppy_id: string | null;
+  puppy_name: string;
+  puppy_slug: string | null;
+  age_label: string | null;
+  amount_cents: number;
+  sort_order: number;
+  created_at: string;
 };
 
 export type PostRow = Timestamps & {
@@ -197,9 +218,18 @@ export type Database = {
       >;
       orders: Table<
         OrderRow,
+        /* `id` is writable on insert, unlike everywhere else. The order is
+           written by anon, which has no SELECT policy, so the id cannot be
+           read back — the app chooses it up front and uses it for the line
+           items. See placeOrder. */
         Omit<OrderRow, "id" | "created_at" | "updated_at" | "status"> & {
+          id?: string;
           status?: OrderStatus;
         }
+      >;
+      order_items: Table<
+        OrderItemRow,
+        Omit<OrderItemRow, "id" | "created_at"> & { sort_order?: number }
       >;
       posts: Table<PostRow>;
       testimonials: Table<TestimonialRow>;

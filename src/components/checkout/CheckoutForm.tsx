@@ -10,6 +10,7 @@ import { invoicePath, stashInvoice } from "@/lib/invoice";
 import { orderSchema, type OrderValues } from "@/lib/schemas/order";
 import { formatPrice } from "@/lib/format";
 import { paymentMethods } from "@/lib/site-config";
+import { useShortlist } from "@/components/shortlist/ShortlistProvider";
 import type { PaymentMethodId } from "@/lib/supabase/database.types";
 
 /**
@@ -24,23 +25,28 @@ import type { PaymentMethodId } from "@/lib/supabase/database.types";
  * their own app afterwards, so "Place order" records the order and sends the
  * details; it does not move money, and the button says so.
  */
+export type CheckoutLine = {
+  slug: string;
+  name: string;
+  priceCents: number;
+};
+
 export function CheckoutForm({
-  puppySlug,
-  puppyName,
-  amountCents,
+  puppies,
+  totalCents,
 }: {
-  puppySlug: string;
-  puppyName: string;
-  amountCents: number;
+  puppies: CheckoutLine[];
+  totalCents: number;
 }) {
   const router = useRouter();
+  const { clear } = useShortlist();
   const [values, setValues] = useState<OrderValues>({
     buyerName: "",
     buyerEmail: "",
     buyerPhone: "",
     buyerLocation: "",
     paymentMethod: "zelle",
-    puppySlug,
+    puppySlugs: puppies.map((p) => p.slug),
     notes: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -92,6 +98,10 @@ export function CheckoutForm({
        invoice page mounts. */
     stashInvoice(result.invoice);
 
+    /* The cart has served its purpose. Leaving the ordered puppies in it would
+       show a count above a panel offering to order them again. */
+    clear();
+
     /* Our own confirmation, not one served by a third party. The buyer's
        invoice must survive Web3Forms being slow, blocked or down. */
     router.push(invoicePath(result.reference));
@@ -101,16 +111,32 @@ export function CheckoutForm({
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      {/* The total, stated before anything is asked for. */}
-      <div className="hairline flex flex-wrap items-baseline justify-between gap-3 pt-5">
-        <div>
-          <p className="eyebrow text-canvas-deep">Ordering</p>
-          <p className="mt-1 font-display text-h3 text-spruce">{puppyName}</p>
-        </div>
-        <div className="text-right">
+      {/* What is being bought and what it comes to, both stated before
+          anything is asked for. Itemised even for one puppy, so a buyer sees
+          the same document shape they will get afterwards. */}
+      <div className="hairline pt-5">
+        <p className="eyebrow text-canvas-deep">
+          {puppies.length === 1 ? "Ordering" : `Ordering ${puppies.length} puppies`}
+        </p>
+
+        <ul className="mt-3">
+          {puppies.map((p) => (
+            <li
+              key={p.slug}
+              className="flex items-baseline justify-between gap-4 border-b border-enamel py-2.5"
+            >
+              <span className="font-display text-h3 text-spruce">{p.name}</span>
+              <span className="font-mono text-data text-spruce">
+                {p.priceCents > 0 ? formatPrice(p.priceCents) : "Ask us"}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-3 flex items-baseline justify-between gap-4">
           <p className="eyebrow text-canvas-deep">Total, paid in full</p>
-          <p className="mt-1 font-mono text-h3 text-spruce">
-            {formatPrice(amountCents)}
+          <p className="font-mono text-h3 text-spruce">
+            {formatPrice(totalCents)}
           </p>
         </div>
       </div>

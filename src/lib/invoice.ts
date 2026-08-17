@@ -25,14 +25,22 @@ export type Invoice = {
   buyerPhone: string;
   buyerLocation: string;
 
-  puppyName: string;
-  puppySlug: string;
-  /** "Female · Chocolate · Ready 14 March" — the line item's description. */
-  puppyDescription: string;
-  amountCents: number;
+  /** One per puppy, in the order the buyer had them in the cart. */
+  items: InvoiceLine[];
+  /** The sum of the lines. Held rather than recomputed so the document and the
+   *  kennel's email can never disagree about what was quoted. */
+  totalCents: number;
 
   paymentMethodLabel: string;
   notes: string;
+};
+
+export type InvoiceLine = {
+  puppyName: string;
+  puppySlug: string;
+  /** "Female · Chocolate · 8 weeks old" — the line's description. */
+  description: string;
+  amountCents: number;
 };
 
 const KEY_PREFIX = "goldenpup:invoice:";

@@ -32,7 +32,16 @@ export const orderSchema = z.object({
   paymentMethod: z.enum(["zelle", "cashapp", "chime", "applepay"], {
     message: "Choose how you would like to pay.",
   }),
-  puppySlug: z.string().trim().min(1),
+  /**
+   * One or more puppies, in the order the buyer had them in the cart.
+   *
+   * An array even for a single puppy, so there is one code path rather than a
+   * special case that only the busiest orders exercise.
+   */
+  puppySlugs: z
+    .array(z.string().trim().min(1))
+    .min(1, "Choose at least one puppy.")
+    .max(6, "That is more puppies than we would place at once — call us."),
   notes: z.string().trim().max(1000),
 });
 

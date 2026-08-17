@@ -75,6 +75,16 @@ export function ShortlistDrawer() {
 
   if (!isOpen) return null;
 
+  /* Only puppies can be ordered, and only ones still available. Adult dogs and
+     anything already placed are in the list to look at, not to buy. */
+  const orderable = items.filter(
+    (i) => i.kind === "puppy" && i.orderable !== false,
+  );
+  const orderableTotal = orderable.reduce(
+    (sum, i) => sum + (i.priceCents ?? 0),
+    0,
+  );
+
   return (
     <div
       className="fixed inset-0 z-[70] flex justify-end bg-spruce/70"
@@ -110,7 +120,7 @@ export function ShortlistDrawer() {
             <span aria-hidden className="text-[1.25rem] leading-none">
               ×
             </span>
-            <span className="sr-only">Close shortlist</span>
+            <span className="sr-only">Close your cart</span>
           </button>
         </div>
 
@@ -178,26 +188,60 @@ export function ShortlistDrawer() {
                     </button>
                   </div>
 
-                  {/* The order route, one puppy at a time. Adult dogs and
-                      placed puppies fall through to nothing. */}
+                  {/* Adult dogs and placed puppies fall through to nothing.
+                      With more than one puppy in the cart these step back to
+                      outlines: the combined order at the foot is the main
+                      action, and this becomes the way to take just one. */}
                   {item.kind === "puppy" && item.orderable !== false && (
                     <Link
                       href={`/checkout?puppy=${item.slug}`}
                       onClick={close}
-                      className={buttonClasses("solid", "md", "mt-3 w-full")}
+                      className={buttonClasses(
+                        orderable.length > 1 ? "outline" : "solid",
+                        "md",
+                        "mt-3 w-full",
+                      )}
                     >
-                      Order {item.name}
+                      {orderable.length > 1
+                        ? `Order only ${item.name}`
+                        : `Order ${item.name}`}
                     </Link>
                   )}
                 </li>
               ))}
             </ul>
 
-            {/* Ordering happens on the rows above, so both of these are
-                outlined. WhatsApp is for questions — making it the loudest
-                control here would send buyers to a chat when they came to
-                order. */}
             <div className="border-t border-enamel p-6">
+              {/* Two or more puppies: one order, one reference, one total, one
+                  phone call. A family taking littermates should not have to go
+                  through checkout twice and end up with two invoices for what
+                  is, to them, a single purchase. */}
+              {orderable.length > 1 && (
+                <>
+                  <Link
+                    href={`/checkout?puppies=${orderable
+                      .map((i) => i.slug)
+                      .join(",")}`}
+                    onClick={close}
+                    className={buttonClasses("solid", "lg", "w-full")}
+                  >
+                    Order all {orderable.length} together
+                  </Link>
+                  <p className="mt-3 flex items-baseline justify-between gap-4">
+                    <span className="eyebrow text-canvas-deep">
+                      Total, paid in full
+                    </span>
+                    <span className="font-mono text-data text-spruce">
+                      {orderableTotal > 0 ? formatPrice(orderableTotal) : "Ask us"}
+                    </span>
+                  </p>
+                  <hr className="mt-6 border-t border-enamel" />
+                </>
+              )}
+
+              {/* WhatsApp is for questions. Making it the loudest control in a
+                  cart would send buyers to a chat when they came to order. */}
+              <div className={orderable.length > 1 ? "mt-6" : ""}>
               <a
                 href={whatsappUrl(shortlistMessage(items))}
                 target="_blank"
@@ -226,6 +270,7 @@ export function ShortlistDrawer() {
                 >
                   Clear all
                 </button>
+              </div>
               </div>
             </div>
           </>

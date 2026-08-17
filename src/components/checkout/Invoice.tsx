@@ -126,19 +126,21 @@ export function Invoice({ reference }: { reference: string }) {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-enamel">
-                <td className="py-4 pr-6 align-top">
-                  <span className="block text-body font-medium text-spruce">
-                    {invoice.puppyName}
-                  </span>
-                  <span className="mt-1 block text-small text-canvas-deep">
-                    {invoice.puppyDescription}
-                  </span>
-                </td>
-                <td className="py-4 text-right align-top font-mono text-data text-spruce">
-                  {formatPrice(invoice.amountCents)}
-                </td>
-              </tr>
+              {invoice.items.map((line) => (
+                <tr key={line.puppySlug} className="border-b border-enamel">
+                  <td className="py-4 pr-6 align-top">
+                    <span className="block text-body font-medium text-spruce">
+                      {line.puppyName}
+                    </span>
+                    <span className="mt-1 block text-small text-canvas-deep">
+                      {line.description}
+                    </span>
+                  </td>
+                  <td className="py-4 text-right align-top font-mono text-data text-spruce">
+                    {formatPrice(line.amountCents)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
             <tfoot>
               <tr>
@@ -151,7 +153,7 @@ export function Invoice({ reference }: { reference: string }) {
                 {/* pl-6: at 390px the label and the figure meet with nothing
                     between them and read as one word. */}
                 <td className="pt-5 pl-6 text-right font-mono text-h3 text-foxred">
-                  {formatPrice(invoice.amountCents)}
+                  {formatPrice(invoice.totalCents)}
                 </td>
               </tr>
             </tfoot>
